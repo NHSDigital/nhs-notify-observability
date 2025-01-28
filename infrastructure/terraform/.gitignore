@@ -23,6 +23,7 @@ components/**/backend_tfscaffold.tf
 
 # Scaffold Plugin Cache
 plugin-cache/*
+bootstrap
 
 # PyCache
 **/__pycache__
