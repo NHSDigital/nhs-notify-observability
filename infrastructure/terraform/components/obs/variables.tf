@@ -38,7 +38,7 @@ variable "group" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "acct"
+  default     = "obs"
 }
 
 variable "default_tags" {
@@ -57,16 +57,15 @@ variable "log_retention_in_days" {
   default     = 0
 }
 
-variable "root_domain_name" {
-  type        = string
-  description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
-  default     = "nonprod.nhsnotify.national.nhs.uk"
-}
+# variable "grafana_admin_group_ids" {
+#   type        = list(string)
+#   description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
+#   default     = []
+# }
 
-variable "grafana_admin_group_ids" {
-  type        = list(string)
-  description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
-  default     = []
+variable "service_account_token" {
+  type        = string
+  description = "Service Account Token for Grafana"
 }
 
 variable "grafana_cross_account_ids" {
