@@ -1,18 +1,17 @@
 resource "aws_iam_role" "grafana_workspace" {
-  name = "${local.csi}-grafana-workspace-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "grafana.amazonaws.com"
-        }
-      },
-    ]
-  })
+  name               = "${local.csi}-grafana-workspace-role"
+  assume_role_policy = data.aws_iam_policy_document.grafana_assume_role_policy.json
+}
+
+data "aws_iam_policy_document" "grafana_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["grafana.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "grafana_workspace_cloudwatch" {
@@ -27,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "grafana_workspace_xray" {
 
 data "aws_iam_policy_document" "grafana_cross_account_access" {
   dynamic "statement" {
-    for_each = var.grafana_cross_account_ids
+    for_each = var.delegated_grafana_account_ids
     content {
       sid = replace("AssumeRoleCrossAccountfor${statement.value.domain}", "-", "")
 

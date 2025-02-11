@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# ==============================================================================
+# Script to manage Grafana service account and token in AWS Grafana workspace
+#
+# This script performs the following tasks:
+# - Fetches the workspace ID from SSM Parameter Store based on the provided environment.
+# - Retrieves the existing service account for the Grafana workspace or creates one if it doesn't exist.
+# - Checks for an existing service account token and deletes it if found, as a new token must be created.
+# - Creates a new service account token and exports it as an environment variable for use in other processes (e.g., Terraform).
+#
+# Prerequisites:
+# - AWS CLI configured with the necessary permissions to interact with AWS SSM, Grafana, and the Grafana workspace.
+# - `jq` command-line tool installed to parse JSON responses from AWS CLI.
+# ==============================================================================
+
 # Fetch workspace ID from SSM Parameter Store
 workspace_id=$(aws ssm get-parameter --with-decryption --name nhs-notify-${2}-acct-grafana-workspace-id | jq -r '.Parameter.Value')
 
@@ -30,7 +44,7 @@ if [[ -z "$svc_account_id" ]]; then
   exit 1
 fi
 
-#Check if token exists first and if it does, delete it as we can't retrieve the key by any other describe/get call
+# Check if token exists first and if it does, delete it as we can't retrieve the key by any other describe/get call
 existing_token_id=$(aws grafana list-workspace-service-account-tokens --service-account-id "${svc_account_id}" --workspace-id "${workspace_id}" | jq -r '.serviceAccountTokens[0].id')
 
 if [[ -n "$existing_token_id" ]]; then

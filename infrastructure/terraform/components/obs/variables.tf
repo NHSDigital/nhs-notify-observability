@@ -57,7 +57,7 @@ variable "log_retention_in_days" {
   default     = 0
 }
 
-# variable "grafana_admin_group_ids" {
+# variable "delegated_grafana_admin_group_ids" {
 #   type        = list(string)
 #   description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
 #   default     = []
@@ -68,7 +68,7 @@ variable "service_account_token" {
   description = "Service Account Token for Grafana"
 }
 
-variable "grafana_cross_account_ids" {
+variable "delegated_grafana_account_ids" {
   type = list(object({
     domain     = string
     account_id = string

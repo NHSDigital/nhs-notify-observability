@@ -63,13 +63,12 @@ variable "root_domain_name" {
   default     = "nonprod.nhsnotify.national.nhs.uk"
 }
 
-variable "grafana_admin_group_ids" {
+variable "delegated_grafana_admin_group_ids" {
   type        = list(string)
   description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
-  default     = []
 }
 
-variable "grafana_cross_account_ids" {
+variable "delegated_grafana_account_ids" {
   type = list(object({
     domain     = string
     account_id = string
