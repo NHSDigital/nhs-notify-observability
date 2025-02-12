@@ -66,6 +66,7 @@ variable "log_retention_in_days" {
 variable "service_account_token" {
   type        = string
   description = "Service Account Token for Grafana"
+  ephemeral = true
 }
 
 variable "delegated_grafana_account_ids" {
