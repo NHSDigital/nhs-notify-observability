@@ -20,7 +20,8 @@ data "aws_iam_policy_document" "github_deploy" {
       "sso:List*",
       "sso:Describe*",
       "sso:AssociateProfile",
-      "sso:Get*"
+      "sso:Get*",
+      "sns:*"
     ]
     resources = ["*"]
   }
