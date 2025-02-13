@@ -16,6 +16,11 @@ data "aws_iam_policy_document" "github_deploy" {
 
     actions = [
       "grafana:*",
+      "identitystore:Get*",
+      "sso:List*",
+      "sso:Describe*",
+      "sso:AssociateProfile",
+      "sso:Get*"
     ]
     resources = ["*"]
   }
