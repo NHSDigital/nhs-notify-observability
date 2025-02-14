@@ -77,3 +77,15 @@ variable "delegated_grafana_account_ids" {
   description = "A list of accounts Grafana can assume role into"
   default     = []
 }
+
+variable "log_level" {
+  type        = string
+  description = "The log level to be used in lambda functions within the component. Any log with a lower severity than the configured value will not be logged: https://docs.python.org/3/library/logging.html#levels"
+  default     = "INFO"
+}
+
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
