@@ -1,0 +1,4 @@
+resource "aws_sns_topic" "alerting" {
+  name              = "${local.csi}-alerting-topic"
+  kms_master_key_id = "alias/aws/sns"
+}
