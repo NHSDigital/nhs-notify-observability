@@ -1,6 +1,6 @@
 resource "grafana_data_source" "cloudwatch" {
   type = "cloudwatch"
-  name = "${local.csi}-current-account-cloudwatch-ds"
+  name = "${local.csi}-cloudwatch"
 
   json_data_encoded = jsonencode({
     defaultRegion = "eu-west-2"
@@ -11,7 +11,7 @@ resource "grafana_data_source" "cloudwatch" {
 resource "grafana_data_source" "cloudwatch_cross_account" {
   for_each = { for id, account_config in var.delegated_grafana_account_ids : account_config.domain => account_config }
   type     = "cloudwatch"
-  name     = "${local.csi}-cross-account-cloudwatch-${each.value.domain}"
+  name     = "${local.csi}-cloudwatch-${each.value.domain}"
 
   json_data_encoded = jsonencode({
     defaultRegion = "eu-west-2"
