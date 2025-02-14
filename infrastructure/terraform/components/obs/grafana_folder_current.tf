@@ -1,4 +1,4 @@
 resource "grafana_folder" "current" {
-  title = "${local.csi}-current-acct"
-  uid   = "${local.csi}-current-acct"
+  title = "${local.csi}"
+  uid   = "${local.csi}"
 }
