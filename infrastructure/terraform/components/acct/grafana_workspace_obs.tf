@@ -20,7 +20,6 @@ resource "aws_grafana_workspace" "obs" {
       }
     }
   )
-
 }
 
 resource "aws_ssm_parameter" "grafana_workspace_id" {
