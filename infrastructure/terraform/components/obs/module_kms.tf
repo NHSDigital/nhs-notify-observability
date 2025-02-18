@@ -10,6 +10,7 @@ module "kms" {
   name                 = "main"
   deletion_window      = var.kms_deletion_window
   alias                = "alias/${local.csi}"
+  key_policy_documents = [data.aws_iam_policy_document.kms.json]
   iam_delegation       = true
 }
 
