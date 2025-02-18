@@ -32,6 +32,10 @@ module "lambda_grafana_alerts_teams" {
 
   force_lambda_code_deploy = var.force_lambda_code_deploy
   enable_lambda_insights   = false
+
+  lambda_env_vars = {
+    "TEAMS_WEBHOOK_ALERTS_SSM_PARAMETER" = local.acct.teams_webhook_url_alerts_arn
+  }
 }
 
 data "aws_iam_policy_document" "lambda_grafana_alerts_teams" {
@@ -73,7 +77,7 @@ data "aws_iam_policy_document" "lambda_grafana_alerts_teams" {
     ]
 
     resources = [
-      "arn:aws:ssm:eu-west-2:123456789012:parameter/myapp/teams-webhook-url"
+      local.acct.teams_webhook_url_alerts_arn
     ]
   }
 }

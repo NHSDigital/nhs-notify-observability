@@ -1,13 +1,19 @@
 import { SNSEvent } from "aws-lambda";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 
-const ssmClient = new SSMClient({ region: "eu-west-2" }); // Adjust region if needed
+const ssmClient = new SSMClient({ region: "eu-west-2" });
 
 // Fetch the Teams Webhook URL from SSM Parameter
 async function getTeamsWebhookUrl(): Promise<string | null> {
+    const parameterName = process.env.TEAMS_WEBHOOK_ALERTS_SSM_PARAM;
+
+    if (!parameterName) {
+        console.error("No SSM parameter name found in environment variables");
+        return null;
+    }
     try {
         const command = new GetParameterCommand({
-            Name: "/myapp/teams-webhook-url", // Replace with your SSM Parameter Name
+            Name: parameterName,
             WithDecryption: true,
         });
         const response = await ssmClient.send(command);
@@ -21,7 +27,6 @@ async function getTeamsWebhookUrl(): Promise<string | null> {
 export const handler = async (event: SNSEvent): Promise<void> => {
     console.log("SNS Event Received:", JSON.stringify(event, null, 2));
 
-    // Retrieve the webhook URL from SSM
     const TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl();
     if (!TEAMS_WEBHOOK_URL) {
         console.error("Failed to retrieve Teams Webhook URL from SSM");
