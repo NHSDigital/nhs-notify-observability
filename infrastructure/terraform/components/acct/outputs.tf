@@ -15,3 +15,8 @@ output "s3_buckets" {
     }
   }
 }
+
+output "teams_webhook_url_alerts_name" {
+  value = aws_ssm_parameter.teams_webhook_url_alerts.name
+  description = "The name of the SSM Parameter for the Teams Webhook URL"
+}
