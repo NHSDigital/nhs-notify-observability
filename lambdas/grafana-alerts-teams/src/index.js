@@ -1,9 +1,11 @@
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
+const fetch = require("node-fetch");
 
 const ssmClient = new SSMClient({ region: "eu-west-2" });
 
 async function getTeamsWebhookUrl() {
     const parameterName = process.env.TEAMS_WEBHOOK_ALERTS_SSM_PARAM;
+    console.log("SSM Parameter Name:", parameterName); // Log the parameter name
     if (!parameterName) {
         console.error("No SSM parameter name found in environment variables");
         return null;
@@ -14,6 +16,7 @@ async function getTeamsWebhookUrl() {
             WithDecryption: true,
         });
         const response = await ssmClient.send(command);
+        console.log("SSM Parameter Response:", response); // Log the response
         return response.Parameter?.Value || null;
     } catch (error) {
         console.error("Error retrieving SSM Parameter:", error);
@@ -25,6 +28,7 @@ async function getTeamsWebhookUrl() {
 let TEAMS_WEBHOOK_URL;
 (async () => {
     TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl();
+    console.log("Teams Webhook URL:", TEAMS_WEBHOOK_URL); // Log the webhook URL
 })();
 
 exports.handler = async (event) => {

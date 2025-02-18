@@ -1,7 +1,8 @@
 {
   "author": "NHS Notify",
   "dependencies": {
-    "@aws-sdk/client-ssm": "^3.750.0"
+    "@aws-sdk/client-ssm": "^3.750.0",
+    "node-fetch": "^3.3.2"
   },
   "description": "AWS Lambda function responsibile for validating and publishing events.",
   "devDependencies": {
