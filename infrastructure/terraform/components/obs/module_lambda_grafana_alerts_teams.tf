@@ -63,4 +63,17 @@ data "aws_iam_policy_document" "lambda_grafana_alerts_teams" {
       aws_sns_topic.alerting.arn,
     ]
   }
+
+  statement {
+    sid    = "SSMParameterAccess"
+    effect = "Allow"
+
+    actions = [
+      "ssm:GetParameter"
+    ]
+
+    resources = [
+      "arn:aws:ssm:eu-west-2:123456789012:parameter/myapp/teams-webhook-url"
+    ]
+  }
 }
