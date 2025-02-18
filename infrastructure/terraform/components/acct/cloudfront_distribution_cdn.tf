@@ -1,3 +1,6 @@
+# As this is just a proxy for the Managed Grafana we're skipping WAF and Logging
+#tfsec:ignore:aws-cloudfront-enable-waf
+#tfsec:ignore:aws-cloudfront-enable-logging
 resource "aws_cloudfront_distribution" "main" {
   provider = aws.us-east-1
 
