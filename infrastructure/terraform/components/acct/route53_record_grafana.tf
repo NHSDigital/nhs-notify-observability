@@ -3,5 +3,5 @@ resource "aws_route53_record" "grafana" {
   zone_id = aws_route53_zone.main.id
   type    = "CNAME"
   ttl     = 5
-  records = [aws_grafana_workspace.obs.endpoint]
+  records = [aws_cloudfront_distribution.main.domain_name]
 }
