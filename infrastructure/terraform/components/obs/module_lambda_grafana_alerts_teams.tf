@@ -34,7 +34,7 @@ module "lambda_grafana_alerts_teams" {
   enable_lambda_insights   = false
 
   lambda_env_vars = {
-    "TEAMS_WEBHOOK_ALERTS_SSM_PARAMETER" = local.acct.teams_webhook_url_alerts_arn
+    "TEAMS_WEBHOOK_ALERTS_SSM_PARAM" = local.acct.teams_webhook_url_alerts_name
   }
 }
 
