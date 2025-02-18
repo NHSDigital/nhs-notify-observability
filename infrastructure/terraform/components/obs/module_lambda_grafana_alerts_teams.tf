@@ -1,7 +1,7 @@
 module "lambda_grafana_alerts_teams" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.2"
 
-  function_name = "${local.csi}-grafana-alerts-teams"
+  function_name = "grafana-alerts-teams"
   description   = "A function for formatting and sending Grafana alerts to Teams"
 
   aws_account_id = var.aws_account_id
