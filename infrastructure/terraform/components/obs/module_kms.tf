@@ -12,3 +12,39 @@ module "kms" {
   alias                = "alias/${local.csi}"
   iam_delegation       = true
 }
+
+data "aws_iam_policy_document" "kms" {
+  statement {
+    sid    = "AllowCloudWatchEncrypt"
+    effect = "Allow"
+
+    principals {
+      type = "Service"
+
+      identifiers = [
+        "logs.${var.region}.amazonaws.com",
+      ]
+    }
+
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*"
+    ]
+
+    resources = [
+      "*",
+    ]
+
+    condition {
+      test     = "ArnLike"
+      variable = "kms:EncryptionContext:aws:logs:arn"
+
+      values = [
+        "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:*",
+      ]
+    }
+  }
+}
