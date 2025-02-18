@@ -1,5 +1,5 @@
 module "lambda_grafana_alerts_teams" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.2"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.9"
 
   function_name = "grafana-alerts-teams"
   description   = "A function for formatting and sending Grafana alerts to Teams"
