@@ -59,7 +59,7 @@ exports.handler = async (event) => {
 
         // Prepare the payload for Microsoft Teams
         const teamsPayload = JSON.stringify({
-            title: `Alert: ${alert.labels.alertname}`,
+            title: `Alert (${alert.status}): ${alert.labels.alertname}`,
             text: formattedMessage,
         });
 
