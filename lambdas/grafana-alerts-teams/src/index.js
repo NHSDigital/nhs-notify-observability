@@ -47,6 +47,14 @@ exports.handler = async (event) => {
         const alert = snsMessage.alerts[0];
         const formattedMessage = `
 **Domain:** ${alert.labels.grafana_folder}
+
+**Status:** ${alert.status}
+
+**Grafana URL:** ${snsMessage.externalURL}
+
+**Silence Link** ${alert.silenceURL}
+
+**Summary:** ${alert.annotations.summary}
         `;
 
         // Prepare the payload for Microsoft Teams
