@@ -1,4 +1,5 @@
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
+const https = require('https');
 
 const ssmClient = new SSMClient({ region: "eu-west-2" });
 
@@ -39,28 +40,54 @@ exports.handler = async (event) => {
     }
 
     for (const record of event.Records) {
-        const snsMessage = record.Sns.Message;
+        const snsMessage = JSON.parse(record.Sns.Message);
         console.log("SNS Message:", snsMessage);
 
+        // Extract and format the message
+        const alert = snsMessage.alerts[0];
+        const formattedMessage = `
+**Alert Name:** ${alert.labels.alertname}
+**Grafana Folder:** ${alert.labels.grafana_folder}
+        `;
+
         // Prepare the payload for Microsoft Teams
-        const teamsPayload = {
-            text: `New SNS Notification: ${snsMessage}`,
+        const teamsPayload = JSON.stringify({
+            text: formattedMessage,
+        });
+
+        const url = new URL(TEAMS_WEBHOOK_URL);
+
+        const options = {
+            hostname: url.hostname,
+            path: url.pathname,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': teamsPayload.length,
+            },
         };
 
-        try {
-            const response = await fetch(TEAMS_WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(teamsPayload),
+        const req = https.request(options, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
             });
 
-            if (!response.ok) {
-                console.error(`Failed to send message to Teams: ${response.statusText}`);
-            } else {
-                console.log("Message successfully sent to Microsoft Teams");
-            }
-        } catch (error) {
+            res.on('end', () => {
+                if (res.statusCode >= 200 && res.statusCode < 300) {
+                    console.log("Message successfully sent to Microsoft Teams");
+                } else {
+                    console.error(`Failed to send message to Teams: ${res.statusCode} ${res.statusMessage}`);
+                }
+            });
+        });
+
+        req.on('error', (error) => {
             console.error("Error sending message to Teams:", error);
-        }
+        });
+
+        req.write(teamsPayload);
+        req.end();
     }
 };
