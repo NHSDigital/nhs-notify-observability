@@ -1,5 +1,4 @@
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
-const fetch = require("node-fetch");
 
 const ssmClient = new SSMClient({ region: "eu-west-2" });
 
