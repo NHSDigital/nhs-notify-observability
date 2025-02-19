@@ -46,12 +46,12 @@ exports.handler = async (event) => {
         // Extract and format the message
         const alert = snsMessage.alerts[0];
         const formattedMessage = `
-**Alert Name:** ${alert.labels.alertname}
-**Grafana Folder:** ${alert.labels.grafana_folder}
+**Domain:** ${alert.labels.grafana_folder}
         `;
 
         // Prepare the payload for Microsoft Teams
         const teamsPayload = JSON.stringify({
+            title: `Alert: ${alert.labels.alertname}`,
             text: formattedMessage,
         });
 
