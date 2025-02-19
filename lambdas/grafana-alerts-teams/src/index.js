@@ -16,7 +16,11 @@ async function getTeamsWebhookUrl() {
         });
         const response = await ssmClient.send(command);
         console.log("SSM Parameter Response:", response); // Log the response
-        return response.Parameter?.Value || null;
+        if (!response.Parameter) {
+            console.error("SSM Parameter not found");
+            return null;
+        }
+        return response.Parameter.Value || null;
     } catch (error) {
         console.error("Error retrieving SSM Parameter:", error);
         console.error("Error details:", error.message); // Log the error message
@@ -25,16 +29,10 @@ async function getTeamsWebhookUrl() {
     }
 }
 
-// Retrieve the Teams Webhook URL once and store it in a variable
-let TEAMS_WEBHOOK_URL;
-(async () => {
-    TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl();
-    console.log("Teams Webhook URL:", TEAMS_WEBHOOK_URL); // Log the webhook URL
-})();
-
 exports.handler = async (event) => {
     console.log("SNS Event Received:", JSON.stringify(event, null, 2));
 
+    const TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl();
     if (!TEAMS_WEBHOOK_URL) {
         console.error("Failed to retrieve Teams Webhook URL from SSM");
         return;
