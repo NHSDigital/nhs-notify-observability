@@ -19,6 +19,8 @@ async function getTeamsWebhookUrl() {
         return response.Parameter?.Value || null;
     } catch (error) {
         console.error("Error retrieving SSM Parameter:", error);
+        console.error("Error details:", error.message); // Log the error message
+        console.error("Error stack:", error.stack); // Log the error stack
         return null;
     }
 }
