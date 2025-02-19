@@ -48,8 +48,6 @@ exports.handler = async (event) => {
         const formattedMessage = `
 **Domain:** ${alert.labels.grafana_folder}
 
-**Status:** ${alert.status}
-
 **Grafana URL:** ${snsMessage.externalURL}
 
 **Silence Link** ${alert.silenceURL}
