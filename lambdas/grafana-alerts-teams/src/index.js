@@ -105,49 +105,48 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
 
 module.exports = {
     getTeamsWebhookUrl,
-    sendTeamsMessage
-};
+    sendTeamsMessage,
+    handler: async (event) => {
+        console.log("SNS Event Received:", JSON.stringify(event, null, 2));
 
-exports.handler = async (event) => {
-    console.log("SNS Event Received:", JSON.stringify(event, null, 2));
+        const TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl();
+        if (!TEAMS_WEBHOOK_URL) {
+            console.error("Failed to retrieve Teams Webhook URL from SSM");
+            return;
+        }
 
-    const TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl();
-    if (!TEAMS_WEBHOOK_URL) {
-        console.error("Failed to retrieve Teams Webhook URL from SSM");
-        return;
-    }
+        console.log("Teams Webhook URL:", TEAMS_WEBHOOK_URL);
 
-    console.log("Teams Webhook URL:", TEAMS_WEBHOOK_URL);
+        const url = new URL(TEAMS_WEBHOOK_URL);
 
-    const url = new URL(TEAMS_WEBHOOK_URL);
+        for (const record of event.Records) {
+            try {
+                const snsMessage = JSON.parse(record.Sns.Message);
+                console.log("SNS Message:", snsMessage);
 
-    for (const record of event.Records) {
-        try {
-            const snsMessage = JSON.parse(record.Sns.Message);
-            console.log("SNS Message:", snsMessage);
+                // Extract and format the message
+                const alert = snsMessage.alerts[0];
+                const status = alert.status.toUpperCase();
+                const statusEmoji = status === 'FIRING' ? '🔴' : status === 'RESOLVED' ? '🟢' : '';
 
-            // Extract and format the message
-            const alert = snsMessage.alerts[0];
-            const status = alert.status.toUpperCase();
-            const statusEmoji = status === 'FIRING' ? '🔴' : status === 'RESOLVED' ? '🟢' : '';
-
-            const formattedMessage = `
+                const formattedMessage = `
 **Domain:** ${alert.labels.grafana_folder}
 
 **Grafana URL:** ${snsMessage.externalURL}
 
 **Silence Link:** ${alert.silenceURL}
-            `.trim(); // Trim any leading/trailing whitespace
+                `.trim(); // Trim any leading/trailing whitespace
 
-            // Prepare the payload for Microsoft Teams
-            const teamsPayload = JSON.stringify({
-                title: `${statusEmoji} Alert: ${alert.labels.alertname} - ${status}`,
-                text: formattedMessage, // Preserve newlines
-            });
+                // Prepare the payload for Microsoft Teams
+                const teamsPayload = JSON.stringify({
+                    title: `${statusEmoji} Alert: ${alert.labels.alertname} - ${status}`,
+                    text: formattedMessage, // Preserve newlines
+                });
 
-            await sendTeamsMessage(teamsPayload, url);
-        } catch (error) {
-            console.error("Error processing record:", error);
+                await sendTeamsMessage(teamsPayload, url);
+            } catch (error) {
+                console.error("Error processing record:", error);
+            }
         }
     }
 };
