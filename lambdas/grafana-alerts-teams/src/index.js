@@ -48,16 +48,16 @@ exports.handler = async (event) => {
         const formattedMessage = `
 **Domain:** ${alert.labels.grafana_folder}
 
+**Status:** ${alert.status}
+
 **Grafana URL:** ${snsMessage.externalURL}
 
-**Silence Link** ${alert.silenceURL}
-
-**Summary:** ${alert.annotations.summary}
+**Silence Link:** ${alert.silenceURL}
         `;
 
         // Prepare the payload for Microsoft Teams
         const teamsPayload = JSON.stringify({
-            title: `Alert (${alert.status}): ${alert.labels.alertname}`,
+            title: `Alert: ${alert.labels.alertname}`,
             text: formattedMessage,
         });
 
@@ -73,6 +73,9 @@ exports.handler = async (event) => {
             },
         };
 
+        console.log("Request options:", options);
+        console.log("Payload:", teamsPayload);
+
         const req = https.request(options, (res) => {
             let data = '';
 
@@ -81,6 +84,7 @@ exports.handler = async (event) => {
             });
 
             res.on('end', () => {
+                console.log("Response data:", data);
                 if (res.statusCode >= 200 && res.statusCode < 300) {
                     console.log("Message successfully sent to Microsoft Teams");
                 } else {
