@@ -39,13 +39,16 @@ exports.handler = async (event) => {
         return;
     }
 
-    for (const record of event.Records) {
-        const snsMessage = JSON.parse(record.Sns.Message);
-        console.log("SNS Message:", snsMessage);
+    console.log("Teams Webhook URL:", TEAMS_WEBHOOK_URL);
 
-        // Extract and format the message
-        const alert = snsMessage.alerts[0];
-        const formattedMessage = `
+    for (const record of event.Records) {
+        try {
+            const snsMessage = JSON.parse(record.Sns.Message);
+            console.log("SNS Message:", snsMessage);
+
+            // Extract and format the message
+            const alert = snsMessage.alerts[0];
+            const formattedMessage = `
 **Domain:** ${alert.labels.grafana_folder}
 
 **Status:** ${alert.status}
@@ -53,51 +56,65 @@ exports.handler = async (event) => {
 **Grafana URL:** ${snsMessage.externalURL}
 
 **Silence Link:** ${alert.silenceURL}
-        `;
 
-        // Prepare the payload for Microsoft Teams
-        const teamsPayload = JSON.stringify({
-            title: `Alert: ${alert.labels.alertname}`,
-            text: formattedMessage,
-        });
+[View Alert in Grafana](${alert.generatorURL})
 
-        const url = new URL(TEAMS_WEBHOOK_URL);
+${alert.generatorURL}
+            `;
 
-        const options = {
-            hostname: url.hostname,
-            path: url.pathname,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': teamsPayload.length,
-            },
-        };
-
-        console.log("Request options:", options);
-        console.log("Payload:", teamsPayload);
-
-        const req = https.request(options, (res) => {
-            let data = '';
-
-            res.on('data', (chunk) => {
-                data += chunk;
+            // Prepare the payload for Microsoft Teams
+            const teamsPayload = JSON.stringify({
+                title: `Alert: ${alert.labels.alertname}`,
+                text: formattedMessage,
             });
 
-            res.on('end', () => {
-                console.log("Response data:", data);
-                if (res.statusCode >= 200 && res.statusCode < 300) {
-                    console.log("Message successfully sent to Microsoft Teams");
-                } else {
-                    console.error(`Failed to send message to Teams: ${res.statusCode} ${res.statusMessage}`);
-                }
+            const url = new URL(TEAMS_WEBHOOK_URL);
+
+            const options = {
+                hostname: url.hostname,
+                path: url.pathname,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': teamsPayload.length,
+                },
+                timeout: 5000, // 5 seconds timeout
+            };
+
+            console.log("Request options:", options);
+            console.log("Payload:", teamsPayload);
+
+            const req = https.request(options, (res) => {
+                let data = '';
+
+                res.on('data', (chunk) => {
+                    data += chunk;
+                });
+
+                res.on('end', () => {
+                    console.log("Response status code:", res.statusCode);
+                    console.log("Response data:", data);
+                    if (res.statusCode >= 200 && res.statusCode < 300) {
+                        console.log("Message successfully sent to Microsoft Teams");
+                    } else {
+                        console.error(`Failed to send message to Teams: ${res.statusCode} ${res.statusMessage}`);
+                    }
+                });
             });
-        });
 
-        req.on('error', (error) => {
-            console.error("Error sending message to Teams:", error);
-        });
+            req.on('error', (error) => {
+                console.error("Error sending message to Teams:", error);
+            });
 
-        req.write(teamsPayload);
-        req.end();
+            req.on('timeout', () => {
+                req.abort();
+                console.error("Request timed out");
+            });
+
+            req.write(teamsPayload);
+            req.end();
+        } catch (error) {
+            console.error("Error processing record:", error);
+        }
     }
 };
