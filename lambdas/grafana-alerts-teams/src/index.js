@@ -103,6 +103,11 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
     });
 }
 
+module.exports = {
+    getTeamsWebhookUrl,
+    sendTeamsMessage
+};
+
 exports.handler = async (event) => {
     console.log("SNS Event Received:", JSON.stringify(event, null, 2));
 
@@ -137,7 +142,7 @@ exports.handler = async (event) => {
             // Prepare the payload for Microsoft Teams
             const teamsPayload = JSON.stringify({
                 title: `${statusEmoji} Alert: ${alert.labels.alertname} - ${status}`,
-                text: formattedMessage.replace(/\n/g, '\\n'), // Replace newlines with escaped newlines
+                text: formattedMessage, // Preserve newlines
             });
 
             await sendTeamsMessage(teamsPayload, url);
