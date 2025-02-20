@@ -30,6 +30,79 @@ async function getTeamsWebhookUrl() {
     }
 }
 
+async function sendTeamsMessage(teamsPayload, url, retries = 3) {
+    return new Promise((resolve, reject) => {
+        const options = {
+            hostname: url.hostname,
+            path: url.pathname,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(teamsPayload),
+            },
+            timeout: 5000, // 5 seconds timeout
+        };
+
+        console.log("Request options:", options);
+        console.log("Payload:", teamsPayload);
+
+        const req = https.request(options, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                console.log("Response status code:", res.statusCode);
+                console.log("Response data:", data);
+                if (res.statusCode >= 200 && res.statusCode < 300) {
+                    console.log("Message successfully sent to Microsoft Teams");
+                    resolve();
+                } else {
+                    console.error(`Failed to send message to Teams: ${res.statusCode} ${res.statusMessage}`);
+                    if (retries > 0) {
+                        console.log(`Retrying... (${retries} retries left)`);
+                        setTimeout(() => {
+                            sendTeamsMessage(teamsPayload, url, retries - 1).then(resolve).catch(reject);
+                        }, 1000); // Retry after 1 second
+                    } else {
+                        reject(new Error(`Failed to send message to Teams after ${retries} retries`));
+                    }
+                }
+            });
+        });
+
+        req.on('error', (error) => {
+            console.error("Error sending message to Teams:", error);
+            if (retries > 0) {
+                console.log(`Retrying... (${retries} retries left)`);
+                setTimeout(() => {
+                    sendTeamsMessage(teamsPayload, url, retries - 1).then(resolve).catch(reject);
+                }, 1000); // Retry after 1 second
+            } else {
+                reject(new Error(`Failed to send message to Teams after ${retries} retries`));
+            }
+        });
+
+        req.on('timeout', () => {
+            req.abort();
+            console.error("Request timed out");
+            if (retries > 0) {
+                console.log(`Retrying... (${retries} retries left)`);
+                setTimeout(() => {
+                    sendTeamsMessage(teamsPayload, url, retries - 1).then(resolve).catch(reject);
+                }, 1000); // Retry after 1 second
+            } else {
+                reject(new Error(`Failed to send message to Teams after ${retries} retries`));
+            }
+        });
+
+        req.write(teamsPayload);
+        req.end();
+    });
+}
+
 exports.handler = async (event) => {
     console.log("SNS Event Received:", JSON.stringify(event, null, 2));
 
@@ -41,6 +114,8 @@ exports.handler = async (event) => {
 
     console.log("Teams Webhook URL:", TEAMS_WEBHOOK_URL);
 
+    const url = new URL(TEAMS_WEBHOOK_URL);
+
     for (const record of event.Records) {
         try {
             const snsMessage = JSON.parse(record.Sns.Message);
@@ -48,71 +123,24 @@ exports.handler = async (event) => {
 
             // Extract and format the message
             const alert = snsMessage.alerts[0];
+            const status = alert.status.toUpperCase();
+            const statusEmoji = status === 'FIRING' ? '🔴' : status === 'RESOLVED' ? '🟢' : '';
+
             const formattedMessage = `
 **Domain:** ${alert.labels.grafana_folder}
-
-**Status:** ${alert.status}
 
 **Grafana URL:** ${snsMessage.externalURL}
 
 **Silence Link:** ${alert.silenceURL}
-
-[View Alert in Grafana](${alert.generatorURL})
-
-${alert.generatorURL}
-            `;
+            `.trim(); // Trim any leading/trailing whitespace
 
             // Prepare the payload for Microsoft Teams
             const teamsPayload = JSON.stringify({
-                title: `Alert: ${alert.labels.alertname}`,
-                text: formattedMessage,
+                title: `${statusEmoji} Alert: ${alert.labels.alertname} - ${status}`,
+                text: formattedMessage.replace(/\n/g, '\\n'), // Replace newlines with escaped newlines
             });
 
-            const url = new URL(TEAMS_WEBHOOK_URL);
-
-            const options = {
-                hostname: url.hostname,
-                path: url.pathname,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': teamsPayload.length,
-                },
-                timeout: 5000, // 5 seconds timeout
-            };
-
-            console.log("Request options:", options);
-            console.log("Payload:", teamsPayload);
-
-            const req = https.request(options, (res) => {
-                let data = '';
-
-                res.on('data', (chunk) => {
-                    data += chunk;
-                });
-
-                res.on('end', () => {
-                    console.log("Response status code:", res.statusCode);
-                    console.log("Response data:", data);
-                    if (res.statusCode >= 200 && res.statusCode < 300) {
-                        console.log("Message successfully sent to Microsoft Teams");
-                    } else {
-                        console.error(`Failed to send message to Teams: ${res.statusCode} ${res.statusMessage}`);
-                    }
-                });
-            });
-
-            req.on('error', (error) => {
-                console.error("Error sending message to Teams:", error);
-            });
-
-            req.on('timeout', () => {
-                req.abort();
-                console.error("Request timed out");
-            });
-
-            req.write(teamsPayload);
-            req.end();
+            await sendTeamsMessage(teamsPayload, url);
         } catch (error) {
             console.error("Error processing record:", error);
         }
