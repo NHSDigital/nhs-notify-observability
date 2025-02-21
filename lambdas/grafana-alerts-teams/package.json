@@ -4,7 +4,7 @@
     "@aws-sdk/client-ssm": "^3.750.0",
     "node-fetch": "^3.3.2"
   },
-  "description": "AWS Lambda function responsibile for validating and publishing events.",
+  "description": "AWS Lambda function responsibile sending Grafana Alerts to Teams vis SNS.",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",
     "@types/jest": "^29.5.14",

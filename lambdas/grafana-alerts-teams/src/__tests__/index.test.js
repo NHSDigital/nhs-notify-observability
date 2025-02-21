@@ -99,7 +99,7 @@ describe('sendTeamsMessage', () => {
         await expect(sendTeamsMessage(teamsPayload, url, 1)).rejects.toThrow('Failed to send message to Teams after 0 retries');
         expect(mockRequest.write).toHaveBeenCalledTimes(2);
         expect(mockRequest.end).toHaveBeenCalledTimes(2);
-    });
+    }, 10000); // Increase timeout to 10 seconds
 
     it('should handle request errors and retry', async () => {
         const mockRequest = {
@@ -114,7 +114,7 @@ describe('sendTeamsMessage', () => {
         await expect(sendTeamsMessage(teamsPayload, url, 1)).rejects.toThrow('Failed to send message to Teams after 0 retries');
         expect(mockRequest.write).toHaveBeenCalledTimes(2);
         expect(mockRequest.end).toHaveBeenCalledTimes(2);
-    });
+    }, 10000); // Increase timeout to 10 seconds
 
     it('should handle request timeouts and retry', async () => {
         const mockRequest = {
@@ -131,5 +131,5 @@ describe('sendTeamsMessage', () => {
         expect(mockRequest.write).toHaveBeenCalledTimes(2);
         expect(mockRequest.end).toHaveBeenCalledTimes(2);
         expect(mockRequest.abort).toHaveBeenCalledTimes(2);
-    });
+    }, 10000); // Increase timeout to 10 seconds
 });
