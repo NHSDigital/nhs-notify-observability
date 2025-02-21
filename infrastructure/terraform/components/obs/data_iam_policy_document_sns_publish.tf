@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "sns_publish" {
     ]
 
     resources = [
-      aws_sns_topic.alerting.arn
+      aws_sns_topic.main.arn
     ]
   }
 }
