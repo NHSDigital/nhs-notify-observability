@@ -5,7 +5,7 @@ const ssmClient = new SSMClient({ region: "eu-west-2" });
 
 async function getTeamsWebhookUrl() {
     const parameterName = process.env.TEAMS_WEBHOOK_ALERTS_SSM_PARAM;
-    console.log("SSM Parameter Name:", parameterName); // Log the parameter name
+    console.log("SSM Parameter Name:", parameterName);
     if (!parameterName) {
         console.error("No SSM parameter name found in environment variables");
         return null;
@@ -16,7 +16,7 @@ async function getTeamsWebhookUrl() {
             WithDecryption: true,
         });
         const response = await ssmClient.send(command);
-        console.log("SSM Parameter Response:", response); // Log the response
+        console.log("SSM Parameter Response:", response);
         if (!response.Parameter) {
             console.error("SSM Parameter not found");
             return null;
@@ -24,8 +24,8 @@ async function getTeamsWebhookUrl() {
         return response.Parameter.Value || null;
     } catch (error) {
         console.error("Error retrieving SSM Parameter:", error);
-        console.error("Error details:", error.message); // Log the error message
-        console.error("Error stack:", error.stack); // Log the error stack
+        console.error("Error details:", error.message);
+        console.error("Error stack:", error.stack);
         return null;
     }
 }
@@ -40,7 +40,7 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(teamsPayload),
             },
-            timeout: 5000, // 5 seconds timeout
+            timeout: 5000,
         };
 
         console.log("Request options:", options);
@@ -65,7 +65,7 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
                         console.log(`Retrying... (${retries} retries left)`);
                         setTimeout(() => {
                             sendTeamsMessage(teamsPayload, url, retries - 1).then(resolve).catch(reject);
-                        }, 1000); // Retry after 1 second
+                        }, 5000);
                     } else {
                         reject(new Error(`Failed to send message to Teams after ${retries} retries`));
                     }
@@ -79,7 +79,7 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
                 console.log(`Retrying... (${retries} retries left)`);
                 setTimeout(() => {
                     sendTeamsMessage(teamsPayload, url, retries - 1).then(resolve).catch(reject);
-                }, 1000); // Retry after 1 second
+                }, 5000);
             } else {
                 reject(new Error(`Failed to send message to Teams after ${retries} retries`));
             }
@@ -92,7 +92,7 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
                 console.log(`Retrying... (${retries} retries left)`);
                 setTimeout(() => {
                     sendTeamsMessage(teamsPayload, url, retries - 1).then(resolve).catch(reject);
-                }, 1000); // Retry after 1 second
+                }, 5000);
             } else {
                 reject(new Error(`Failed to send message to Teams after ${retries} retries`));
             }
@@ -124,7 +124,6 @@ module.exports = {
                 const snsMessage = JSON.parse(record.Sns.Message);
                 console.log("SNS Message:", snsMessage);
 
-                // Extract and format the message
                 const alert = snsMessage.alerts[0];
                 const status = alert.status.toUpperCase();
                 const statusEmoji = status === 'FIRING' ? '🔴' : status === 'RESOLVED' ? '🟢' : '';
@@ -135,12 +134,11 @@ module.exports = {
 **Grafana URL:** ${snsMessage.externalURL}
 
 **Silence Link:** ${alert.silenceURL}
-                `.trim(); // Trim any leading/trailing whitespace
+                `.trim();
 
-                // Prepare the payload for Microsoft Teams
                 const teamsPayload = JSON.stringify({
                     title: `${statusEmoji} Alert: ${alert.labels.alertname} - ${status}`,
-                    text: formattedMessage, // Preserve newlines
+                    text: formattedMessage,
                 });
 
                 await sendTeamsMessage(teamsPayload, url);
