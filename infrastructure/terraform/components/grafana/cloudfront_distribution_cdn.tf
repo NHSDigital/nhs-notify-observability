@@ -20,13 +20,14 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = [local.root_domain_name]
 
   viewer_certificate {
+    cloudfront_default_certificate = false
     acm_certificate_arn      = aws_acm_certificate.main.arn
     minimum_protocol_version = "TLSv1.2_2021" # Supports 1.2 & 1.3 - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html
     ssl_support_method       = "sni-only"
   }
 
   origin {
-    domain_name = aws_grafana_workspace.obs.endpoint
+    domain_name = aws_grafana_workspace.grafana.endpoint
     origin_id   = "GrafanaOrigin"
 
     custom_origin_config {
@@ -53,4 +54,3 @@ default_cache_behavior {
     }
   }
 }
-

@@ -12,6 +12,6 @@ resource "aws_route53_record" "acm_validation" {
   name            = each.value.name
   records         = [each.value.record]
   type            = each.value.type
-  zone_id         = aws_route53_zone.main.id
+  zone_id         = data.aws_route53_zone.main.zone_id
   ttl             = 60
 }
