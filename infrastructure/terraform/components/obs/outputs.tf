@@ -1,5 +1,5 @@
 output "domain_dashboard" {
   value = {
-    url          = { for k,v in grafana_dashboard.domain : k => v.url }
+    for key, dashboard in grafana_dashboard.domain : key => dashboard.url
   }
 }

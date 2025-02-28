@@ -16,6 +16,6 @@ resource "grafana_data_source" "cloudwatch_cross_account" {
   json_data_encoded = jsonencode({
     defaultRegion = "eu-west-2"
     authType      = "ec2_iam_role"
-    assumeRoleArn = replace("arn:aws:iam::${each.value.account_id}:role/${local.csi}-grafana-cross-access-role", var.component, "acct")
+    assumeRoleArn = replace("arn:aws:iam::${each.value.account_id}:role/${local.csi}-grafana-cross-access-role", "-${var.component}", "")
   })
 }

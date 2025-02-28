@@ -1,5 +1,5 @@
 resource "aws_iam_role" "grafana_workspace" {
-  name               = "${local.csi}-grafana-workspace-role"
+  name               = "${local.csi}-workspace-role"
   assume_role_policy = data.aws_iam_policy_document.grafana_assume_role_policy.json
 }
 
@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "grafana_cross_account_access" {
       ]
 
       resources = [
-        "arn:aws:iam::${statement.value.account_id}:role/${local.csi}-grafana-cross-access-role",
+        "arn:aws:iam::${statement.value.account_id}:role/${local.csi}-cross-access-role",
       ]
     }
 
