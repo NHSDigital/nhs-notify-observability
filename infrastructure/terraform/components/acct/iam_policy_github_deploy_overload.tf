@@ -20,6 +20,8 @@ data "aws_iam_policy_document" "github_deploy" {
       "identitystore:Get*",
       "sns:*",
       "sso:AssociateProfile",
+      "sso:DisassociateProfile",
+      "sso:DeleteManagedApplicationInstance",
       "sso:CreateManagedApplicationInstance",
       "sso:Describe*",
       "sso:Get*",
