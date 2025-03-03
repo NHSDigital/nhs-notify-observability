@@ -466,7 +466,6 @@ rule {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
         }
-        expression       = "SELECT MAX(OverdueRequestItemPlansCount) FROM \"Notify/Watchdog\" WHERE environment='${var.environment}'"
         id               = "max_overdue_request_item_plans_count"
         intervalMs       = 3600000
         label            = ""
@@ -483,6 +482,9 @@ rule {
         region           = "default"
         sqlExpression    = ""
         statistic        = "Sum"
+        dimensions       = {
+          environment = var.environment
+        }
       })
     }
 
@@ -578,7 +580,6 @@ rule {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
         }
-        expression       = "SELECT MAX(OverdueRequestItemsCount) FROM \"Notify/Watchdog\" WHERE environment='${var.environment}'"
         id               = "max_overdue_request_items_count"
         intervalMs       = 3600000
         label            = ""
@@ -595,6 +596,9 @@ rule {
         region           = "default"
         sqlExpression    = ""
         statistic        = "Sum"
+        dimensions       = {
+          environment = var.environment
+        }
       })
     }
 
@@ -690,7 +694,6 @@ rule {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
         }
-        expression       = "SELECT MAX(OverdueRequestsCount) FROM \"Notify/Watchdog\" WHERE environment='${var.environment}'"
         id               = "max_overdue_requests_count"
         intervalMs       = 3600000
         label            = ""
@@ -707,6 +710,9 @@ rule {
         region           = "default"
         sqlExpression    = ""
         statistic        = "Sum"
+        dimensions       = {
+          environment = var.environment
+        }
       })
     }
 
