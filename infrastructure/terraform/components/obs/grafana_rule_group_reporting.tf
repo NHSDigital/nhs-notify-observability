@@ -101,7 +101,7 @@ resource "grafana_rule_group" "reporting" {
       })
     }
 
-    no_data_state  = "NoData"
+    no_data_state  = "OK"
     exec_err_state = "Error"
     for            = "1h"
     annotations    = {}
@@ -213,7 +213,7 @@ resource "grafana_rule_group" "reporting" {
       })
     }
 
-    no_data_state  = "NoData"
+    no_data_state  = "OK"
     exec_err_state = "Error"
     for            = "1h"
     annotations    = {}
@@ -324,7 +324,7 @@ resource "grafana_rule_group" "reporting" {
       })
     }
 
-    no_data_state  = "NoData"
+    no_data_state  = "OK"
     exec_err_state = "Error"
     for            = "1h"
     annotations    = {}
@@ -435,7 +435,7 @@ rule {
       })
     }
 
-    no_data_state  = "NoData"
+    no_data_state  = "OK"
     exec_err_state = "Error"
     for            = "1h"
     annotations    = {}
