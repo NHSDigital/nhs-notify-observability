@@ -410,7 +410,10 @@ rule {
         maxDataPoints  = 43200
         reducer        = "last"
         refId          = "B"
-        settings       = { mode = "" }
+        settings       = {
+          mode = "replaceNN",
+          replaceWithValue = 0
+        }
         type           = "reduce"
       })
     }
@@ -523,7 +526,10 @@ rule {
         maxDataPoints  = 43200
         reducer        = "last"
         refId          = "B"
-        settings       = { mode = "" }
+        settings       = {
+          mode = "replaceNN",
+          replaceWithValue = 0
+        }
         type           = "reduce"
       })
     }
@@ -637,7 +643,10 @@ rule {
         maxDataPoints  = 43200
         reducer        = "last"
         refId          = "B"
-        settings       = { mode = "" }
+        settings       = {
+          mode = "replaceNN",
+          replaceWithValue = 0
+        }
         type           = "reduce"
       })
     }
@@ -751,7 +760,10 @@ rule {
         maxDataPoints  = 43200
         reducer        = "last"
         refId          = "B"
-        settings       = { mode = "" }
+        settings       = {
+          mode = "replaceNN",
+          replaceWithValue = 0
+        }
         type           = "reduce"
       })
     }
