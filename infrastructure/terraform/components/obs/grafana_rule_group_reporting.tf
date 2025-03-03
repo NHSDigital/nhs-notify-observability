@@ -475,6 +475,7 @@ rule {
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricQueryType  = 0
+        metricName       = "OverdueRequestItemPlansCount"
         namespace        = "Notify/Watchdog"
         period           = "3600"
         queryMode        = "Metrics"
@@ -586,6 +587,7 @@ rule {
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricQueryType  = 0
+        metricName       = "OverdueRequestsItemsCount"
         namespace        = "Notify/Watchdog"
         period           = "3600"
         queryMode        = "Metrics"
@@ -697,6 +699,7 @@ rule {
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricQueryType  = 0
+        metricName       = "OverdueRequestsCount"
         namespace        = "Notify/Watchdog"
         period           = "3600"
         queryMode        = "Metrics"
