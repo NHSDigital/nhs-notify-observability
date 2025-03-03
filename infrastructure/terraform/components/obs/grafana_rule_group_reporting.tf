@@ -26,7 +26,7 @@ resource "grafana_rule_group" "reporting" {
         intervalMs       = 1000
         label            = ""
         logGroups        = []
-        matchExact       = true
+        matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricName       = "ExecutionsAborted"
@@ -138,7 +138,7 @@ resource "grafana_rule_group" "reporting" {
         intervalMs       = 1000
         label            = ""
         logGroups        = []
-        matchExact       = true
+        matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricName       = "ExecutionsFailed"
@@ -249,7 +249,7 @@ resource "grafana_rule_group" "reporting" {
         intervalMs       = 1000
         label            = ""
         logGroups        = []
-        matchExact       = true
+        matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricName       = "ExecutionsTimedOut"
@@ -360,7 +360,7 @@ rule {
         intervalMs       = 1000
         label            = ""
         logGroups        = []
-        matchExact       = true
+        matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricName       = "NumberOfBackupJobsFailed"
@@ -471,7 +471,7 @@ rule {
         intervalMs       = 3600000
         label            = ""
         logGroups        = []
-        matchExact       = true
+        matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricQueryType  = 0
@@ -582,7 +582,7 @@ rule {
         intervalMs       = 3600000
         label            = ""
         logGroups        = []
-        matchExact       = true
+        matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricQueryType  = 0
@@ -693,7 +693,7 @@ rule {
         intervalMs       = 3600000
         label            = ""
         logGroups        = []
-        matchExact       = true
+        matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
         metricQueryType  = 0
