@@ -462,7 +462,7 @@ rule {
   }
   rule {
     name      = "Overdue Request Item Plans"
-    condition = "C"
+    condition = "B"
 
     data {
       ref_id = "A"
@@ -478,6 +478,9 @@ rule {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
         }
+        dimensions = {
+          environment = var.environment
+        }
         id               = "max_overdue_request_item_plans_count"
         intervalMs       = 3600000
         label            = ""
@@ -485,18 +488,15 @@ rule {
         matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
-        metricQueryType  = 0
         metricName       = "OverdueRequestItemPlansCount"
+        metricQueryType  = 0
         namespace        = "Notify/Watchdog"
         period           = "3600"
         queryMode        = "Metrics"
         refId            = "A"
         region           = "default"
         sqlExpression    = ""
-        statistic        = "Sum"
-        dimensions       = {
-          environment = var.environment
-        }
+        statistic        = "Maximum"
       })
     }
 
@@ -504,71 +504,44 @@ rule {
       ref_id = "B"
 
       relative_time_range {
-        from = 3600
+        from = 600
         to   = 0
       }
 
       datasource_uid = "__expr__"
       model          = jsonencode({
         conditions = [{
-          evaluator = { params = [1], type = "gt" }
-          operator  = { type = "and" }
+          evaluator = { params = [0, 0], type = "gt" }
+          operator  = { type = "when" }
           query     = { params = ["A"] }
-          reducer   = { params = [], type = "last" }
+          reducer   = { params = [], type = "max" }
           type      = "query"
         }]
         datasource = {
+          name = "Expression"
           type = "__expr__"
           uid  = "__expr__"
         }
-        expression     = "A"
-        intervalMs     = 3600000
+        expression     = ""
+        intervalMs     = 1000
         maxDataPoints  = 43200
-        reducer        = "last"
         refId          = "B"
-        settings       = {
-          mode = "replaceNN",
-          replaceWithValue = 0
-        }
-        type           = "reduce"
-      })
-    }
-
-    data {
-      ref_id = "C"
-
-      relative_time_range {
-        from = 3600
-        to   = 0
-      }
-
-      datasource_uid = "__expr__"
-      model          = jsonencode({
-        conditions = [{
-          evaluator = { params = [0], type = "gt" }
-          operator  = { type = "and" }
-          query     = { params = ["B"] }
-          reducer   = { params = [], type = "last" }
-          type      = "query"
-        }]
-        datasource = {
-          type = "__expr__"
-          uid  = "__expr__"
-        }
-        expression    = "B"
-        intervalMs    = 3600000
-        maxDataPoints = 43200
-        refId         = "C"
-        type          = "threshold"
+        type           = "classic_conditions"
       })
     }
 
     no_data_state  = "OK"
     exec_err_state = "Error"
     for            = "1h"
-    annotations    = {}
-    labels         = {}
-    is_paused      = false
+    annotations = {
+      description = ""
+      runbook_url = ""
+      summary     = ""
+    }
+    labels = {
+      "" = ""
+    }
+    is_paused = false
 
     notification_settings {
       contact_point = grafana_contact_point.sns.name
@@ -579,7 +552,7 @@ rule {
 
   rule {
     name      = "Overdue Request Items"
-    condition = "C"
+    condition = "B"
 
     data {
       ref_id = "A"
@@ -595,6 +568,9 @@ rule {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
         }
+        dimensions = {
+          environment = var.environment
+        }
         id               = "max_overdue_request_items_count"
         intervalMs       = 3600000
         label            = ""
@@ -602,18 +578,15 @@ rule {
         matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
+        metricName       = "OverdueRequestItemsCount"
         metricQueryType  = 0
-        metricName       = "OverdueRequestsItemsCount"
         namespace        = "Notify/Watchdog"
         period           = "3600"
         queryMode        = "Metrics"
         refId            = "A"
         region           = "default"
         sqlExpression    = ""
-        statistic        = "Sum"
-        dimensions       = {
-          environment = var.environment
-        }
+        statistic        = "Maximum"
       })
     }
 
@@ -621,71 +594,44 @@ rule {
       ref_id = "B"
 
       relative_time_range {
-        from = 3600
+        from = 600
         to   = 0
       }
 
       datasource_uid = "__expr__"
       model          = jsonencode({
         conditions = [{
-          evaluator = { params = [1], type = "gt" }
-          operator  = { type = "and" }
+          evaluator = { params = [0, 0], type = "gt" }
+          operator  = { type = "when" }
           query     = { params = ["A"] }
-          reducer   = { params = [], type = "last" }
+          reducer   = { params = [], type = "max" }
           type      = "query"
         }]
         datasource = {
+          name = "Expression"
           type = "__expr__"
           uid  = "__expr__"
         }
-        expression     = "A"
-        intervalMs     = 3600000
+        expression     = ""
+        intervalMs     = 1000
         maxDataPoints  = 43200
-        reducer        = "last"
         refId          = "B"
-        settings       = {
-          mode = "replaceNN",
-          replaceWithValue = 0
-        }
-        type           = "reduce"
-      })
-    }
-
-    data {
-      ref_id = "C"
-
-      relative_time_range {
-        from = 3600
-        to   = 0
-      }
-
-      datasource_uid = "__expr__"
-      model          = jsonencode({
-        conditions = [{
-          evaluator = { params = [0], type = "gt" }
-          operator  = { type = "and" }
-          query     = { params = ["B"] }
-          reducer   = { params = [], type = "last" }
-          type      = "query"
-        }]
-        datasource = {
-          type = "__expr__"
-          uid  = "__expr__"
-        }
-        expression    = "B"
-        intervalMs    = 3600000
-        maxDataPoints = 43200
-        refId         = "C"
-        type          = "threshold"
+        type           = "classic_conditions"
       })
     }
 
     no_data_state  = "OK"
     exec_err_state = "Error"
     for            = "1h"
-    annotations    = {}
-    labels         = {}
-    is_paused      = false
+    annotations = {
+      description = ""
+      runbook_url = ""
+      summary     = ""
+    }
+    labels = {
+      "" = ""
+    }
+    is_paused = false
 
     notification_settings {
       contact_point = grafana_contact_point.sns.name
@@ -696,7 +642,7 @@ rule {
 
   rule {
     name      = "Overdue Requests"
-    condition = "C"
+    condition = "B"
 
     data {
       ref_id = "A"
@@ -712,6 +658,9 @@ rule {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
         }
+        dimensions = {
+          environment = var.environment
+        }
         id               = "max_overdue_requests_count"
         intervalMs       = 3600000
         label            = ""
@@ -719,18 +668,15 @@ rule {
         matchExact       = false
         maxDataPoints    = 43200
         metricEditorMode = 0
-        metricQueryType  = 0
         metricName       = "OverdueRequestsCount"
+        metricQueryType  = 0
         namespace        = "Notify/Watchdog"
         period           = "3600"
         queryMode        = "Metrics"
         refId            = "A"
         region           = "default"
         sqlExpression    = ""
-        statistic        = "Sum"
-        dimensions       = {
-          environment = var.environment
-        }
+        statistic        = "Maximum"
       })
     }
 
@@ -738,71 +684,44 @@ rule {
       ref_id = "B"
 
       relative_time_range {
-        from = 3600
+        from = 600
         to   = 0
       }
 
       datasource_uid = "__expr__"
       model          = jsonencode({
         conditions = [{
-          evaluator = { params = [1], type = "gt" }
-          operator  = { type = "and" }
+          evaluator = { params = [0, 0], type = "gt" }
+          operator  = { type = "when" }
           query     = { params = ["A"] }
-          reducer   = { params = [], type = "last" }
+          reducer   = { params = [], type = "max" }
           type      = "query"
         }]
         datasource = {
+          name = "Expression"
           type = "__expr__"
           uid  = "__expr__"
         }
-        expression     = "A"
-        intervalMs     = 3600000
+        expression     = ""
+        intervalMs     = 1000
         maxDataPoints  = 43200
-        reducer        = "last"
         refId          = "B"
-        settings       = {
-          mode = "replaceNN",
-          replaceWithValue = 0
-        }
-        type           = "reduce"
-      })
-    }
-
-    data {
-      ref_id = "C"
-
-      relative_time_range {
-        from = 3600
-        to   = 0
-      }
-
-      datasource_uid = "__expr__"
-      model          = jsonencode({
-        conditions = [{
-          evaluator = { params = [0], type = "gt" }
-          operator  = { type = "and" }
-          query     = { params = ["B"] }
-          reducer   = { params = [], type = "last" }
-          type      = "query"
-        }]
-        datasource = {
-          type = "__expr__"
-          uid  = "__expr__"
-        }
-        expression    = "B"
-        intervalMs    = 3600000
-        maxDataPoints = 43200
-        refId         = "C"
-        type          = "threshold"
+        type           = "classic_conditions"
       })
     }
 
     no_data_state  = "OK"
     exec_err_state = "Error"
     for            = "1h"
-    annotations    = {}
-    labels         = {}
-    is_paused      = false
+    annotations = {
+      description = ""
+      runbook_url = ""
+      summary     = ""
+    }
+    labels = {
+      "" = ""
+    }
+    is_paused = false
 
     notification_settings {
       contact_point = grafana_contact_point.sns.name
