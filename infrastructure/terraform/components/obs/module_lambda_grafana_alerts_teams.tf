@@ -64,7 +64,7 @@ data "aws_iam_policy_document" "lambda_grafana_alerts_teams" {
     ]
 
     resources = [
-      aws_sns_topic.alerting.arn,
+      aws_sns_topic.main.arn,
     ]
   }
 
