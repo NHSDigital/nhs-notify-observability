@@ -4,7 +4,7 @@ resource "grafana_rule_group" "reporting" {
   interval_seconds = 3600
 
   rule {
-    name      = "Completed Batch Report Executions Aborted"
+    name      = "Executions Aborted"
     condition = "C"
 
     data {
@@ -20,9 +20,6 @@ resource "grafana_rule_group" "reporting" {
         datasource = {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
-        }
-        dimensions = {
-          StateMachineArn = "arn:aws:states:${var.region}:${lookup(var.delegated_grafana_account_ids, "reporting", "account_id")}:stateMachine:nhs-notify-${var.environment}-reporting-state-machine-completed-batch-report"
         }
         expression       = ""
         id               = ""
@@ -119,7 +116,7 @@ resource "grafana_rule_group" "reporting" {
   }
 
   rule {
-    name      = "Completed Batch Report Executions Failed"
+    name      = "Executions Failed"
     condition = "C"
 
     data {
@@ -135,9 +132,6 @@ resource "grafana_rule_group" "reporting" {
         datasource = {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
-        }
-        dimensions = {
-          StateMachineArn = "arn:aws:states:${var.region}:${lookup(var.delegated_grafana_account_ids, "reporting", "account_id")}:stateMachine:nhs-notify-${var.environment}-reporting-state-machine-completed-batch-report"
         }
         expression       = ""
         id               = ""
@@ -233,7 +227,7 @@ resource "grafana_rule_group" "reporting" {
     }
   }
   rule {
-    name      = "Completed Batch Report Executions Timed Out"
+    name      = "Executions Timed Out"
     condition = "C"
 
     data {
@@ -249,9 +243,6 @@ resource "grafana_rule_group" "reporting" {
         datasource = {
           type = "cloudwatch"
           uid  = grafana_data_source.cloudwatch_cross_account["reporting"].uid
-        }
-        dimensions = {
-          StateMachineArn = "arn:aws:states:${var.region}:${lookup(var.delegated_grafana_account_ids, "reporting", "account_id")}:stateMachine:nhs-notify-${var.environment}-reporting-state-machine-completed-batch-report"
         }
         expression       = ""
         id               = ""
