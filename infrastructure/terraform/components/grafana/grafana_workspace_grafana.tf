@@ -16,7 +16,7 @@ resource "aws_grafana_workspace" "grafana" {
         "pluginAdminEnabled" = true
       },
       "unifiedAlerting" = {
-        "enabled" = true
+        "enabled" = false
       }
     }
   )

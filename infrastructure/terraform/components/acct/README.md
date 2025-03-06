@@ -16,7 +16,6 @@
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"acct"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_delegated_grafana_account_ids"></a> [delegated\_grafana\_account\_ids](#input\_delegated\_grafana\_account\_ids) | A list of accounts Grafana can assume role into | <pre>list(object({<br/>    domain     = string<br/>    account_id = string<br/>  }))</pre> | `[]` | no |
-| <a name="input_delegated_grafana_admin_group_ids"></a> [delegated\_grafana\_admin\_group\_ids](#input\_delegated\_grafana\_admin\_group\_ids) | A list of SSO group ids that would be granted ADMIN access in Grafana | `list(string)` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
 | <a name="input_group"></a> [group](#input\_group) | The group variables are being inherited from (often synonmous with account short-name) | `string` | n/a | yes |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite | `number` | `0` | no |
