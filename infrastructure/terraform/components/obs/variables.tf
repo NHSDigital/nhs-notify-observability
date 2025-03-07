@@ -57,16 +57,15 @@ variable "log_retention_in_days" {
   default     = 0
 }
 
-# variable "delegated_grafana_admin_group_ids" {
-#   type        = list(string)
-#   description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
-#   default     = []
-# }
-
-variable "service_account_token" {
+variable "root_domain_name" {
   type        = string
-  description = "Service Account Token for Grafana"
-  ephemeral = true
+  description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
+  default     = "nonprod.nhsnotify.national.nhs.uk"
+}
+
+variable "delegated_grafana_admin_group_ids" {
+  type        = list(string)
+  description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
 }
 
 variable "delegated_grafana_account_ids" {

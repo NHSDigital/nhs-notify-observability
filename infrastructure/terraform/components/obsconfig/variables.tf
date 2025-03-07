@@ -38,7 +38,7 @@ variable "group" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "grafana"
+  default     = "obsconfig"
 }
 
 variable "default_tags" {
@@ -57,15 +57,16 @@ variable "log_retention_in_days" {
   default     = 0
 }
 
-variable "root_domain_name" {
-  type        = string
-  description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
-  default     = "nonprod.nhsnotify.national.nhs.uk"
-}
+# variable "delegated_grafana_admin_group_ids" {
+#   type        = list(string)
+#   description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
+#   default     = []
+# }
 
-variable "delegated_grafana_admin_group_ids" {
-  type        = list(string)
-  description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
+variable "service_account_token" {
+  type        = string
+  description = "Service Account Token for Grafana"
+  ephemeral = true
 }
 
 variable "delegated_grafana_account_ids" {
@@ -73,6 +74,30 @@ variable "delegated_grafana_account_ids" {
     domain     = string
     account_id = string
   }))
-  description = "A list of accounts Grafana can assume role into"
+  description = "A list of accounts Observability can assume role into"
   default     = []
+}
+
+variable "log_level" {
+  type        = string
+  description = "The log level to be used in lambda functions within the component. Any log with a lower severity than the configured value will not be logged: https://docs.python.org/3/library/logging.html#levels"
+  default     = "INFO"
+}
+
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
+
+variable "force_lambda_code_deploy" {
+  type        = bool
+  description = "If the lambda package in s3 has the same commit id tag as the terraform build branch, the lambda will not update automatically. Set to True if making changes to Lambda code from on the same commit for example during development"
+  default     = false
+}
+
+variable "parent_acct_environment" {
+  type        = string
+  description = "Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments"
+  default     = "main"
 }
