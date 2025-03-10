@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 14,
   "links": [],
   "panels": [
     {
@@ -647,7 +647,7 @@
             "uid": "${cloudwatch_data_source_uid}"
           },
           "dimensions": {
-            "WebACL": "$WAF_WEBACL_NAME"
+            "WebACL": "$ENV_CSI"
           },
           "expression": "",
           "id": "",
@@ -818,7 +818,7 @@
             "uid": "${cloudwatch_data_source_uid}"
           },
           "dimensions": {
-            "WebACL": "$WAF_WEBACL_NAME"
+            "WebACL": "$ENV_CSI"
           },
           "expression": "",
           "id": "",
@@ -965,6 +965,111 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 14,
+        "y": 22
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${cloudwatch_data_source_uid}"
+          },
+          "dimensions": {
+            "WebACL": "$ENV_CSI"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "AllowedRequests",
+          "metricQueryType": 0,
+          "namespace": "AWS/WAFV2",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "us-east-1",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/CloudFront",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "4xxErrorRate",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Allowed Requests",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${cloudwatch_data_source_uid}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "palette-classic"
           },
           "custom": {
@@ -982,7 +1087,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1135,7 +1241,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1291,7 +1398,7 @@
         "description": "nhs-notify-main-cdn",
         "hide": 0,
         "label": "Environment CSI Prefix",
-        "name": "WAF_WEBACL_NAME",
+        "name": "ENV_CSI",
         "options": [
           {
             "selected": true,
@@ -1313,6 +1420,6 @@
   "timezone": "browser",
   "title": "web-gateway-${environment}",
   "uid": "",
-  "version": 11,
+  "version": 16,
   "weekStart": ""
 }
