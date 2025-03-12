@@ -36,7 +36,6 @@
 | <a name="output_event_bus_arn"></a> [event\_bus\_arn](#output\_event\_bus\_arn) | n/a |
 | <a name="output_event_bus_name"></a> [event\_bus\_name](#output\_event\_bus\_name) | n/a |
 | <a name="output_s3_buckets"></a> [s3\_buckets](#output\_s3\_buckets) | n/a |
-| <a name="output_teams_webhook_url_alerts_name"></a> [teams\_webhook\_url\_alerts\_name](#output\_teams\_webhook\_url\_alerts\_name) | The name of the SSM Parameter for the Teams Webhook URL |
 <!-- vale on -->
 <!-- markdownlint-enable -->
 <!-- END_TF_DOCS -->
