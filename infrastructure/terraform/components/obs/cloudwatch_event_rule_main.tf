@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "main" {
   name          = "${local.csi}-cloudwatch-alarm-forwarding"
-  event_bus_name = aws_cloudwatch_event_bus.main.name
+  event_bus_name = data.terraform_remote_state.event_bus.outputs.event_bus_name
   description   = "Triggers Lambda when an alarm event is received"
 
   event_pattern = jsonencode({

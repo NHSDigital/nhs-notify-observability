@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_event_bus_policy" "main" {
-  event_bus_name = aws_cloudwatch_event_bus.main.name
+  event_bus_name = data.terraform_remote_state.acct.outputs.event_bus_name
   policy         = data.aws_iam_policy_document.main.json
 }
 
@@ -14,6 +14,6 @@ data "aws_iam_policy_document" "main" {
     }
 
     actions   = ["events:PutEvents"]
-    resources = [aws_cloudwatch_event_bus.main.arn]
+    resources = [data.terraform_remote_state.acct.outputs.event_bus_arn]
   }
 }

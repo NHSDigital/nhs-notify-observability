@@ -29,10 +29,7 @@
 | <a name="input_service_account_token"></a> [service\_account\_token](#input\_service\_account\_token) | Service Account Token for Grafana | `string` | n/a | yes |
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_kms_alert_forwarding"></a> [kms\_alert\_forwarding](#module\_kms\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.9 |
-| <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v1.0.9 |
+No modules.
 ## Outputs
 
 | Name | Description |

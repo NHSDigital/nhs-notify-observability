@@ -20,3 +20,11 @@ output "teams_webhook_url_alerts_name" {
   value = aws_ssm_parameter.teams_webhook_url_alerts.name
   description = "The name of the SSM Parameter for the Teams Webhook URL"
 }
+
+output "event_bus_name" {
+  value = aws_cloudwatch_event_bus.main.name
+}
+
+output "event_bus_arn" {
+  value = aws_cloudwatch_event_bus.main.arn
+}
