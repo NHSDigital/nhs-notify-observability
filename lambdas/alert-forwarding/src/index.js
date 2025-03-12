@@ -123,21 +123,42 @@ module.exports = {
             const detail = event.detail;
             console.log("Event Detail:", detail);
 
-            const alarmName = detail.alarmName;
-            const state = detail.state.value;
-            const reason = detail.state.reason;
-            const statusEmoji = state === 'ALARM' ? '🔴' : state === 'OK' ? '🟢' : '';
+            let title, formattedMessage;
 
-            const formattedMessage = `
+            if (event.source === "aws.cloudwatch") {
+                const alarmName = detail.alarmName;
+                const state = detail.state.value;
+                const reason = detail.state.reason;
+                const statusEmoji = state === 'ALARM' ? '🔴' : state === 'OK' ? '🟢' : '';
+
+                title = `${statusEmoji} CloudWatch Alarm: ${alarmName} - ${state}`;
+                formattedMessage = `
 **Alarm Name:** ${alarmName}
 
 **State:** ${state}
 
 **Reason:** ${reason}
-            `.trim();
+                `.trim();
+            } else if (event.source === "aws.backup") {
+                const jobId = detail.backupJobId || detail.restoreJobId || detail.copyJobId;
+                const state = detail.state;
+                const statusEmoji = state === 'FAILED' ? '🔴' : state === 'ABORTED' ? '⚠️' : '';
+
+                title = `${statusEmoji} AWS Backup Job: ${jobId} - ${state}`;
+                formattedMessage = `
+**Job ID:** ${jobId}
+
+**State:** ${state}
+
+**Status Message:** ${detail.statusMessage || "N/A"}
+                `.trim();
+            } else {
+                console.error("Unhandled event source:", event.source);
+                return;
+            }
 
             const teamsPayload = JSON.stringify({
-                title: `${statusEmoji} CloudWatch Alarm: ${alarmName} - ${state}`,
+                title: title,
                 text: formattedMessage,
             });
 
