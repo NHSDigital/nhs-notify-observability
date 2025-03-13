@@ -34,7 +34,8 @@ module "lambda_alert_forwarding" {
   enable_lambda_insights   = false
 
   lambda_env_vars = {
-    "TEAMS_WEBHOOK_ALERTS_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_alerts.name
+    "TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.name,
+    "TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.name
   }
 }
 
@@ -62,7 +63,8 @@ data "aws_iam_policy_document" "lambda_alert_forwarding" {
     ]
 
     resources = [
-      aws_ssm_parameter.teams_webhook_url_alerts.arn
+      aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.arn,
+      aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.arn
     ]
   }
 }

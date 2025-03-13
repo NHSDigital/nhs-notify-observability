@@ -3,8 +3,7 @@ const https = require('https');
 
 const ssmClient = new SSMClient({ region: "eu-west-2" });
 
-async function getTeamsWebhookUrl() {
-    const parameterName = process.env.TEAMS_WEBHOOK_ALERTS_SSM_PARAM;
+async function getTeamsWebhookUrl(parameterName) {
     console.log("SSM Parameter Name:", parameterName);
     if (!parameterName) {
         console.error("No SSM parameter name found in environment variables");
@@ -109,7 +108,17 @@ module.exports = {
     handler: async (event) => {
         console.log("Event Received:", JSON.stringify(event, null, 2));
 
-        const TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl();
+        let parameterName;
+        if (event.source === "aws.cloudwatch") {
+            parameterName = process.env.TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM;
+        } else if (event.source === "aws.backup") {
+            parameterName = process.env.TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM;
+        } else {
+            console.error("Unhandled event source:", event.source);
+            return;
+        }
+
+        const TEAMS_WEBHOOK_URL = await getTeamsWebhookUrl(parameterName);
         if (!TEAMS_WEBHOOK_URL) {
             console.error("Failed to retrieve Teams Webhook URL from SSM");
             return;
@@ -152,9 +161,6 @@ module.exports = {
 
 **Status Message:** ${detail.statusMessage || "N/A"}
                 `.trim();
-            } else {
-                console.error("Unhandled event source:", event.source);
-                return;
             }
 
             const teamsPayload = JSON.stringify({
