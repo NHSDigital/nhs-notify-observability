@@ -1,0 +1,26 @@
+{
+  "author": "NHS Notify",
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.750.0",
+    "node-fetch": "^3.3.2"
+  },
+  "description": "AWS Lambda function responsible for sending Cloudwatch Alerts to Teams.",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testEnvironment": "node"
+  },
+  "license": "ISC",
+  "main": "src/index.js",
+  "name": "alert-forwarding",
+  "scripts": {
+    "test": "jest"
+  },
+  "version": "1.0.0"
+}
