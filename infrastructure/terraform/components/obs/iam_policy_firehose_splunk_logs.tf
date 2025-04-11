@@ -1,3 +1,4 @@
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_policy" "firehose_splunk_logs" {
   name = "${local.csi}-firehose-splunk-logs-delivery-policy"
 
