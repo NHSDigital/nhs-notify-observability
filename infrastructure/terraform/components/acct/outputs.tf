@@ -13,6 +13,11 @@ output "s3_buckets" {
       bucket = module.s3bucket_lambda_artefacts.bucket
       id     = module.s3bucket_lambda_artefacts.id
     }
+    s3bucket_access_logs = {
+      arn    = module.s3bucket_access_logs.arn
+      bucket = module.s3bucket_access_logs.bucket
+      id     = module.s3bucket_access_logs.id
+    }
   }
 }
 

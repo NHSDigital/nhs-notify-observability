@@ -32,7 +32,9 @@
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_kms_alert_forwarding"></a> [kms\_alert\_forwarding](#module\_kms\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.9 |
+| <a name="module_kms_splunk"></a> [kms\_splunk](#module\_kms\_splunk) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.9 |
 | <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v1.0.9 |
+| <a name="module_s3bucket_splunk_logs"></a> [s3bucket\_splunk\_logs](#module\_s3bucket\_splunk\_logs) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v1.0.0 |
 ## Outputs
 
 No outputs.
