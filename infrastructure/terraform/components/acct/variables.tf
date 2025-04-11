@@ -71,3 +71,9 @@ variable "delegated_grafana_account_ids" {
   description = "A list of accounts Grafana can assume role into"
   default     = []
 }
+
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}

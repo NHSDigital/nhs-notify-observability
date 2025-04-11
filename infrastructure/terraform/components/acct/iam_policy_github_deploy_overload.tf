@@ -16,8 +16,10 @@ data "aws_iam_policy_document" "github_deploy" {
 
     actions = [
       "cloudfront:*",
+      "firehose:*",
       "grafana:*",
       "identitystore:Get*",
+      "oam:*",
       "sns:*",
       "sso:AssociateProfile",
       "sso:DisassociateProfile",
