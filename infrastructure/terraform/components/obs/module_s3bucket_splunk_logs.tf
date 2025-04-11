@@ -13,7 +13,7 @@ module "s3bucket_splunk_logs" {
   force_destroy = false
   versioning    = true
 
-  kms_key_arn = module.kms_splunk_logs.key_arn
+  kms_key_arn = module.kms_splunk.key_arn
 
   lifecycle_rules = [
     {
