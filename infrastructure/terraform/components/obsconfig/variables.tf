@@ -71,8 +71,9 @@ variable "service_account_token" {
 
 variable "delegated_grafana_account_ids" {
   type = list(object({
-    domain     = string
-    account_id = string
+    domain            = string
+    account_id        = string
+    custom_namespaces = optional(list(string),[])
   }))
   description = "A list of accounts Observability can assume role into"
   default     = []
