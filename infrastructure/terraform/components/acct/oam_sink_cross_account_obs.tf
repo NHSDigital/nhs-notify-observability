@@ -1,9 +1,9 @@
-resource "aws_oam_sink" "main" {
+resource "aws_oam_sink" "cross_account_obs" {
   name = "${local.csi}-oam-sink"
   tags  = var.default_tags
 }
 
-data "aws_iam_policy_document" "main" {
+data "aws_iam_policy_document" "cross_account_obs" {
   statement {
     actions   = ["oam:CreateLink", "oam:UpdateLink"]
     resources = ["*"]
@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "main" {
   }
 }
 
-resource "aws_oam_sink_policy" "main" {
-  sink_identifier = aws_oam_sink.main.id
+resource "aws_oam_sink_policy" "cross_account_obs" {
+  sink_identifier = aws_oam_sink.cross_account_obs.id
   policy          = data.aws_iam_policy_document.oam_sink_policy.json
 }
