@@ -24,5 +24,5 @@ data "aws_iam_policy_document" "cross_account_obs" {
 
 resource "aws_oam_sink_policy" "cross_account_obs" {
   sink_identifier = aws_oam_sink.cross_account_obs.id
-  policy          = data.aws_iam_policy_document.oam_sink_policy.json
+  policy          = data.aws_iam_policy_document.cross_account_obs.json
 }
