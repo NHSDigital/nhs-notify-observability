@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "cross_account_obs" {
       variable = "oam:ResourceTypes"
       values   = [
         "AWS::CloudWatch::Metric",
-        "AWS::CloudWatch::Log"
+        "AWS::Logs::LogGroup"
       ]
     }
   }
