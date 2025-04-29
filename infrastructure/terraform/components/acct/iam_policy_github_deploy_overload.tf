@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "github_deploy" {
       "cloudfront:*",
       "grafana:*",
       "identitystore:Get*",
+      "oam:*",
       "sns:*",
       "sso:AssociateProfile",
       "sso:DisassociateProfile",
