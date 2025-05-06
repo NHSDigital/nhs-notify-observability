@@ -1,12 +1,12 @@
 resource "aws_cloudwatch_log_destination" "firehose_logs" {
   name       = "${local.csi}-firehose-logs"
-  target_arn = aws_kinesis_firehose_delivery_stream.splunk_logs.arn
+  target_arn = module.kinesis_firehose_to_splunk_logs.kinesis_firehose_arn
   role_arn   = aws_iam_role.cloudwatch_logs_to_firehose.arn
 
   depends_on = [
     aws_iam_role.cloudwatch_logs_to_firehose,
     aws_iam_role_policy_attachment.cloudwatch_logs_to_firehose_attachment,
-    aws_kinesis_firehose_delivery_stream.splunk_logs
+    module.kinesis_firehose_to_splunk_logs.kinesis_firehose_arn
   ]
 }
 
