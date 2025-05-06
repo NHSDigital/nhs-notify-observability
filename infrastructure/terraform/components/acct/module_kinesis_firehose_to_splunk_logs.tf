@@ -1,5 +1,12 @@
 module "kinesis_firehose_to_splunk_logs" {
-  source = "../modules/kinesis-firehose-to-splunk"
+  source = "../../modules/kinesis-firehose-to-splunk"
+
+  project                     = var.project
+  environment                 = var.environment
+  aws_account_id              = var.aws_account_id
+  region                      = var.region
+  group                       = var.group
+  component                   = var.component
 
   default_tags                = var.default_tags
   log_retention_in_days       = var.log_retention_in_days

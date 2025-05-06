@@ -27,8 +27,8 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_kinesis_firehose_to_splunk_logs"></a> [kinesis\_firehose\_to\_splunk\_logs](#module\_kinesis\_firehose\_to\_splunk\_logs) | ../modules/kinesis-firehose-to-splunk | n/a |
-| <a name="module_kinesis_firehose_to_splunk_metrics"></a> [kinesis\_firehose\_to\_splunk\_metrics](#module\_kinesis\_firehose\_to\_splunk\_metrics) | ../modules/kinesis-firehose-to-splunk | n/a |
+| <a name="module_kinesis_firehose_to_splunk_logs"></a> [kinesis\_firehose\_to\_splunk\_logs](#module\_kinesis\_firehose\_to\_splunk\_logs) | ../../modules/kinesis-firehose-to-splunk | n/a |
+| <a name="module_kinesis_firehose_to_splunk_metrics"></a> [kinesis\_firehose\_to\_splunk\_metrics](#module\_kinesis\_firehose\_to\_splunk\_metrics) | ../../modules/kinesis-firehose-to-splunk | n/a |
 | <a name="module_kms_splunk"></a> [kms\_splunk](#module\_kms\_splunk) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.9 |
 | <a name="module_s3bucket_access_logs"></a> [s3bucket\_access\_logs](#module\_s3bucket\_access\_logs) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v1.0.8 |
 | <a name="module_s3bucket_lambda_artefacts"></a> [s3bucket\_lambda\_artefacts](#module\_s3bucket\_lambda\_artefacts) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v1.0.0 |
