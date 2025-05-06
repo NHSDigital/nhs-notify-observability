@@ -52,10 +52,10 @@ data "aws_iam_policy_document" "firehose_to_s3" {
       "logs:DescribeLogStreams"
     ]
     resources = [
-      aws_cloudwatch_log_group.splunk_logs_firehose.arn,
-      "${aws_cloudwatch_log_group.splunk_logs_firehose.arn}:*",
-      aws_cloudwatch_log_group.splunk_metrics_firehose.arn,
-      "${aws_cloudwatch_log_group.splunk_metrics_firehose.arn}:*"
+      module.kinesis_firehose_to_splunk_logs.log_group_arn,
+      "${module.kinesis_firehose_to_splunk_logs.log_group_arn}:*",
+      module.kinesis_firehose_to_splunk_metrics.log_group_arn,
+      "${module.kinesis_firehose_to_splunk_metrics.log_group_arn}:*"
     ]
   }
 }
