@@ -15,12 +15,17 @@ data "aws_iam_policy_document" "github_deploy" {
     effect = "Allow"
 
     actions = [
+      "cloudfront:*",
       "grafana:*",
       "identitystore:Get*",
-      "sso:List*",
-      "sso:Describe*",
+      "sns:*",
       "sso:AssociateProfile",
-      "sso:Get*"
+      "sso:DisassociateProfile",
+      "sso:DeleteManagedApplicationInstance",
+      "sso:CreateManagedApplicationInstance",
+      "sso:Describe*",
+      "sso:Get*",
+      "sso:List*"
     ]
     resources = ["*"]
   }
