@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_policy" {
       "firehose:PutRecordBatch"
     ]
     resources = [
-      aws_kinesis_firehose_delivery_stream.splunk_logs.arn
+      module.kinesis_firehose_to_splunk_logs.kinesis_firehose_arn
     ]
   }
 }

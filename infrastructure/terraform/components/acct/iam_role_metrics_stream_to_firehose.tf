@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "metric_stream_to_firehose_policy" {
       "firehose:PutRecordBatch"
     ]
     resources = [
-      aws_kinesis_firehose_delivery_stream.splunk_metrics.arn
+      module.kinesis_firehose_to_splunk_metrics.kinesis_firehose_arn
     ]
   }
 }
