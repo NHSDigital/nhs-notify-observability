@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "firehose_logs" {
     principals {
       type        = "AWS"
       identifiers = concat(
-        [for account in var.delegated_grafana_account_ids : "${account.account_id}"],
+        [for account in var.bounded_context_account_ids : "${account.account_id}"],
         ["${var.aws_account_id}"]
       )
     }

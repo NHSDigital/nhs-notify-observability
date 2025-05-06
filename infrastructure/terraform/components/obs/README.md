@@ -13,9 +13,9 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
+| <a name="input_bounded_context_account_ids"></a> [bounded\_context\_account\_ids](#input\_bounded\_context\_account\_ids) | A list of accounts Grafana can assume role into | <pre>list(object({<br/>    domain     = string<br/>    account_id = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"obs"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
-| <a name="input_delegated_grafana_account_ids"></a> [delegated\_grafana\_account\_ids](#input\_delegated\_grafana\_account\_ids) | A list of accounts Grafana can assume role into | <pre>list(object({<br/>    domain     = string<br/>    account_id = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_delegated_grafana_admin_group_ids"></a> [delegated\_grafana\_admin\_group\_ids](#input\_delegated\_grafana\_admin\_group\_ids) | A list of SSO group ids that would be granted ADMIN access in Grafana | `list(string)` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
 | <a name="input_force_lambda_code_deploy"></a> [force\_lambda\_code\_deploy](#input\_force\_lambda\_code\_deploy) | If the lambda package in s3 has the same commit id tag as the terraform build branch, the lambda will not update automatically. Set to True if making changes to Lambda code from on the same commit for example during development | `bool` | `false` | no |

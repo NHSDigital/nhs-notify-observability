@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_assume_role_policy" 
       test     = "StringLike"
       variable = "aws:SourceArn"
       values = concat(
-        [for account in var.delegated_grafana_account_ids : "arn:aws:logs:${var.region}:${account.account_id}:*"],
+        [for account in var.bounded_context_account_ids : "arn:aws:logs:${var.region}:${account.account_id}:*"],
         ["arn:aws:logs:${var.region}:${var.aws_account_id}:*"]
       )
     }

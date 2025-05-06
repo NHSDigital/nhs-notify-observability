@@ -68,7 +68,7 @@ variable "delegated_grafana_admin_group_ids" {
   description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
 }
 
-variable "delegated_grafana_account_ids" {
+variable "bounded_context_account_ids" {
   type = list(object({
     domain     = string
     account_id = string

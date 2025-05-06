@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "cross_account_obs" {
     resources = ["*"]
     principals {
       type        = "AWS"
-      identifiers = var.delegated_grafana_account_ids[*].account_id
+      identifiers = var.bounded_context_account_ids[*].account_id
     }
     condition {
       test     = "ForAllValues:StringEquals"
