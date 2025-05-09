@@ -20,7 +20,6 @@ data "aws_iam_policy_document" "github_deploy" {
       "grafana:*",
       "identitystore:Get*",
       "oam:*",
-      "ram:*",
       "sns:*",
       "sso:AssociateProfile",
       "sso:DisassociateProfile",
