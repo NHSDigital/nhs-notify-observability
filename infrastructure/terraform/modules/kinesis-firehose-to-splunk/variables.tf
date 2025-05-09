@@ -38,7 +38,7 @@ variable "group" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "obs"
+  default     = "acct"
 }
 
 variable "default_tags" {
@@ -57,46 +57,32 @@ variable "log_retention_in_days" {
   default     = 0
 }
 
-variable "root_domain_name" {
+variable "type" {
   type        = string
-  description = "The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk"
-  default     = "nonprod.nhsnotify.national.nhs.uk"
+  description = "The type of the resource - logs or metrics"
+  default     = null
+
+  validation {
+    condition     = var.type == "logs" || var.type == "metrics"
+    error_message = "The 'type' variable must be either 'logs' or 'metrics'."
+  }
+
 }
 
-variable "delegated_grafana_admin_group_ids" {
-  type        = list(string)
-  description = "A list of SSO group ids that would be granted ADMIN access in Grafana"
-}
-
-variable "bounded_context_account_ids" {
-  type = list(object({
-    domain     = string
-    account_id = string
-  }))
-  description = "A list of accounts Grafana can assume role into"
-  default     = []
-}
-
-variable "log_level" {
+variable "kms_splunk_key_arn"{
   type        = string
-  description = "The log level to be used in lambda functions within the component. Any log with a lower severity than the configured value will not be logged: https://docs.python.org/3/library/logging.html#levels"
-  default     = "INFO"
+  description = "The ARN of the KMS key to use for encrypting the Splunk Firehose data"
+  default     = null
 }
 
-variable "kms_deletion_window" {
+variable "splunk_firehose_bucket_arn" {
   type        = string
-  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
-  default     = "30"
+  description = "The ARN of the S3 bucket to use for the Splunk Firehose data"
+  default     = null
 }
 
-variable "force_lambda_code_deploy" {
-  type        = bool
-  description = "If the lambda package in s3 has the same commit id tag as the terraform build branch, the lambda will not update automatically. Set to True if making changes to Lambda code from on the same commit for example during development"
-  default     = false
-}
-
-variable "parent_acct_environment" {
+variable "firehose_to_s3_role_arn" {
   type        = string
-  description = "Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments"
-  default     = "main"
+  description = "The ARN of the IAM role to use for the Splunk Firehose to S3"
+  default     = null
 }

@@ -63,11 +63,17 @@ variable "root_domain_name" {
   default     = "nonprod.nhsnotify.national.nhs.uk"
 }
 
-variable "delegated_grafana_account_ids" {
+variable "bounded_context_account_ids" {
   type = list(object({
     domain     = string
     account_id = string
   }))
-  description = "A list of accounts Grafana can assume role into"
+  description = "A list of bounded context account ids"
   default     = []
+}
+
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
 }

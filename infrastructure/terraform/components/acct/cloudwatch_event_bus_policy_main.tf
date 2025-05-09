@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "main" {
 
     principals {
       type        = "AWS"
-      identifiers = [for account in var.delegated_grafana_account_ids : account.account_id]
+      identifiers = [for account in var.bounded_context_account_ids : account.account_id]
     }
 
     actions   = ["events:PutEvents"]

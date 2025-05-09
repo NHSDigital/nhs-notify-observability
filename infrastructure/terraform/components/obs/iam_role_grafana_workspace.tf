@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "grafana_workspace_xray" {
 
 data "aws_iam_policy_document" "grafana_cross_account_access" {
   dynamic "statement" {
-    for_each = var.delegated_grafana_account_ids
+    for_each = var.bounded_context_account_ids
     content {
       sid = replace("AssumeRoleCrossAccountfor${statement.value.domain}", "-", "")
 

@@ -69,7 +69,7 @@ variable "service_account_token" {
   ephemeral = true
 }
 
-variable "delegated_grafana_account_ids" {
+variable "bounded_context_account_ids" {
   type = list(object({
     domain            = string
     account_id        = string

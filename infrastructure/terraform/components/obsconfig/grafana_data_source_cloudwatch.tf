@@ -9,7 +9,7 @@ resource "grafana_data_source" "cloudwatch" {
 }
 
 resource "grafana_data_source" "cloudwatch_cross_account" {
-  for_each = { for id, account_config in var.delegated_grafana_account_ids : account_config.domain => account_config }
+  for_each = { for id, account_config in var.bounded_context_account_ids : account_config.domain => account_config }
 
   type     = "cloudwatch"
   name     = "CloudWatch-${each.value.domain}"
