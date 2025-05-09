@@ -1,5 +1,5 @@
-resource "aws_iam_role" "firehose_to_s3" {
-  name               = "${local.csi}-firehose-to-s3-delivery-role"
+resource "aws_iam_role" "firehose_to_splunk" {
+  name               = "${local.csi}-firehose-to-splunk-delivery-role"
   assume_role_policy = data.aws_iam_policy_document.firehose_assume_role_policy.json
 }
 
@@ -14,13 +14,13 @@ data "aws_iam_policy_document" "firehose_assume_role_policy" {
   }
 }
 
-resource "aws_iam_policy" "firehose_to_s3" {
-  name   = "${local.csi}-firehose-to-s3-delivery-policy"
-  policy = data.aws_iam_policy_document.firehose_to_s3.json
+resource "aws_iam_policy" "firehose_to_splunk" {
+  name   = "${local.csi}-firehose-to-splunk-delivery-policy"
+  policy = data.aws_iam_policy_document.firehose_to_splunk.json
 }
 
 #tfsec:ignore:aws-iam-no-policy-wildcards
-data "aws_iam_policy_document" "firehose_to_s3" {
+data "aws_iam_policy_document" "firehose_to_splunk" {
   statement {
     effect = "Allow"
     actions = [
@@ -58,9 +58,21 @@ data "aws_iam_policy_document" "firehose_to_s3" {
       "${module.kinesis_firehose_to_splunk_metrics.log_group_arn}:*"
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:InvokeFunction",
+      "lambda:GetFunctionConfiguration"
+    ]
+    resources = [
+      "${module.splunk_logs_formatter.function_arn}:$LATEST",
+      "${module.splunk_metrics_formatter.function_arn}:$LATEST"
+    ]
+  }
 }
 
-resource "aws_iam_role_policy_attachment" "firehose_to_s3" {
-  role       = aws_iam_role.firehose_to_s3.name
-  policy_arn = aws_iam_policy.firehose_to_s3.arn
+resource "aws_iam_role_policy_attachment" "firehose_to_splunk" {
+  role       = aws_iam_role.firehose_to_splunk.name
+  policy_arn = aws_iam_policy.firehose_to_splunk.arn
 }

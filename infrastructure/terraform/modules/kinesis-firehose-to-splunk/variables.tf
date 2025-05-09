@@ -81,8 +81,26 @@ variable "splunk_firehose_bucket_arn" {
   default     = null
 }
 
-variable "firehose_to_s3_role_arn" {
+variable "firehose_to_splunk_role_arn" {
   type        = string
-  description = "The ARN of the IAM role to use for the Splunk Firehose to S3"
+  description = "The ARN of the IAM role to use for the Firehose to Splunk"
   default     = null
+}
+
+variable "formatter_lambda_function_arn" {
+  type        = string
+  description = "The ARN of the Lambda function used for formatting Firehose data"
+  default     = null
+}
+
+variable "formatter_lambda_buffer" {
+  type        = string
+  description = "The buffer size in MBs for the Lambda function"
+  default     = "3"
+}
+
+variable "formatter_lambda_buffer_interval" {
+  type        = string
+  description = "The buffer interval in seconds for the Lambda function"
+  default     = "60"
 }
