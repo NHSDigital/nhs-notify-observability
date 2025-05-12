@@ -1,6 +1,6 @@
 resource "aws_oam_sink" "cross_account_obs" {
   name = "${local.csi}-oam-sink"
-  tags  = var.default_tags
+  tags = var.default_tags
 }
 
 data "aws_iam_policy_document" "cross_account_obs" {
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "cross_account_obs" {
     condition {
       test     = "ForAllValues:StringEquals"
       variable = "oam:ResourceTypes"
-      values   = [
+      values = [
         "AWS::CloudWatch::Metric",
         "AWS::Logs::LogGroup"
       ]

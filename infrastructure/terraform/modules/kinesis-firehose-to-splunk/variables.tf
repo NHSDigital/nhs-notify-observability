@@ -86,3 +86,19 @@ variable "firehose_to_s3_role_arn" {
   description = "The ARN of the IAM role to use for the Splunk Firehose to S3"
   default     = null
 }
+
+variable "formatter_lambda_buffer" {
+  description = "Formatter lambda buffer size"
+  default     = 1 # Megabytes (Maximum 3)
+}
+
+variable "formatter_lambda_buffer_interval" {
+  description = "Buffer for formatter lambda for the specified period of time, in seconds, before delivering it to the lambda"
+  default     = 60 # Seconds (Maximum 900)
+}
+
+variable "formatter_lambda_function_arn" {
+  type        = string
+  description = "Formatter function arn"
+  default     = ""
+}

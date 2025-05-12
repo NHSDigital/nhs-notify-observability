@@ -76,7 +76,7 @@ data "aws_iam_policy_document" "kms_splunk" {
     condition {
       test     = "ArnEquals"
       variable = "kms:EncryptionContext:aws:logs:arn"
-      values   = [
+      values = [
         "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:${local.csi}-splunk-logs-firehose",
         "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:${local.csi}-splunk-metrics-firehose"
       ]

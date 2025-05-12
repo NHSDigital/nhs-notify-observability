@@ -8,8 +8,3 @@ resource "aws_ssm_parameter" "splunk_hec_endpoint" {
     ignore_changes = [value]
   }
 }
-
-data "aws_ssm_parameter" "splunk_hec_endpoint" {
-  name       = "/splunk/hec/endpoint/${var.type}"
-  depends_on = [ aws_ssm_parameter.splunk_hec_endpoint ]
-}

@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "firehose_logs" {
   statement {
     effect = "Allow"
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = concat(
         [for account in var.bounded_context_account_ids : "${account.account_id}"],
         ["${var.aws_account_id}"]

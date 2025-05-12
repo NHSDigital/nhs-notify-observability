@@ -8,8 +8,3 @@ resource "aws_ssm_parameter" "splunk_hec_token" {
     ignore_changes = [value]
   }
 }
-
-data "aws_ssm_parameter" "splunk_hec_token" {
-  name       = "/splunk/hec/token/${var.type}"
-  depends_on = [ aws_ssm_parameter.splunk_hec_token ]
-}
