@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "kinesis_firehose_policy_document" {
 }
 
 resource "aws_iam_policy" "kinesis_firehose_iam_policy" {
-  name        = "${local.csi}-firehose-policy"
+  name        = "${local.csi}-${var.type}-firehose-policy"
   policy      = data.aws_iam_policy_document.kinesis_firehose_policy_document.json
   description = "IAM Policy for firehose delivery stream role"
 }

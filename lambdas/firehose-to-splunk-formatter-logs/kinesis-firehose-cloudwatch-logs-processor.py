@@ -88,7 +88,7 @@ def transformLogEvent(log_event, acct, arn, loggrp, logstrm, filterName):
         sourcetype = "aws:cloudwatch"
 
     # Inserting environment to make it easier to filter logs if missing in the event, only if its a valid json message
-    log_event['message'] = insert_env_if_json(log_event['message'])
+    log_event['message'] = insert_env_if_json(log_event['message'], acct)
 
     return_message = '{"time": ' + str(
         log_event['timestamp']) + ',"host": "' + arn + '","source": "' + filterName + ':' + loggrp + '"'
@@ -97,7 +97,7 @@ def transformLogEvent(log_event, acct, arn, loggrp, logstrm, filterName):
 
     return return_message + '\n'
 
-def insert_env_if_json(message):
+def insert_env_if_json(message, acct):
     try:
         json.loads(message)
     except ValueError as e:
@@ -105,6 +105,7 @@ def insert_env_if_json(message):
     update_message=json.loads(message)
     update_message['environment'] = os.environ['ENVIRONMENT']
     update_message['architecture'] = 'new'
+    update_message['account'] = acct
     message = json.dumps(update_message)
     return message
 
