@@ -14,5 +14,5 @@ module "kinesis_firehose_to_splunk_metrics" {
   kms_splunk_key_arn            = module.kms_splunk.key_arn
   splunk_firehose_bucket_arn    = module.s3bucket_splunk_firehose.arn
   firehose_to_s3_role_arn       = aws_iam_role.firehose_to_s3.arn
-  formatter_lambda_function_arn = module.splunk_logs_formatter_lambda.function_arn
+  formatter_lambda_function_arn = module.splunk_metrics_formatter_lambda.function_arn
 }
