@@ -102,3 +102,23 @@ variable "formatter_lambda_function_arn" {
   description = "Formatter function arn"
   default     = ""
 }
+
+variable "kinesis_firehose_buffer" {
+  description = "https://www.terraform.io/docs/providers/aws/r/kinesis_firehose_delivery_stream.html#buffer_size"
+  default     = 5 # Megabytes (Maximum 5)
+}
+
+variable "kinesis_firehose_buffer_interval" {
+  description = "Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination"
+  default     = 60 # Seconds (Maximum 60)
+}
+
+variable "s3_kinesis_firehose_buffer" {
+  description = "S3 backup buffer"
+  default     = 5 # Megabytes (Maximum 128)
+}
+
+variable "s3_kinesis_firehose_buffer_interval" {
+  description = "S3 backup buffer interval"
+  default     = 300 # Seconds (Maximum 900)
+}

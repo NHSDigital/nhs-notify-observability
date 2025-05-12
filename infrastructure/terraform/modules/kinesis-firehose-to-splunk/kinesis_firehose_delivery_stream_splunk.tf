@@ -8,6 +8,8 @@ resource "aws_kinesis_firehose_delivery_stream" "splunk_firehose" {
     hec_token               = aws_ssm_parameter.splunk_hec_token.value
     retry_duration          = 300
     s3_backup_mode          = "FailedEventsOnly"
+    buffering_size             = var.kinesis_firehose_buffer
+    buffering_interval         = var.kinesis_firehose_buffer_interval
 
     processing_configuration {
       enabled = "true"
@@ -37,15 +39,17 @@ resource "aws_kinesis_firehose_delivery_stream" "splunk_firehose" {
     s3_configuration {
       role_arn           = var.firehose_to_s3_role_arn
       bucket_arn         = var.splunk_firehose_bucket_arn
-      buffering_size     = 5
-      buffering_interval = 300
+      buffering_size     = var.s3_kinesis_firehose_buffer
+      buffering_interval = var.s3_kinesis_firehose_buffer_interval
       compression_format = "GZIP"
       kms_key_arn        = var.kms_splunk_key_arn
-      cloudwatch_logging_options {
+
+    }
+
+    cloudwatch_logging_options {
         enabled         = true
         log_group_name  = aws_cloudwatch_log_group.splunk_firehose.name
         log_stream_name = aws_cloudwatch_log_stream.splunk_firehose.name
-      }
     }
   }
 
