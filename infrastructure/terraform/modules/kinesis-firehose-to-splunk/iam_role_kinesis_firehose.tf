@@ -1,6 +1,6 @@
 # Role for Kinesis Firehose
 resource "aws_iam_role" "kinesis_firehose" {
-  name        = "${local.csi}-splunk-firehose-role"
+  name        = "${local.csi}-${var.type}-splunk-firehose-role"
   description = "IAM Role for Kinesis Firehose"
 
   assume_role_policy = <<POLICY

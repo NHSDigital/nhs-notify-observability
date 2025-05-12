@@ -12,7 +12,7 @@ module "splunk_logs_formatter_lambda" {
   group          = var.group
 
   log_retention_in_days = var.log_retention_in_days
-  kms_key_arn           = module.kms_splunk.key_arn
+  kms_key_arn           = module.kms_logs.key_arn
 
   iam_policy_document = {
     body = data.aws_iam_policy_document.splunk_formatter_kinesis_perms.json

@@ -6,41 +6,41 @@ For processing data sent to Firehose by Cloudwatch Logs subscription filters.
 Additional processing of message into format for Splunk HTTP Event Collector - Event input (not Raw)
 Cloudwatch Logs sends to Firehose records that look like this:
 {
-  "messageType": "DATA_MESSAGE",
-  "owner": "123456789012",
-  "logGroup": "log_group_name",
-  "logStream": "log_stream_name",
-  "subscriptionFilters": [
-    "subscription_filter_name"
-  ],
-  "logEvents": [
-    {
-      "id": "01234567890123456789012345678901234567890123456789012345",
-      "timestamp": 1510109208016,
-      "message": "log message 1"
-    },
-    {
-      "id": "01234567890123456789012345678901234567890123456789012345",
-      "timestamp": 1510109208017,
-      "message": "log message 2"
+    "messageType": "DATA_MESSAGE",
+    "owner": "123456789012",
+    "logGroup": "log_group_name",
+    "logStream": "log_stream_name",
+    "subscriptionFilters": [
+        "subscription_filter_name"
+    ],
+    "logEvents": [
+        {
+        "id": "01234567890123456789012345678901234567890123456789012345",
+        "timestamp": 1510109208016,
+        "message": "log message 1"
+        },
+        {
+        "id": "01234567890123456789012345678901234567890123456789012345",
+        "timestamp": 1510109208017,
+        "message": "log message 2"
+        }
+        ...
+    ]
     }
-    ...
-  ]
-}
 The data is additionally compressed with GZIP.
 The code below will:
-1) Gunzip the data
-2) Parse the json
-3) Set the result to ProcessingFailed for any record whose messageType is not DATA_MESSAGE, thus redirecting them to the
-   processing error output. Such records do not contain any log events. You can modify the code to set the result to
-   Dropped instead to get rid of these records completely.
-4) For records whose messageType is DATA_MESSAGE, extract the individual log events from the logEvents field, and pass
-   each one to the transformLogEvent method. You can modify the transformLogEvent method to perform custom
-   transformations on the log events.
-5) Concatenate the result from (4) together and set the result as the data of the record returned to Firehose. Note that
-   this step will not add any delimiters. Delimiters should be appended by the logic within the transformLogEvent
-   method.
-6) Any additional records which exceed 6MB will be re-ingested back into Firehose.
+    1) Gunzip the data
+    2) Parse the json
+    3) Set the result to ProcessingFailed for any record whose messageType is not DATA_MESSAGE, thus redirecting them to the
+    processing error output. Such records do not contain any log events. You can modify the code to set the result to
+    Dropped instead to get rid of these records completely.
+    4) For records whose messageType is DATA_MESSAGE, extract the individual log events from the logEvents field, and pass
+    each one to the transformLogEvent method. You can modify the transformLogEvent method to perform custom
+    transformations on the log events.
+    5) Concatenate the result from (4) together and set the result as the data of the record returned to Firehose. Note that
+    this step will not add any delimiters. Delimiters should be appended by the logic within the transformLogEvent
+    method.
+    6) Any additional records which exceed 6MB will be re-ingested back into Firehose.
 """
 
 import base64
@@ -98,15 +98,15 @@ def transformLogEvent(log_event, acct, arn, loggrp, logstrm, filterName):
     return return_message + '\n'
 
 def insert_env_if_json(message):
-  try:
-    json.loads(message)
-  except ValueError as e:
+    try:
+        json.loads(message)
+    except ValueError as e:
+        return message
+    update_message=json.loads(message)
+    update_message['environment'] = os.environ['ENVIRONMENT']
+    update_message['architecture'] = 'new'
+    message = json.dumps(update_message)
     return message
-  update_message=json.loads(message)
-  update_message['environment'] = os.environ['ENVIRONMENT']
-  update_message['architecture'] = 'new'
-  message = json.dumps(update_message)
-  return message
 
 
 def processRecords(records, arn):
@@ -131,7 +131,7 @@ def processRecords(records, arn):
             }
         elif data['messageType'] == 'DATA_MESSAGE':
             data = ''.join([transformLogEvent(e, data['owner'], arn, data['logGroup'], data['logStream'],
-                                              data['subscriptionFilters'][0]) for e in data['logEvents']])
+                                                data['subscriptionFilters'][0]) for e in data['logEvents']])
             if IS_PY3:
                 data = base64.b64encode(data.encode('utf-8')).decode()
             else:
