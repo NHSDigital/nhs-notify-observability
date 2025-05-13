@@ -26,3 +26,10 @@ resource "aws_oam_sink_policy" "cross_account_obs" {
   sink_identifier = aws_oam_sink.cross_account_obs.id
   policy          = data.aws_iam_policy_document.cross_account_obs.json
 }
+
+resource "aws_ssm_parameter" "oam_sink_id" {
+  name        = "/oam/sink_id"
+  type        = "String"
+  value       = aws_oam_sink.cross_account_obs.id
+  description = "OAM sink ID"
+}
