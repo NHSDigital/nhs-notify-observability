@@ -3,10 +3,10 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type { Config } from 'jest';
+import type { Config } from "jest";
 
 const config: Config = {
-  preset: 'ts-jest',
+  preset: "ts-jest",
 
   // Automatically clear mock calls, instances, contexts and results before every test
   clearMocks: true,
@@ -15,10 +15,10 @@ const config: Config = {
   collectCoverage: true,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: './.reports/unit/coverage',
+  coverageDirectory: "./.reports/unit/coverage",
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: 'v8',
+  coverageProvider: "v8",
 
   coverageThreshold: {
     global: {
@@ -29,25 +29,25 @@ const config: Config = {
     },
   },
 
-  collectCoverageFrom: ['src/**/*.ts*'],
+  collectCoverageFrom: ["src/**/*.ts*", "!src/**/types.ts"],
 
   // Use this configuration option to add custom reporters to Jest
   reporters: [
-    'default',
+    "default",
     [
-      'jest-html-reporter',
+      "jest-html-reporter",
       {
-        pageTitle: 'Test Report',
-        outputPath: './.reports/unit/test-report.html',
+        pageTitle: "Test Report",
+        outputPath: "./.reports/unit/test-report.html",
         includeFailureMsg: true,
       },
     ],
   ],
 
   // The test environment that will be used for testing
-  testEnvironment: 'node',
+  testEnvironment: "node",
 
-  testPathIgnorePatterns: ['/node_modules/', '/tests/'],
+  testPathIgnorePatterns: ["/node_modules/", "/tests/"],
 };
 
 export default config;

@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { logger } from '@nhs-notify-observability/utils-logger';
-import { cloneDeep } from 'lodash';
-import { metricEventType, recordEntry } from './types';
+import { logger } from "@nhs-notify-observability/utils-logger";
+import { cloneDeep } from "lodash";
+import { metricEventType } from "./types";
 
 export function transformJsonMetricEvent(metrics: string[]): unknown[] {
   try {
     const events: unknown[] = [];
-    metrics.forEach((metricString: string) => {
-      if (metricString !== '') {
+    for (const metricString of metrics) {
+      if (metricString !== "") {
         const metric = JSON.parse(metricString);
         const metricEvent = cloneDeep(metric);
         // eslint-disable-next-line array-callback-return
@@ -20,22 +20,22 @@ export function transformJsonMetricEvent(metrics: string[]): unknown[] {
         Object.entries(metricEvent.value)
           // eslint-disable-next-line array-callback-return
           .map(([key, value]) => {
-            if (key === 'count') {
+            if (key === "count") {
               metricEvent.SampleCount = value;
             }
-            if (key === 'sum') {
+            if (key === "sum") {
               metricEvent.Sum = value;
             }
-            if (key === 'max') {
+            if (key === "max") {
               metricEvent.Maximum = value;
             }
-            if (key === 'min') {
+            if (key === "min") {
               metricEvent.Minimum = value;
             }
           });
         metricEvent.Average = metricEvent.Sum / metricEvent.SampleCount;
         delete metricEvent.value;
-        let sourcetype = 'aws:cloudwatch';
+        let sourcetype = "aws:cloudwatch";
         if (process.env.SPLUNK_CLOUDWATCH_SOURCETYPE) {
           sourcetype = process.env.SPLUNK_CLOUDWATCH_SOURCETYPE;
         }
@@ -47,15 +47,15 @@ export function transformJsonMetricEvent(metrics: string[]): unknown[] {
         };
         events.push(event);
       }
-    });
+    }
 
     return events;
-  } catch (err) {
+  } catch (error) {
     logger.error({
-      eventCode: 'MLP2003',
-      err: 'Transform JSON error',
+      eventCode: "MLP2003",
+      err: "Transform JSON error",
     });
-    throw new Error(`Transform JSON error:: ${err}`);
+    throw new Error(`Transform JSON error:: ${error}`);
   }
 }
 
@@ -65,38 +65,38 @@ export async function handler(event: metricEventType): Promise<void | any> {
     const { records } = event;
     if (
       process.env.METRICS_OUTPUT_FORMAT &&
-      process.env.METRICS_OUTPUT_FORMAT === 'json'
+      process.env.METRICS_OUTPUT_FORMAT === "json"
     ) {
-      records.forEach(async (record: recordEntry) => {
+      for (const record of records) {
         const recordData = record.data;
-        const decodedData = Buffer.from(recordData, 'base64');
+        const decodedData = Buffer.from(recordData, "base64");
         const decodedMetrics: string[] = decodedData
-          .toString('utf-8')
-          .split('\n');
+          .toString("utf8")
+          .split("\n");
         const transformedMetricData = transformJsonMetricEvent(decodedMetrics);
         const metricEncodedString = Buffer.from(
           JSON.stringify(transformedMetricData),
-          'utf-8'
-        ).toString('base64');
+          "utf8",
+        ).toString("base64");
 
         const eventMap = cloneDeep(record);
         eventMap.data = metricEncodedString;
-        eventMap.result = 'Ok';
+        eventMap.result = "Ok";
         metrics.push(eventMap);
-      });
+      }
     } else {
       logger.error({
-        eventCode: 'MLP2001',
-        err: 'Invalid METRICS_OUTPUT_FORMAT value. Set to json',
+        eventCode: "MLP2001",
+        err: "Invalid METRICS_OUTPUT_FORMAT value. Set to json",
       });
-      throw new Error('Invalid METRICS_OUTPUT_FORMAT value. Set to json');
+      throw new Error("Invalid METRICS_OUTPUT_FORMAT value. Set to json");
     }
     return { records: metrics };
-  } catch (err) {
+  } catch (error) {
     logger.error({
-      eventCode: 'MLP2002',
-      err: 'Failed to deliver to firehose stream',
+      eventCode: "MLP2002",
+      err: "Failed to deliver to firehose stream",
     });
-    throw new Error(`Failed to deliver to firehose stream:: ${err}`);
+    throw new Error(`Failed to deliver to firehose stream:: ${error}`);
   }
 }

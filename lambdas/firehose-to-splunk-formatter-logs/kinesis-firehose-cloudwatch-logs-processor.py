@@ -79,6 +79,7 @@ def transformLogEvent(log_event, acct, arn, loggrp, logstrm, filterName):
     """
 
     region_name = arn.split(':')[3]
+    account_id = acct
     # note that the region_name is taken from the region for the Stream, this won't change if Cloudwatch from another account/region. Not used for this example function
     if "lambda" in loggrp:
         sourcetype = "aws:lambda"
@@ -88,7 +89,7 @@ def transformLogEvent(log_event, acct, arn, loggrp, logstrm, filterName):
         sourcetype = "aws:cloudwatch"
 
     # Inserting environment to make it easier to filter logs if missing in the event, only if its a valid json message
-    log_event['message'] = insert_env_if_json(log_event['message'])
+    log_event['message'] = insert_env_if_json(log_event['message'], account_id)
 
     return_message = '{"time": ' + str(
         log_event['timestamp']) + ',"host": "' + arn + '","source": "' + filterName + ':' + loggrp + '"'
@@ -97,13 +98,15 @@ def transformLogEvent(log_event, acct, arn, loggrp, logstrm, filterName):
 
     return return_message + '\n'
 
-def insert_env_if_json(message):
+def insert_env_if_json(message, account_id):
     try:
         json.loads(message)
     except ValueError as e:
         return message
     update_message=json.loads(message)
-    update_message['environment'] = os.environ['ENVIRONMENT']
+    update_message['obs_environment'] = os.environ['ENVIRONMENT']
+    if account_id:
+        update_message['account_id'] = account_id
     message = json.dumps(update_message)
     return message
 
