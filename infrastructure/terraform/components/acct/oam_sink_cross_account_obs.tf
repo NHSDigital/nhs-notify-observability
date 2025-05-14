@@ -1,6 +1,6 @@
 resource "aws_oam_sink" "cross_account_obs" {
   name = "${local.csi}-oam-sink"
-  tags  = var.default_tags
+  tags = var.default_tags
 }
 
 data "aws_iam_policy_document" "cross_account_obs" {
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "cross_account_obs" {
     condition {
       test     = "ForAllValues:StringEquals"
       variable = "oam:ResourceTypes"
-      values   = [
+      values = [
         "AWS::CloudWatch::Metric",
         "AWS::Logs::LogGroup"
       ]
@@ -25,4 +25,11 @@ data "aws_iam_policy_document" "cross_account_obs" {
 resource "aws_oam_sink_policy" "cross_account_obs" {
   sink_identifier = aws_oam_sink.cross_account_obs.id
   policy          = data.aws_iam_policy_document.cross_account_obs.json
+}
+
+resource "aws_ssm_parameter" "oam_sink_id" {
+  name        = "/oam/sink_id"
+  type        = "String"
+  value       = aws_oam_sink.cross_account_obs.id
+  description = "OAM sink ID"
 }
