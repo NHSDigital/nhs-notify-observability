@@ -20,7 +20,7 @@ module "splunk_metrics_formatter_lambda" {
 
   function_s3_bucket      = module.s3bucket_lambda_artefacts.id
   function_code_base_path = local.aws_lambda_functions_dir_path
-  function_code_dir = "metric-lambda-processor/dist"
+  function_code_dir       = "metric-lambda-processor/dist"
   function_module_name    = "index"
   handler_function_name   = "handler"
   runtime                 = "nodejs20.x"
@@ -28,7 +28,7 @@ module "splunk_metrics_formatter_lambda" {
   timeout                 = 900
 
   lambda_env_vars = {
-    ENVIRONMENT = var.environment
+    ENVIRONMENT                  = var.environment
     SPLUNK_CLOUDWATCH_SOURCETYPE = "aws:cloudwatch:metric"
     METRICS_OUTPUT_FORMAT        = "json"
   }
