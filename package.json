@@ -30,7 +30,7 @@
     "eslint-plugin-prettier": "^5.2.4",
     "eslint-plugin-security": "^3.0.1",
     "eslint-plugin-sonarjs": "^3.0.2",
-    "eslint-plugin-unicorn": "^55.0.0",
+    "eslint-plugin-unicorn": "^59.0.1",
     "jest-html-reporter": "^3.10.2",
     "jest-mock-extended": "^3.0.7",
     "prettier": "^3.5.3",
