@@ -1,5 +1,5 @@
 module "lambda_alert_forwarding" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.9"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.6"
 
   function_name = "alert-forwarding"
   description   = "A function for formatting and sending Cloudwatch alerts to Teams"
@@ -24,7 +24,7 @@ module "lambda_alert_forwarding" {
   function_include_common = true
   function_module_name    = "index"
   handler_function_name   = "handler"
-  runtime                 = "nodejs20.x"
+  runtime                 = "nodejs22.x"
   memory                  = 128
   timeout                 = 5
   log_level               = var.log_level
