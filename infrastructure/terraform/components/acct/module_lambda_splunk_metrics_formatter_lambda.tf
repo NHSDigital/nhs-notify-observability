@@ -23,7 +23,7 @@ module "splunk_metrics_formatter_lambda" {
   function_code_dir       = "metric-lambda-processor/dist"
   function_module_name    = "index"
   handler_function_name   = "handler"
-  runtime                 = "nodejs20.x"
+  runtime                 = "nodejs22.x"
   memory                  = 512
   timeout                 = 900
 
