@@ -1,5 +1,5 @@
 module "splunk_metrics_formatter_lambda" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.3"
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.6"
 
   function_name = "splunk-metrics-formatter"
   description   = "A function for formatting metrics for Splunk"

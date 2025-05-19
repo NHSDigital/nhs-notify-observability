@@ -32,7 +32,7 @@
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_kms_alert_forwarding"></a> [kms\_alert\_forwarding](#module\_kms\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.9 |
-| <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v1.0.9 |
+| <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.6 |
 ## Outputs
 
 No outputs.
