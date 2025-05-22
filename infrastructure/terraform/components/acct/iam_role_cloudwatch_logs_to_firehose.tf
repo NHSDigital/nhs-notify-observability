@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_assume_role_policy" 
     effect = "Allow"
     principals {
       type        = "Service"
-      identifiers = ["logs.${var.region}.amazonaws.com"]
+      identifiers = ["logs.${var.region}.amazonaws.com", "logs.us-east-1.amazonaws.com"]
     }
     actions = ["sts:AssumeRole"]
     condition {
@@ -16,7 +16,9 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_assume_role_policy" 
       variable = "aws:SourceArn"
       values = concat(
         [for account in var.bounded_context_account_ids : "arn:aws:logs:${var.region}:${account.account_id}:*"],
-        ["arn:aws:logs:${var.region}:${var.aws_account_id}:*"]
+        [for account in var.bounded_context_account_ids : "arn:aws:logs:us-east-1:${account.account_id}:*"],
+        ["arn:aws:logs:${var.region}:${var.aws_account_id}:*"],
+        ["arn:aws:logs:us-east-1:${var.aws_account_id}:*"]
       )
     }
   }

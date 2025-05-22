@@ -1,4 +1,6 @@
 resource "aws_cloudwatch_log_destination" "firehose_logs" {
+  for_each   = local.log_dest_regions
+  provider   = each.value.provider
   name       = "${local.csi}-firehose-logs"
   target_arn = module.kinesis_firehose_to_splunk_logs.kinesis_firehose_arn
   role_arn   = aws_iam_role.cloudwatch_logs_to_firehose.arn
@@ -11,6 +13,8 @@ resource "aws_cloudwatch_log_destination" "firehose_logs" {
 }
 
 data "aws_iam_policy_document" "firehose_logs" {
+  for_each = local.log_dest_regions
+  provider = each.value.provider
   statement {
     effect = "Allow"
     principals {
@@ -21,11 +25,13 @@ data "aws_iam_policy_document" "firehose_logs" {
       )
     }
     actions   = ["logs:PutSubscriptionFilter"]
-    resources = [aws_cloudwatch_log_destination.firehose_logs.arn]
+    resources = [aws_cloudwatch_log_destination.firehose_logs[each.key].arn]
   }
 }
 
 resource "aws_cloudwatch_log_destination_policy" "firehose_logs" {
-  destination_name = aws_cloudwatch_log_destination.firehose_logs.name
-  access_policy    = data.aws_iam_policy_document.firehose_logs.json
+  for_each         = local.log_dest_regions
+  provider         = each.value.provider
+  destination_name = aws_cloudwatch_log_destination.firehose_logs[each.key].name
+  access_policy    = data.aws_iam_policy_document.firehose_logs[each.key].json
 }
