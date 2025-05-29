@@ -90,7 +90,7 @@ jobs:
             run_id=$(echo "$in_progress" | jq -r \
               --arg env "${{ inputs.targetEnvironment }}" \
               --arg component "${{ inputs.targetComponent }}" \
-              --arg repoName "nhs-notify-web-template-management" \
+              --arg repoName "nhs-notify-observability" \
               --arg releaseVersion "${{ inputs.releaseVersion }}" \
               '.workflow_runs[]
                 | select(.name | contains($env) and contains($component) and contains($repoName) and contains($releaseVersion))
