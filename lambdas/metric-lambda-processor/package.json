@@ -14,7 +14,7 @@
     "pino": "^8.6.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.27.0",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.27.0",
     "@nhs-notify-observability/utils-logger": "^0.0.1",
     "@swc/core": "^1.5.7",
