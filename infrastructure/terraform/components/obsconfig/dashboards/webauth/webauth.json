@@ -15,16 +15,18 @@
       }
     ]
   },
+  "description": "",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 23,
   "links": [],
   "panels": [
     {
       "description": "",
       "gridPos": {
         "h": 2,
-        "w": 15,
+        "w": 21,
         "x": 0,
         "y": 0
       },
@@ -35,7 +37,49 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "# Web Gateway Service Levels",
+        "content": "# Webauth Overview",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 11,
+        "x": 0,
+        "y": 2
+      },
+      "id": 9,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Latency",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 10,
+        "x": 11,
+        "y": 2
+      },
+      "id": 26,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Traffic",
         "mode": "markdown"
       },
       "pluginVersion": "10.4.1",
@@ -61,24 +105,35 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 250
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 500
+              },
+              {
+                "color": "#EF843C",
+                "value": 1000
               }
             ]
           },
-          "unit": "none"
+          "unit": "ms"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 11,
         "x": 0,
-        "y": 2
+        "y": 4
       },
-      "id": 24,
+      "id": 27,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -87,9 +142,9 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "10.4.1",
       "targets": [
@@ -99,22 +154,22 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "DistributionId": "$cfDist"
+            "ApiName": "$appApiName"
           },
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "",
+          "label": "Average",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "Requests",
+          "metricName": "Latency",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/ApiGateway",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
@@ -135,11 +190,55 @@
             }
           },
           "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Sum"
+          "statistic": "Average"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "ApiName": "$appApiName"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Maximum",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Latency",
+          "metricQueryType": 0,
+          "namespace": "AWS/ApiGateway",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/CloudFront",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "4xxErrorRate",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "statistic": "Maximum"
         }
       ],
-      "title": "Requests",
-      "type": "stat"
+      "title": "API Gateway Latency",
+      "type": "gauge"
     },
     {
       "datasource": {
@@ -150,7 +249,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisBorderShow": false,
@@ -184,19 +283,30 @@
               "mode": "off"
             }
           },
-          "decimals": 0,
           "mappings": [],
           "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "purple",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 250
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 500
+              },
+              {
+                "color": "#EF843C",
+                "value": 1000
               }
             ]
           },
-          "unit": "percent"
+          "unit": "none"
         },
         "overrides": [
           {
@@ -206,7 +316,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "C E1EFO16JSDGHL1"
+                  "Count"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -226,12 +336,12 @@
         ]
       },
       "gridPos": {
-        "h": 4,
-        "w": 10,
+        "h": 5,
+        "w": 11,
         "x": 11,
-        "y": 2
+        "y": 4
       },
-      "id": 2,
+      "id": 30,
       "options": {
         "legend": {
           "calcs": [],
@@ -252,22 +362,22 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "DistributionId": "$cfDist"
+            "ApiName": "$appApiName"
           },
           "expression": "",
-          "hide": true,
+          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "TotalErrorRate",
+          "metricName": "Count",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/ApiGateway",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
@@ -289,64 +399,9 @@
           },
           "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
           "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
-          "expression": "",
-          "hide": true,
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "Requests",
-          "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "B",
-          "region": "us-east-1",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/CloudFront",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "4xxErrorRate",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "name": "Expression",
-            "type": "__expr__",
-            "uid": "__expr__"
-          },
-          "expression": "$A/$B",
-          "hide": false,
-          "refId": "C",
-          "type": "math"
         }
       ],
-      "title": "Error Rate",
+      "title": "API Gateway Requests",
       "type": "timeseries"
     },
     {
@@ -354,10 +409,46 @@
         "type": "cloudwatch",
         "uid": "${datasrc}"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -366,43 +457,31 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 10
-              },
-              {
-                "color": "green",
-                "value": 11
               }
             ]
           },
-          "unit": "d"
+          "unit": "ms"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 21,
+        "h": 6,
+        "w": 11,
         "x": 0,
-        "y": 6
+        "y": 9
       },
-      "id": 19,
+      "id": 28,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "10.4.1",
       "targets": [
@@ -413,18 +492,19 @@
           },
           "dimensions": {},
           "expression": "",
+          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
           "matchExact": false,
           "metricEditorMode": 0,
-          "metricName": "DaysToExpiry",
+          "metricName": "Duration",
           "metricQueryType": 0,
-          "namespace": "AWS/CertificateManager",
+          "namespace": "AWS/Lambda",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
@@ -448,431 +528,24 @@
           "statistic": "Maximum"
         }
       ],
-      "timeFrom": "6h",
-      "title": "Certficate Expiry",
+      "title": "Lambda Max Execution Duration",
       "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "Time|^${envCsi}-[^\\s]+$"
+            }
+          }
+        },
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "^[^/]+/([^/]+)",
+            "regex": "nhs-.*-app-(.*)",
             "renamePattern": "$1"
           }
         }
       ],
-      "type": "stat"
-    },
-    {
-      "gridPos": {
-        "h": 2,
-        "w": 21,
-        "x": 0,
-        "y": 10
-      },
-      "id": 9,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "## Traffic",
-        "mode": "markdown"
-      },
-      "pluginVersion": "10.4.1",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "aefiv5z88bmrkf"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 7,
-        "x": 0,
-        "y": 12
-      },
-      "id": 22,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "beizrse9lcrnka"
-          },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "BytesDownloaded",
-          "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "us-east-1",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "beizrse9lcrnka"
-          },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "BytesUploaded",
-          "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "B",
-          "region": "us-east-1",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        }
-      ],
-      "title": "Traffic",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "fieldMinMax": false,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 7,
-        "y": 12
-      },
-      "id": 16,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
-          "expression": "",
-          "hide": true,
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "Requests",
-          "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "us-east-1",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/CloudFront",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "4xxErrorRate",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
-          "expression": "",
-          "hide": true,
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "CacheHitRate",
-          "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "B",
-          "region": "us-east-1",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/CloudFront",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "4xxErrorRate",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "name": "Expression",
-            "type": "__expr__",
-            "uid": "__expr__"
-          },
-          "expression": "$A*($B/100)",
-          "hide": false,
-          "refId": "C",
-          "type": "math"
-        }
-      ],
-      "title": "Cloudfront Cache Hit",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "C (.*)",
-            "renamePattern": "Cache Hit $1"
-          }
-        }
-      ],
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 20,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 10,
-        "x": 11,
-        "y": 12
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "WebACL": "$envCsi"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "AllowedRequests",
-          "metricQueryType": 0,
-          "namespace": "AWS/WAFV2",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "us-east-1",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/CloudFront",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "4xxErrorRate",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Sum"
-        }
-      ],
-      "title": "WAF Allowed Requests",
       "type": "timeseries"
     },
     {
@@ -880,6 +553,7 @@
         "type": "cloudwatch",
         "uid": "${datasrc}"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -893,8 +567,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 100,
-            "gradientMode": "opacity",
+            "fillOpacity": 0,
+            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -910,7 +584,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "never",
+            "showPoints": "auto",
             "spanNulls": true,
             "stacking": {
               "group": "A",
@@ -921,21 +595,12 @@
             }
           },
           "mappings": [],
-          "min": 0,
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "dark-red",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 50
-              },
-              {
                 "color": "green",
-                "value": 90
+                "value": null
               }
             ]
           },
@@ -944,18 +609,18 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 6,
         "w": 11,
-        "x": 0,
-        "y": 17
+        "x": 11,
+        "y": 9
       },
-      "id": 15,
+      "id": 31,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -969,9 +634,7 @@
             "type": "cloudwatch",
             "uid": "${datasrc}"
           },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
+          "dimensions": {},
           "expression": "",
           "hide": false,
           "id": "",
@@ -979,142 +642,13 @@
           "logGroups": [],
           "matchExact": false,
           "metricEditorMode": 0,
-          "metricName": "Requests",
+          "metricName": "Invocations",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/Lambda",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "us-east-1",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/CloudFront",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "5xxErrorRate",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(\"5xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Sum"
-        }
-      ],
-      "title": "Cloudfront Requests",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 20,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 10,
-        "x": 11,
-        "y": 20
-      },
-      "id": 11,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "WebACL": "$envCsi"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "BlockedRequests",
-          "metricQueryType": 0,
-          "namespace": "AWS/WAFV2",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
@@ -1138,38 +672,34 @@
           "statistic": "Sum"
         }
       ],
-      "title": "WAF Blocked Requests",
+      "title": "Lambda Invocations by Function",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "Time|^nhs-notify-${env}-[^\\s]+$"
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*[${env}]-(.*)",
+            "renamePattern": "$1"
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
       "gridPos": {
         "h": 2,
-        "w": 11,
+        "w": 21,
         "x": 0,
-        "y": 26
+        "y": 15
       },
-      "id": 10,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "## Latency",
-        "mode": "markdown"
-      },
-      "pluginVersion": "10.4.1",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "gridPos": {
-        "h": 2,
-        "w": 10,
-        "x": 11,
-        "y": 26
-      },
-      "id": 7,
+      "id": 33,
       "options": {
         "code": {
           "language": "plaintext",
@@ -1188,12 +718,14 @@
         "type": "cloudwatch",
         "uid": "${datasrc}"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1203,37 +735,37 @@
               },
               {
                 "color": "#EAB839",
-                "value": 251
+                "value": 250
               },
               {
-                "color": "red",
-                "value": 501
+                "color": "#6ED0E0",
+                "value": 500
               },
               {
-                "color": "dark-red",
-                "value": 1001
+                "color": "#EF843C",
+                "value": 1000
               }
             ]
           },
-          "unit": "ms"
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 4,
-        "w": 11,
+        "w": 6,
         "x": 0,
-        "y": 28
+        "y": 17
       },
-      "id": 20,
+      "id": 35,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -1250,21 +782,22 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "DistributionId": "$cfDist"
+            "ApiName": "$appApiName"
           },
           "expression": "",
+          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "OriginLatency",
+          "metricName": "4XXError",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/ApiGateway",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
@@ -1285,10 +818,54 @@
             }
           },
           "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Average"
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "ApiName": "$appApiName"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "5XXError",
+          "metricQueryType": 0,
+          "namespace": "AWS/ApiGateway",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/CloudFront",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "4xxErrorRate",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "statistic": "Sum"
         }
       ],
-      "title": "Cloudfront Origin Latency",
+      "title": "API Gateway Frontend vs Backend Errors",
       "type": "stat"
     },
     {
@@ -1296,6 +873,168 @@
         "type": "cloudwatch",
         "uid": "${datasrc}"
       },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 16,
+        "x": 6,
+        "y": 17
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {},
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "Errors",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/CloudFront",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "4xxErrorRate",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Lambda Errors",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "Time|^nhs-notify-${env}-[^\\s]+$"
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*[${env}]-(.*)",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 11,
+        "x": 0,
+        "y": 21
+      },
+      "id": 34,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Saturation",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 11,
+        "x": 11,
+        "y": 21
+      },
+      "id": 38,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Operational",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1309,8 +1048,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 100,
-            "gradientMode": "opacity",
+            "fillOpacity": 0,
+            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1324,10 +1063,159 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 1024,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 250
+              },
+              {
+                "color": "orange",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 1000
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 11,
+        "x": 0,
+        "y": 23
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {},
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "ConcurrentExecutions",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/CloudFront",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "4xxErrorRate",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Lambda Concurency",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "Time|^${envCsi}-[^\\s]+$"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "never",
-            "spanNulls": true,
+            "showPoints": "auto",
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1337,48 +1225,27 @@
             }
           },
           "mappings": [],
-          "min": 0,
+          "noValue": "0",
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "dark-red",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 50
-              },
-              {
                 "color": "green",
-                "value": 90
+                "value": null
               }
             ]
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "TotalErrorRate"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 10,
+        "h": 6,
+        "w": 11,
         "x": 11,
-        "y": 28
+        "y": 23
       },
-      "id": 25,
+      "id": 43,
       "options": {
         "legend": {
           "calcs": [],
@@ -1399,26 +1266,26 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "DistributionId": "$cfDist"
+            "BackupVaultName": "$backupVault"
           },
           "expression": "",
           "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "4xxErrorRate",
+          "metricName": "NumberOfBackupJobsCompleted",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/Backup",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
-                "name": "AWS/CloudFront",
+                "name": "AWS/S3",
                 "type": "string"
               },
               "type": "property"
@@ -1427,14 +1294,14 @@
               "name": "SUM",
               "parameters": [
                 {
-                  "name": "5xxErrorRate",
+                  "name": "PutRequests",
                   "type": "functionParameter"
                 }
               ],
               "type": "function"
             }
           },
-          "sqlExpression": "SELECT SUM(\"5xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "sqlExpression": "SELECT SUM(PutRequests) FROM \"AWS/S3\"",
           "statistic": "Sum"
         },
         {
@@ -1443,26 +1310,26 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "DistributionId": "$cfDist"
+            "BackupVaultName": "$backupVault"
           },
           "expression": "",
           "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "5xxErrorRate",
+          "metricName": "NumberOfBackupJobsAborted",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/Backup",
           "period": "",
           "queryMode": "Metrics",
           "refId": "B",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
-                "name": "AWS/CloudFront",
+                "name": "AWS/S3",
                 "type": "string"
               },
               "type": "property"
@@ -1471,14 +1338,14 @@
               "name": "SUM",
               "parameters": [
                 {
-                  "name": "5xxErrorRate",
+                  "name": "PutRequests",
                   "type": "functionParameter"
                 }
               ],
               "type": "function"
             }
           },
-          "sqlExpression": "SELECT SUM(\"5xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "sqlExpression": "SELECT SUM(PutRequests) FROM \"AWS/S3\"",
           "statistic": "Sum"
         },
         {
@@ -1487,26 +1354,26 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "DistributionId": "$cfDist"
+            "BackupVaultName": "$backupVault"
           },
           "expression": "",
           "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "TotalErrorRate",
+          "metricName": "NumberOfBackupJobsFailed",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/Backup",
           "period": "",
           "queryMode": "Metrics",
           "refId": "C",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
-                "name": "AWS/CloudFront",
+                "name": "AWS/S3",
                 "type": "string"
               },
               "type": "property"
@@ -1515,18 +1382,62 @@
               "name": "SUM",
               "parameters": [
                 {
-                  "name": "5xxErrorRate",
+                  "name": "PutRequests",
                   "type": "functionParameter"
                 }
               ],
               "type": "function"
             }
           },
-          "sqlExpression": "SELECT SUM(\"5xxErrorRate\") FROM \"AWS/CloudFront\"",
+          "sqlExpression": "SELECT SUM(PutRequests) FROM \"AWS/S3\"",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "BackupVaultName": "$backupVault"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfCopyJobsFailed",
+          "metricQueryType": 0,
+          "namespace": "AWS/Backup",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "D",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/S3",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "PutRequests",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(PutRequests) FROM \"AWS/S3\"",
           "statistic": "Sum"
         }
       ],
-      "title": "Cloudfront Requests",
+      "title": "Backup Status",
       "type": "timeseries"
     },
     {
@@ -1534,61 +1445,101 @@
         "type": "cloudwatch",
         "uid": "${datasrc}"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
-          }
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "query4fc0717db1c34d1f9b856517155f6bc0"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "query56712feab6844791afed49fa342bc7a2"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 6,
         "w": 11,
-        "x": 0,
-        "y": 32
+        "x": 11,
+        "y": 29
       },
-      "id": 17,
+      "id": 44,
       "options": {
-        "calculate": false,
-        "cellGap": 1,
-        "color": {
-          "exponent": 0.5,
-          "fill": "dark-orange",
-          "mode": "scheme",
-          "reverse": false,
-          "scale": "exponential",
-          "scheme": "Spectral",
-          "steps": 64
-        },
-        "exemplars": {
-          "color": "rgba(255,0,255,0.7)"
-        },
-        "filterValues": {
-          "le": 1e-9
-        },
         "legend": {
-          "show": true
-        },
-        "rowsFrame": {
-          "layout": "auto"
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
-          "showColorScale": false,
-          "yHistogram": false
-        },
-        "yAxis": {
-          "axisPlacement": "left",
-          "reverse": false,
-          "unit": "none"
+          "sort": "none"
         }
       },
       "pluginVersion": "10.4.1",
@@ -1599,25 +1550,26 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "DistributionId": "$cfDist"
+            "App": "$appId"
           },
           "expression": "",
+          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
           "matchExact": false,
           "metricEditorMode": 0,
-          "metricName": "OriginLatency",
+          "metricName": "Requests",
           "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
+          "namespace": "AWS/AmplifyHosting",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "us-east-1",
+          "region": "default",
           "sql": {
             "from": {
               "property": {
-                "name": "AWS/CloudFront",
+                "name": "AWS/S3",
                 "type": "string"
               },
               "type": "property"
@@ -1626,37 +1578,110 @@
               "name": "SUM",
               "parameters": [
                 {
-                  "name": "4xxErrorRate",
+                  "name": "PutRequests",
                   "type": "functionParameter"
                 }
               ],
               "type": "function"
             }
           },
-          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Average"
-        }
-      ],
-      "title": "Cloudfront Origin Latency",
-      "transformations": [
+          "sqlExpression": "SELECT SUM(PutRequests) FROM \"AWS/S3\"",
+          "statistic": "Sum"
+        },
         {
-          "id": "heatmap",
-          "options": {
-            "xBuckets": {
-              "mode": "size"
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "App": "$appId"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "4XXErrors",
+          "metricQueryType": 0,
+          "namespace": "AWS/AmplifyHosting",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/S3",
+                "type": "string"
+              },
+              "type": "property"
             },
-            "yBuckets": {
-              "mode": "size",
-              "scale": {
-                "type": "linear"
-              }
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "PutRequests",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
             }
-          }
+          },
+          "sqlExpression": "SELECT SUM(PutRequests) FROM \"AWS/S3\"",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "App": "$appId"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "5XXErrors",
+          "metricQueryType": 0,
+          "namespace": "AWS/AmplifyHosting",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "C",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/S3",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "PutRequests",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(PutRequests) FROM \"AWS/S3\"",
+          "statistic": "Sum"
         }
       ],
-      "type": "heatmap"
+      "title": "Amplify Status",
+      "type": "timeseries"
     }
   ],
+  "refresh": "",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -1667,9 +1692,10 @@
           "text": "*",
           "value": "*"
         },
+        "description": "",
         "hide": 0,
-        "label": "Cloudfront Distribution ID",
-        "name": "cfDist",
+        "label": "Amplify App ID",
+        "name": "appId",
         "options": [
           {
             "selected": true,
@@ -1684,10 +1710,10 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-notify-main-cdn",
-          "value": "nhs-notify-main-cdn"
+          "text": "nhs-notify-main",
+          "value": "nhs-notify-main"
         },
-        "description": "nhs-notify-main-cdn",
+        "description": "",
         "hide": 2,
         "includeAll": false,
         "label": "Environment CSI Prefix",
@@ -1696,19 +1722,19 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-notify-main-cdn",
-            "value": "nhs-notify-main-cdn"
+            "text": "nhs-notify-main",
+            "value": "nhs-notify-main"
           }
         ],
-        "query": "nhs-notify-${env}-cdn",
+        "query": "nhs-notify-${env}",
         "skipUrlSync": false,
         "type": "custom"
       },
       {
         "current": {
           "selected": false,
-          "text": "CloudWatch-web-gateway",
-          "value": "befiv6gq7pq80a"
+          "text": "CloudWatch-iam",
+          "value": "beizrse9lcrnka"
         },
         "hide": 2,
         "includeAll": false,
@@ -1719,9 +1745,53 @@
         "query": "cloudwatch",
         "queryValue": "",
         "refresh": 1,
-        "regex": ".*web-gateway",
+        "regex": ".*iam",
         "skipUrlSync": false,
         "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "nhs-notify-main-api",
+          "value": "nhs-notify-main-api"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "label": "Composed API Name",
+        "multi": false,
+        "name": "apiName",
+        "options": [
+          {
+            "selected": true,
+            "text": "nhs-notify-main-api",
+            "value": "nhs-notify-main-api"
+          }
+        ],
+        "query": "${envCsi}-api",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "nhs-notify-main-backup-vault",
+          "value": "nhs-notify-main-backup-vault"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "label": "Composed backup vault name",
+        "multi": false,
+        "name": "backupVault",
+        "options": [
+          {
+            "selected": true,
+            "text": "nhs-notify-main-backup-vault",
+            "value": "nhs-notify-main-backup-vault"
+          }
+        ],
+        "query": "${envCsi}-backup-vault",
+        "skipUrlSync": false,
+        "type": "custom"
       },
       {
         "current": {
@@ -1742,16 +1812,62 @@
         "query": "main",
         "skipUrlSync": false,
         "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "nhs-notify-main-app",
+          "value": "nhs-notify-main-app"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "label": "Composed API Name",
+        "multi": false,
+        "name": "appName",
+        "options": [
+          {
+            "selected": true,
+            "text": "nhs-notify-main-app",
+            "value": "nhs-notify-main-app"
+          }
+        ],
+        "query": "${envCsi}-app",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "nhs-notify-main-app-api",
+          "value": "nhs-notify-main-app-api"
+        },
+        "description": "The API isn't in the API component for... reasons",
+        "hide": 2,
+        "includeAll": false,
+        "label": "Composed API Name",
+        "multi": false,
+        "name": "appApiName",
+        "options": [
+          {
+            "selected": true,
+            "text": "nhs-notify-main-app-api",
+            "value": "nhs-notify-main-app-api"
+          }
+        ],
+        "query": "${envCsi}-app-api",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-12h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Web Gateway Overview",
+  "title": "Webauth Overview",
   "uid": "",
+  "version": 6,
   "weekStart": ""
 }

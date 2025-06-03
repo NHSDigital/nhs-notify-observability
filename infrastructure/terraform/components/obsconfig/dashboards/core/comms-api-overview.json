@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 19,
+  "id": 20,
   "links": [],
   "panels": [
     {
@@ -82,7 +82,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 7,
+        "w": 11,
         "x": 0,
         "y": 0
       },
@@ -193,8 +193,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 17,
-        "x": 7,
+        "w": 10,
+        "x": 11,
         "y": 0
       },
       "hideTimeOverride": false,
@@ -275,6 +275,136 @@
       "timeFrom": "now-3h",
       "title": "PDS Message Response Rate",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "TPS"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 0
+      },
+      "hideTimeOverride": false,
+      "id": 25,
+      "interval": "5m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": true,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {},
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "TPS",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "pds_message_sent",
+          "metricQueryType": 1,
+          "namespace": "comms-enrichment-metrics",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "comms-enrichment-metrics",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "http_status_code",
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "orderBy": {
+              "name": "SUM",
+              "type": "function"
+            },
+            "select": {
+              "name": "MAX",
+              "parameters": [
+                {
+                  "name": "pds_message_sent",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT MAX(pds_message_sent) FROM \"comms-enrichment-metrics\" GROUP BY http_status_code ORDER BY SUM() ASC",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A/300",
+          "hide": false,
+          "refId": "B",
+          "type": "math"
+        }
+      ],
+      "timeFrom": "now-3h",
+      "title": "PDS TPS",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -1356,8 +1486,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1480,8 +1609,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1766,9 +1894,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "ref2",
-          "value": "ref2"
+          "selected": true,
+          "text": "prod",
+          "value": "prod"
         },
         "hide": 0,
         "includeAll": false,
@@ -1777,7 +1905,7 @@
         "name": "env",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "prod",
             "value": "prod"
           },
@@ -1797,7 +1925,7 @@
             "value": "ref"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "ref2",
             "value": "ref2"
           },
@@ -1830,8 +1958,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-oa3-commsapi",
-          "value": "comms-ref2-api-oa3-commsapi"
+          "text": "comms-prod-api-oa3-commsapi",
+          "value": "comms-prod-api-oa3-commsapi"
         },
         "hide": 2,
         "includeAll": false,
@@ -1840,8 +1968,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-oa3-commsapi",
-            "value": "comms-ref2-api-oa3-commsapi"
+            "text": "comms-prod-api-oa3-commsapi",
+            "value": "comms-prod-api-oa3-commsapi"
           }
         ],
         "query": "comms-${env}-api-oa3-commsapi",
@@ -1851,8 +1979,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-stl-enrichment-queue.fifo",
-          "value": "comms-ref2-api-stl-enrichment-queue.fifo"
+          "text": "comms-prod-api-stl-enrichment-queue.fifo",
+          "value": "comms-prod-api-stl-enrichment-queue.fifo"
         },
         "hide": 2,
         "includeAll": false,
@@ -1862,8 +1990,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-stl-enrichment-queue.fifo",
-            "value": "comms-ref2-api-stl-enrichment-queue.fifo"
+            "text": "comms-prod-api-stl-enrichment-queue.fifo",
+            "value": "comms-prod-api-stl-enrichment-queue.fifo"
           }
         ],
         "query": "comms-${env}-api-stl-enrichment-queue.fifo",
@@ -1874,8 +2002,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-stl-send-nhsapp-queue",
-          "value": "comms-ref2-api-stl-send-nhsapp-queue"
+          "text": "comms-prod-api-stl-send-nhsapp-queue",
+          "value": "comms-prod-api-stl-send-nhsapp-queue"
         },
         "hide": 2,
         "includeAll": false,
@@ -1885,8 +2013,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-stl-send-nhsapp-queue",
-            "value": "comms-ref2-api-stl-send-nhsapp-queue"
+            "text": "comms-prod-api-stl-send-nhsapp-queue",
+            "value": "comms-prod-api-stl-send-nhsapp-queue"
           }
         ],
         "query": "comms-${env}-api-stl-send-nhsapp-queue",
@@ -1897,8 +2025,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-stl-send-govuknotify-queue",
-          "value": "comms-ref2-api-stl-send-govuknotify-queue"
+          "text": "comms-prod-api-stl-send-govuknotify-queue",
+          "value": "comms-prod-api-stl-send-govuknotify-queue"
         },
         "hide": 2,
         "includeAll": false,
@@ -1908,8 +2036,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-stl-send-govuknotify-queue",
-            "value": "comms-ref2-api-stl-send-govuknotify-queue"
+            "text": "comms-prod-api-stl-send-govuknotify-queue",
+            "value": "comms-prod-api-stl-send-govuknotify-queue"
           }
         ],
         "query": "comms-${env}-api-stl-send-govuknotify-queue",
@@ -1920,8 +2048,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-lspl-sftpsend-queue",
-          "value": "comms-ref2-api-lspl-sftpsend-queue"
+          "text": "comms-prod-api-lspl-sftpsend-queue",
+          "value": "comms-prod-api-lspl-sftpsend-queue"
         },
         "hide": 2,
         "includeAll": false,
@@ -1931,8 +2059,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-lspl-sftpsend-queue",
-            "value": "comms-ref2-api-lspl-sftpsend-queue"
+            "text": "comms-prod-api-lspl-sftpsend-queue",
+            "value": "comms-prod-api-lspl-sftpsend-queue"
           }
         ],
         "query": "comms-${env}-api-lspl-sftpsend-queue",
@@ -1943,8 +2071,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-stl-sftpsendsynertec-queue",
-          "value": "comms-ref2-api-stl-sftpsendsynertec-queue"
+          "text": "comms-prod-api-stl-sftpsendsynertec-queue",
+          "value": "comms-prod-api-stl-sftpsendsynertec-queue"
         },
         "hide": 2,
         "includeAll": false,
@@ -1954,8 +2082,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-stl-sftpsendsynertec-queue",
-            "value": "comms-ref2-api-stl-sftpsendsynertec-queue"
+            "text": "comms-prod-api-stl-sftpsendsynertec-queue",
+            "value": "comms-prod-api-stl-sftpsendsynertec-queue"
           }
         ],
         "query": "comms-${env}-api-stl-sftpsendsynertec-queue",
@@ -1966,8 +2094,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-stl-sftpsendprecisionproco-queue",
-          "value": "comms-ref2-api-stl-sftpsendprecisionproco-queue"
+          "text": "comms-prod-api-stl-sftpsendprecisionproco-queue",
+          "value": "comms-prod-api-stl-sftpsendprecisionproco-queue"
         },
         "hide": 2,
         "includeAll": false,
@@ -1977,8 +2105,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-stl-sftpsendprecisionproco-queue",
-            "value": "comms-ref2-api-stl-sftpsendprecisionproco-queue"
+            "text": "comms-prod-api-stl-sftpsendprecisionproco-queue",
+            "value": "comms-prod-api-stl-sftpsendprecisionproco-queue"
           }
         ],
         "query": "comms-${env}-api-stl-sftpsendprecisionproco-queue",
@@ -1989,8 +2117,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-notify-main-obsconfig-cloudwatch-core-perfmock",
-          "value": "feg3pyak6ve9sf"
+          "text": "CloudWatch-core-prod",
+          "value": "ceizrsvn3trlsa"
         },
         "hide": 0,
         "includeAll": false,
@@ -2009,8 +2137,8 @@
         "allValue": "",
         "current": {
           "selected": false,
-          "text": "comms-ref2-api-stl-enrichment-dlq.fifo",
-          "value": "comms-ref2-api-stl-enrichment-dlq.fifo"
+          "text": "comms-prod-api-stl-enrichment-dlq.fifo",
+          "value": "comms-prod-api-stl-enrichment-dlq.fifo"
         },
         "description": "Dead Letter Queues",
         "hide": 2,
@@ -2020,33 +2148,33 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-ref2-api-stl-enrichment-dlq.fifo",
-            "value": "comms-ref2-api-stl-enrichment-dlq.fifo"
+            "text": "comms-prod-api-stl-enrichment-dlq.fifo",
+            "value": "comms-prod-api-stl-enrichment-dlq.fifo"
           },
           {
             "selected": false,
-            "text": "comms-ref2-api-stl-send-govuknotify-dlq",
-            "value": "comms-ref2-api-stl-send-govuknotify-dlq"
+            "text": "comms-prod-api-stl-send-govuknotify-dlq",
+            "value": "comms-prod-api-stl-send-govuknotify-dlq"
           },
           {
             "selected": false,
-            "text": "comms-ref2-api-stl-send-nhsapp-dlq",
-            "value": "comms-ref2-api-stl-send-nhsapp-dlq"
+            "text": "comms-prod-api-stl-send-nhsapp-dlq",
+            "value": "comms-prod-api-stl-send-nhsapp-dlq"
           },
           {
             "selected": false,
-            "text": "comms-ref2-api-lspl-sftpsend-dlq",
-            "value": "comms-ref2-api-lspl-sftpsend-dlq"
+            "text": "comms-prod-api-lspl-sftpsend-dlq",
+            "value": "comms-prod-api-lspl-sftpsend-dlq"
           },
           {
             "selected": false,
-            "text": "comms-ref2-api-stl-sftpsendsynertec-dlq",
-            "value": "comms-ref2-api-stl-sftpsendsynertec-dlq"
+            "text": "comms-prod-api-stl-sftpsendsynertec-dlq",
+            "value": "comms-prod-api-stl-sftpsendsynertec-dlq"
           },
           {
             "selected": false,
-            "text": "comms-ref2-api-stl-sftpsendprecisionproco-dlq",
-            "value": "comms-ref2-api-stl-sftpsendprecisionproco-dlq"
+            "text": "comms-prod-api-stl-sftpsendprecisionproco-dlq",
+            "value": "comms-prod-api-stl-sftpsendprecisionproco-dlq"
           }
         ],
         "query": "comms-${env}-api-stl-enrichment-dlq.fifo,\ncomms-${env}-api-stl-send-govuknotify-dlq,\ncomms-${env}-api-stl-send-nhsapp-dlq,\ncomms-${env}-api-lspl-sftpsend-dlq,\ncomms-${env}-api-stl-sftpsendsynertec-dlq,\ncomms-${env}-api-stl-sftpsendprecisionproco-dlq",
@@ -2063,7 +2191,7 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Core API Overview",
-  "uid": "",
-  "version": 15,
+  "uid": "belz22noxam80c",
+  "version": 3,
   "weekStart": ""
 }
