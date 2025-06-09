@@ -18,7 +18,7 @@
 
 # Default group names
 admin_group_name="AWS-NHSNotify-Observability-Admins"
-viewer_group_name="AWS-NHSNotify-Observability-Readonly"
+viewer_group_name="AWS-NHSNotify-Observability-ReadOnly"
 editor_group_name="AWS-NHSNotify-Observability-Developers"
 
 # Debug print function
