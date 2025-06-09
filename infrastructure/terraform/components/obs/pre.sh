@@ -1,31 +1,62 @@
 #!/bin/bash
 # ==============================================================================
-# Script to assign Grafana admin group ID for the AWS Observability admins
+# Script to assign Grafana group IDs for AWS Observability roles
 #
 # This script:
-# - Determines the appropriate group name based on the `group` variable.
+# - Determines the appropriate group names for admins, viewers, and editors.
 # - Fetches the IdentityStore ID for AWS SSO using the AWS CLI.
-# - Retrieves the Group ID from AWS IdentityStore for the specified group name.
-# - Exports the group ID as a Terraform variable for delegated Grafana admins.
+# - Retrieves the Group IDs from AWS IdentityStore for the specified group names.
+# - Exports the group IDs as Terraform variables for delegated Grafana roles.
 #
 # Prerequisites:
 # - AWS CLI configured with appropriate IAM permissions to interact with AWS SSO and IdentityStore.
 # - `jq` command-line tool for parsing JSON responses.
+#
+# Notes:
+# run the script like DEBUG=1 pre.sh for additional information
 # ==============================================================================
 
-# Default group name
-group_name="AWS-NHSNotify-Observability-Admins"
+# Default group names
+admin_group_name="AWS-NHSNotify-Observability-Admins"
+viewer_group_name="AWS-NHSNotify-Observability-Readonly"
+editor_group_name="AWS-NHSNotify-Observability-Developers"
 
-# Initialize the 'group' variable (if not set externally)
+# Debug print function
+debug() {
+  if [[ "${DEBUG}" == "1" ]]; then
+    echo "[DEBUG] $1"
+  fi
+}
+
+# Function to fetch group ID by group name
+get_group_id() {
+  local group_name="$1"
+  debug "Fetching group ID for group: ${group_name}"
+  aws identitystore get-group-id \
+    --identity-store-id "${identity_store_id}" \
+    --alternate-identifier "{\"UniqueAttribute\":{\"AttributePath\":\"displayName\",\"AttributeValue\":\"${group_name}\"}}" \
+    | jq -r '.GroupId'
+}
+
+# Initialize the 'group' variable (if not set externally from tfvars)
 group="${group:-}"
+debug "Group variable is set to: ${group}"
 
-# Check if the group variable is set and contains "prod" (case-insensitive)
+# Adjust group names for prod if needed
 if [[ -n "${group}" && "${group}" =~ "prod" ]]; then
-  group_name="AWS-NHSNotify-Observability-ProdAdmins"
+  admin_group_name="AWS-NHSNotify-Observability-ProdAdmins"
+  debug "Admin group name: ${admin_group_name}"
+
+  viewer_group_name="AWS-NHSNotify-Observability-ProdReadonly"
+  debug "Viewer group name: ${viewer_group_name}"
+
+  editor_group_name="AWS-NHSNotify-Observability-ProdDevelopers"
+  debug "Editor group name: ${editor_group_name}"
 fi
 
 # Fetch IdentityStoreID
 identity_store_id=$(aws sso-admin list-instances | jq -r '.Instances[0].IdentityStoreId')
+debug "Fetched IdentityStoreId: ${identity_store_id}"
 
 # Ensure identity_store_id is set
 if [[ -z "${identity_store_id}" ]]; then
@@ -33,16 +64,26 @@ if [[ -z "${identity_store_id}" ]]; then
   exit 1
 fi
 
-# Fetch Group ID from IdentityStore
-group_id=$(aws identitystore get-group-id \
-  --identity-store-id "${identity_store_id}" \
-  --alternate-identifier "{\"UniqueAttribute\":{\"AttributePath\":\"displayName\",\"AttributeValue\":\"${group_name}\"}}" \
-  | jq -r '.GroupId')
+admin_group_id=$(get_group_id "${admin_group_name}")
+debug "Admin group ID: ${admin_group_id}"
 
-# Ensure group_id is set
-if [[ -z "${group_id}" ]]; then
-  echo "Error: group_id is empty or not found."
+viewer_group_id=$(get_group_id "${viewer_group_name}")
+debug "Viewer group ID: ${viewer_group_id}"
+
+editor_group_id=$(get_group_id "${editor_group_name}")
+debug "Editor group ID: ${editor_group_id}"
+
+# Ensure all group_ids are set
+if [[ -z "${admin_group_id}" || -z "${viewer_group_id}" || -z "${editor_group_id}" ]]; then
+  echo "Error: One or more group IDs are empty or not found."
   exit 1
-else
-  export TF_VAR_delegated_grafana_admin_group_ids="[\"${group_id}\"]"
 fi
+
+export TF_VAR_delegated_grafana_admin_group_ids="[\"${admin_group_id}\"]"
+debug "Exported TF_VAR_delegated_grafana_admin_group_ids: [\"${admin_group_id}\"]"
+
+export TF_VAR_delegated_grafana_viewer_group_ids="[\"${viewer_group_id}\"]"
+debug "Exported TF_VAR_delegated_grafana_viewer_group_ids: [\"${viewer_group_id}\"]"
+
+export TF_VAR_delegated_grafana_editor_group_ids="[\"${editor_group_id}\"]"
+debug "Exported TF_VAR_delegated_grafana_editor_group_ids: [\"${editor_group_id}\"]"
