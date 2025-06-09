@@ -3,4 +3,6 @@ resource "grafana_dashboard" "dashboards" {
 
   folder      = dirname(each.value)
   config_json = file("${path.module}/dashboards/${each.value}")
+
+  depends_on = [grafana_folder.dashboards]
 }

@@ -1,5 +1,5 @@
 resource "aws_grafana_workspace" "grafana" {
-  name        = "${local.csi}-workspace"
+  name        = "${var.group}-${var.environment}"
   description = "Grafana Workspace for Observability"
 
   account_access_type      = "CURRENT_ACCOUNT"
