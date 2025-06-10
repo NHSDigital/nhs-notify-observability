@@ -485,7 +485,7 @@
     {
       "datasource": {
         "type": "cloudwatch",
-        "uid": "aefiv5z88bmrkf"
+        "uid": "${datasrc}"
       },
       "fieldConfig": {
         "defaults": {
@@ -534,7 +534,7 @@
         {
           "datasource": {
             "type": "cloudwatch",
-            "uid": "beizrse9lcrnka"
+            "uid": "${datasrc}"
           },
           "dimensions": {
             "DistributionId": "$cfDist"
@@ -558,7 +558,7 @@
         {
           "datasource": {
             "type": "cloudwatch",
-            "uid": "beizrse9lcrnka"
+            "uid": "${datasrc}"
           },
           "dimensions": {
             "DistributionId": "$cfDist"
@@ -1708,7 +1708,7 @@
         "current": {
           "selected": false,
           "text": "CloudWatch-web-gateway",
-          "value": "befiv6gq7pq80a"
+          "value": "deog7dod7aneoe"
         },
         "hide": 2,
         "includeAll": false,
