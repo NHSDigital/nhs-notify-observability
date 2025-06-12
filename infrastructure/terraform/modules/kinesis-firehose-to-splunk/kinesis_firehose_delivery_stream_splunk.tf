@@ -3,13 +3,13 @@ resource "aws_kinesis_firehose_delivery_stream" "splunk_firehose" {
   destination = "splunk"
 
   splunk_configuration {
-    hec_endpoint            = aws_ssm_parameter.splunk_hec_endpoint.value
-    hec_endpoint_type       = "Event"
-    hec_token               = aws_ssm_parameter.splunk_hec_token.value
-    retry_duration          = 300
-    s3_backup_mode          = "FailedEventsOnly"
-    buffering_size             = var.kinesis_firehose_buffer
-    buffering_interval         = var.kinesis_firehose_buffer_interval
+    hec_endpoint       = aws_ssm_parameter.splunk_hec_endpoint.value
+    hec_endpoint_type  = "Event"
+    hec_token          = aws_ssm_parameter.splunk_hec_token.value
+    retry_duration     = 300
+    s3_backup_mode     = "FailedEventsOnly"
+    buffering_size     = var.kinesis_firehose_buffer
+    buffering_interval = var.kinesis_firehose_buffer_interval
 
     processing_configuration {
       enabled = "true"
@@ -47,9 +47,9 @@ resource "aws_kinesis_firehose_delivery_stream" "splunk_firehose" {
     }
 
     cloudwatch_logging_options {
-        enabled         = true
-        log_group_name  = aws_cloudwatch_log_group.splunk_firehose.name
-        log_stream_name = aws_cloudwatch_log_stream.splunk_firehose.name
+      enabled         = true
+      log_group_name  = aws_cloudwatch_log_group.splunk_firehose.name
+      log_stream_name = aws_cloudwatch_log_stream.splunk_firehose.name
     }
   }
 

@@ -69,7 +69,7 @@ variable "type" {
 
 }
 
-variable "kms_splunk_key_arn"{
+variable "kms_splunk_key_arn" {
   type        = string
   description = "The ARN of the KMS key to use for encrypting the Splunk Firehose data"
   default     = null

@@ -36,7 +36,6 @@
 | <a name="module_kinesis_firehose_to_splunk_logs"></a> [kinesis\_firehose\_to\_splunk\_logs](#module\_kinesis\_firehose\_to\_splunk\_logs) | ../../modules/kinesis-firehose-to-splunk | n/a |
 | <a name="module_kinesis_firehose_to_splunk_metrics"></a> [kinesis\_firehose\_to\_splunk\_metrics](#module\_kinesis\_firehose\_to\_splunk\_metrics) | ../../modules/kinesis-firehose-to-splunk | n/a |
 | <a name="module_kinesis_firehose_to_splunk_metrics_us"></a> [kinesis\_firehose\_to\_splunk\_metrics\_us](#module\_kinesis\_firehose\_to\_splunk\_metrics\_us) | ../../modules/kinesis-firehose-to-splunk | n/a |
-| <a name="module_kms_alert_forwarding"></a> [kms\_alert\_forwarding](#module\_kms\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v2.0.13 |
 | <a name="module_kms_logs"></a> [kms\_logs](#module\_kms\_logs) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v2.0.13 |
 | <a name="module_kms_splunk"></a> [kms\_splunk](#module\_kms\_splunk) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v2.0.13 |
 | <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.6 |

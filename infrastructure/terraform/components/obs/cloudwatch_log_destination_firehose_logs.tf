@@ -31,7 +31,7 @@ resource "aws_cloudwatch_log_destination_policy" "firehose_logs" {
 }
 
 resource "aws_cloudwatch_log_destination" "firehose_logs_us" {
-  provider = aws.us-east-1
+  provider   = aws.us-east-1
   name       = "${local.csi}-us-east-1-firehose-logs"
   target_arn = module.kinesis_firehose_to_splunk_logs.kinesis_firehose_arn
   role_arn   = aws_iam_role.cloudwatch_logs_to_firehose.arn
@@ -44,7 +44,7 @@ resource "aws_cloudwatch_log_destination" "firehose_logs_us" {
 }
 
 resource "aws_cloudwatch_log_destination_policy" "firehose_logs_us" {
-  provider = aws.us-east-1
+  provider         = aws.us-east-1
   destination_name = aws_cloudwatch_log_destination.firehose_logs_us.name
   access_policy    = data.aws_iam_policy_document.firehose_logs.json
 }

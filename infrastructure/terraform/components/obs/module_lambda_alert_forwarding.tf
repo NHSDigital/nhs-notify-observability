@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "lambda_alert_forwarding" {
     ]
 
     resources = [
-      module.kms_alert_forwarding.key_arn,
+      module.kms_logs.key_arn,
     ]
   }
 
