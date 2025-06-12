@@ -6,7 +6,7 @@ resource "aws_cloudwatch_log_destination" "firehose_logs" {
   depends_on = [
     aws_iam_role.cloudwatch_logs_to_firehose,
     aws_iam_role_policy_attachment.cloudwatch_logs_to_firehose_attachment,
-    module.kinesis_firehose_to_splunk_logs.kinesis_firehose_arn
+    module.kinesis_firehose_to_splunk_logs
   ]
 }
 
@@ -21,7 +21,10 @@ data "aws_iam_policy_document" "firehose_logs" {
       )
     }
     actions   = ["logs:PutSubscriptionFilter"]
-    resources = [aws_cloudwatch_log_destination.firehose_logs.arn]
+    resources = [
+      aws_cloudwatch_log_destination.firehose_logs.arn,
+      aws_cloudwatch_log_destination.firehose_logs_us.arn
+      ]
   }
 }
 

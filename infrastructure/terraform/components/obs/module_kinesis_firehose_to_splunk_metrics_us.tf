@@ -8,7 +8,7 @@ module "kinesis_firehose_to_splunk_metrics_us" {
   project        = var.project
   environment    = var.environment
   aws_account_id = var.aws_account_id
-  region         = var.region
+  region         = "us-east-1"
   group          = var.group
   component      = var.component
 
@@ -17,7 +17,7 @@ module "kinesis_firehose_to_splunk_metrics_us" {
   type                          = "metrics"
   region_prefix                 = "us"
   kms_splunk_key_arn            = module.kms_splunk.replica_key_arn
-  splunk_firehose_bucket_arn    = module.s3bucket_splunk_firehose.arn
+  splunk_firehose_bucket_arn    = module.s3bucket_splunk_firehose_us.arn
   firehose_to_s3_role_arn       = aws_iam_role.firehose_to_s3.arn
-  formatter_lambda_function_arn = module.splunk_metrics_formatter_lambda.function_arn
+  formatter_lambda_function_arn = module.splunk_metrics_formatter_lambda_us.function_arn
 }
