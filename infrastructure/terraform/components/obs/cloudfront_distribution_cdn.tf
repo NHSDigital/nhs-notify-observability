@@ -20,10 +20,11 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = [local.root_domain_name]
 
   viewer_certificate {
-    cloudfront_default_certificate = false
-    acm_certificate_arn      = aws_acm_certificate.main.arn
-    minimum_protocol_version = "TLSv1.2_2021" # Supports 1.2 & 1.3 - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html
-    ssl_support_method       = "sni-only"
+    cloudfront_default_certificate = true
+    # Uncomment below after we get DNS validation working when we cutover DNS
+    # acm_certificate_arn            = aws_acm_certificate.main.arn
+    # minimum_protocol_version       = "TLSv1.2_2021" # Supports 1.2 & 1.3 - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html
+    # ssl_support_method             = "sni-only"
   }
 
   origin {
@@ -38,7 +39,7 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
-default_cache_behavior {
+  default_cache_behavior {
     target_origin_id       = "GrafanaOrigin"
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]

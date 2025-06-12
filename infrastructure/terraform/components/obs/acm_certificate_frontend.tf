@@ -1,14 +1,15 @@
-resource "aws_acm_certificate" "main" {
-  provider          = aws.us-east-1
-  domain_name       = local.root_domain_name
-  validation_method = "DNS"
+# Uncomment below after we get DNS validation working when we cutover DNS
+# resource "aws_acm_certificate" "main" {
+#   provider          = aws.us-east-1
+#   domain_name       = local.root_domain_name
+#   validation_method = "DNS"
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
-resource "aws_acm_certificate_validation" "main" {
-  provider        = aws.us-east-1
-  certificate_arn = aws_acm_certificate.main.arn
-}
+# resource "aws_acm_certificate_validation" "main" {
+#   provider        = aws.us-east-1
+#   certificate_arn = aws_acm_certificate.main.arn
+# }

@@ -1,4 +1,4 @@
-module "kms_alert_forwarding" {
+module "kms_logs" {
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms?ref=v2.0.13"
   providers = {
     aws           = aws
@@ -14,11 +14,15 @@ module "kms_alert_forwarding" {
   name                 = "main"
   deletion_window      = var.kms_deletion_window
   alias                = "alias/${local.csi}"
-  key_policy_documents = [data.aws_iam_policy_document.kms_alert_forwarding.json]
+  key_policy_documents = [data.aws_iam_policy_document.kms.json]
   iam_delegation       = true
+  is_multi_region      = true
 }
 
-data "aws_iam_policy_document" "kms_alert_forwarding" {
+data "aws_iam_policy_document" "kms" {
+  # '*' resource scope is permitted in access policies as as the resource is itself
+  # https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-services.html
+
   statement {
     sid    = "AllowCloudWatchEncrypt"
     effect = "Allow"
@@ -27,7 +31,7 @@ data "aws_iam_policy_document" "kms_alert_forwarding" {
       type = "Service"
 
       identifiers = [
-        "logs.${var.region}.amazonaws.com",
+        "logs.${var.region}.amazonaws.com"
       ]
     }
 

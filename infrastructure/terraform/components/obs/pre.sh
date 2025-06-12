@@ -87,3 +87,10 @@ debug "Exported TF_VAR_delegated_grafana_viewer_group_ids: [\"${viewer_group_id}
 
 export TF_VAR_delegated_grafana_editor_group_ids="[\"${editor_group_id}\"]"
 debug "Exported TF_VAR_delegated_grafana_editor_group_ids: [\"${editor_group_id}\"]"
+
+# Package lambda dependencies
+npm ci
+
+npm run generate-dependencies --workspaces --if-present
+
+npm run lambda-build --workspaces --if-present
