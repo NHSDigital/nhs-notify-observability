@@ -4,7 +4,7 @@ module "splunk_metrics_formatter_lambda_us" {
   }
   source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.13"
 
-  function_name = "splunk-metrics-formatter"
+  function_name = "us-splunk-metrics-formatter"
   description   = "A function for formatting metrics for Splunk"
 
   aws_account_id = var.aws_account_id

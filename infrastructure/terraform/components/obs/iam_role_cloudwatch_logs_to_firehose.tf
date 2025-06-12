@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_assume_role_policy" 
     effect = "Allow"
     principals {
       type        = "Service"
-      identifiers = ["logs.${var.region}.amazonaws.com"]
+      identifiers = ["logs.${var.region}.amazonaws.com", "logs.us-east-1.amazonaws.com"]
     }
     actions = ["sts:AssumeRole"]
     condition {
