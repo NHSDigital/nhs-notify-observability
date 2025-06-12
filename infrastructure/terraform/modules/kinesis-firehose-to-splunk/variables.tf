@@ -122,3 +122,9 @@ variable "s3_kinesis_firehose_buffer_interval" {
   description = "S3 backup buffer interval"
   default     = 300 # Seconds (Maximum 900)
 }
+
+variable "region_prefix" {
+  type        = string
+  description = "The prefix to use for the region in the resource names"
+  default     = ""
+}

@@ -18,7 +18,7 @@ module "splunk_metrics_formatter_lambda" {
     body = data.aws_iam_policy_document.splunk_metrics_formatter_kinesis_perms.json
   }
 
-  function_s3_bucket      = local.acct.s3_buckets["lambda_function_artefacts_us"]["id"]
+  function_s3_bucket      = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
   function_code_base_path = local.aws_lambda_functions_dir_path
   function_code_dir       = "metric-lambda-processor/dist"
   function_module_name    = "index"

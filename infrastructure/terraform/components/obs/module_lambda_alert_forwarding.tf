@@ -12,7 +12,7 @@ module "lambda_alert_forwarding" {
   group          = var.group
 
   log_retention_in_days = var.log_retention_in_days
-  kms_key_arn           = module.kms_alert_forwarding.key_arn
+  kms_key_arn           = module.kms_logs.key_arn
 
   iam_policy_document = {
     body = data.aws_iam_policy_document.lambda_alert_forwarding.json

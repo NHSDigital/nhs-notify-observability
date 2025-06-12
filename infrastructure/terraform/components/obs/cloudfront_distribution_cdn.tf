@@ -17,7 +17,8 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
-  aliases = [local.root_domain_name]
+  # Uncomment below after we get DNS validation working when we cutover DNS
+  #aliases = [local.root_domain_name]
 
   viewer_certificate {
     cloudfront_default_certificate = true

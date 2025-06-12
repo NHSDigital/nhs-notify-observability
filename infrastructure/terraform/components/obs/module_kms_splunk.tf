@@ -64,6 +64,7 @@ data "aws_iam_policy_document" "kms_splunk" {
 
       identifiers = [
         "logs.${var.region}.amazonaws.com",
+        "logs.us-east-1.amazonaws.com", # For multi-region keys
       ]
     }
 
@@ -83,7 +84,8 @@ data "aws_iam_policy_document" "kms_splunk" {
       variable = "kms:EncryptionContext:aws:logs:arn"
       values = [
         "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:${local.csi}-splunk-logs-firehose",
-        "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:${local.csi}-splunk-metrics-firehose"
+        "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:${local.csi}-splunk-metrics-firehose",
+        "arn:aws:logs:us-east-1:${var.aws_account_id}:log-group:${local.csi}-splunk-metrics-firehose"
       ]
     }
   }

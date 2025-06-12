@@ -31,7 +31,8 @@ data "aws_iam_policy_document" "kms" {
       type = "Service"
 
       identifiers = [
-        "logs.${var.region}.amazonaws.com"
+        "logs.${var.region}.amazonaws.com",
+        "logs.us-east-1.amazonaws.com", # For multi-region keys
       ]
     }
 
@@ -53,6 +54,7 @@ data "aws_iam_policy_document" "kms" {
 
       values = [
         "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:*",
+        "arn:aws:logs:us-east-1:${var.aws_account_id}:log-group:*", # For multi-region keys
       ]
     }
   }
