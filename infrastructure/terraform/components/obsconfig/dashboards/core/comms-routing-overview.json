@@ -203,7 +203,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 12,
+        "w": 9,
         "x": 0,
         "y": 4
       },
@@ -213,7 +213,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -324,8 +324,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 9,
         "y": 4
       },
       "id": 4,
@@ -334,7 +334,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -378,6 +378,146 @@
             "include": {
               "pattern": "Time|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
             }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 17,
+        "y": 4
+      },
+      "id": 41,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "Environment": "$env",
+            "queue_name": "*",
+            "status": "PENDING"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "virtual_queue_insertion",
+          "metricQueryType": 0,
+          "namespace": "comms-process-queue-updates-lambda-metrics",
+          "period": "300",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A/300",
+          "hide": false,
+          "refId": "B",
+          "type": "math"
+        }
+      ],
+      "title": "Request Enqueuing Rate (Stacked)",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "byVariable": false,
+            "include": {
+              "pattern": "Time|.*ENRICHMENT_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*"
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*ENRICHMENT_([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}).*",
+            "renamePattern": "$1"
           }
         }
       ],
@@ -1115,7 +1255,7 @@
             "axisLabel": "TPS",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
@@ -1134,7 +1274,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -2377,9 +2517,9 @@
             "axisLabel": "TPS",
             "axisPlacement": "left",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 28,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2475,10 +2615,11 @@
           },
           "dimensions": {
             "Environment": "$env",
+            "queue_name": "*",
             "status": "IN-FLIGHT"
           },
           "expression": "",
-          "hide": false,
+          "hide": true,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -2528,6 +2669,17 @@
           },
           "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
           "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A/60",
+          "hide": false,
+          "refId": "B",
+          "type": "math"
         }
       ],
       "title": "NHS App Send Rate (stacked)",
@@ -2537,7 +2689,7 @@
           "options": {
             "byVariable": false,
             "include": {
-              "pattern": "Time|comms-$env-api-rol-router-request.*nhsapp.fifo"
+              "pattern": "Time|queue_name=\"comms-$env-api-rol-router-request.*nhsapp.fifo.*"
             }
           }
         },
@@ -2551,7 +2703,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-nhsapp.fifo",
+            "regex": ".*-request-nhsapp.fifo.*",
             "renamePattern": "shared"
           }
         }
@@ -4114,9 +4266,9 @@
             "axisLabel": "TPS",
             "axisPlacement": "left",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 28,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -4181,10 +4333,11 @@
           },
           "dimensions": {
             "Environment": "$env",
+            "queue_name": "*",
             "status": "IN-FLIGHT"
           },
           "expression": "",
-          "hide": false,
+          "hide": true,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -4241,8 +4394,8 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$A/300",
-          "hide": true,
+          "expression": "$A/60",
+          "hide": false,
           "refId": "B",
           "type": "math"
         }
@@ -4254,7 +4407,7 @@
           "options": {
             "byVariable": false,
             "include": {
-              "pattern": "Time|comms-prod-api-rol-router-request.*-((email|sms)(?:-notify)?\\.fifo)"
+              "pattern": "Time|.*comms-$env-api-rol-router-request.*-((email|sms)(?:-notify)?\\.fifo).*"
             }
           }
         },
@@ -4268,25 +4421,8 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-(email|sms)\\.fifo",
+            "regex": ".*-(email|sms)\\.fifo.*",
             "renamePattern": "$1-shared"
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "TPS",
-            "binary": {
-              "left": "Time|comms-prod-api-rol-router-request.*-((email|sms)(?:-notify)?\\.fifo)",
-              "operator": "/",
-              "right": "300"
-            },
-            "mode": "binary",
-            "reduce": {
-              "include": [],
-              "reducer": "sum"
-            },
-            "replaceFields": false
           }
         }
       ],
@@ -5996,9 +6132,9 @@
             "axisLabel": "TPS",
             "axisPlacement": "left",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 28,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -6985,7 +7121,7 @@
         "current": {
           "selected": false,
           "text": "CloudWatch-core-prod",
-          "value": "ceizrsvn3trlsa"
+          "value": "deog7e2wl2ccga"
         },
         "hide": 0,
         "includeAll": false,
@@ -7003,8 +7139,8 @@
       {
         "current": {
           "selected": false,
-          "text": "CloudWatch-Alerts-core-prod",
-          "value": "felz24f4maewwa"
+          "text": "CloudWatch-Alarms-core-prod",
+          "value": "ceog7e2w3l1xdb"
         },
         "hide": 0,
         "includeAll": false,
@@ -7114,7 +7250,5 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Core Routing Overview",
-  "uid": "delz1qh51jabkd",
-  "version": 90,
   "weekStart": ""
 }
