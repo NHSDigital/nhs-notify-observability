@@ -80,8 +80,9 @@ variable "delegated_grafana_viewer_group_ids" {
 
 variable "bounded_context_account_ids" {
   type = list(object({
-    domain     = string
-    account_id = string
+    domain                = string
+    account_id            = string
+    override_project_name = optional(string, "") # Optional override for Legacy Project Name used in Core/DNS
   }))
   description = "A list of accounts Grafana can assume role into"
   default     = []

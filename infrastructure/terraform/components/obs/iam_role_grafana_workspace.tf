@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "grafana_workspace_xray" {
 
 data "aws_iam_policy_document" "grafana_cross_account_access" {
   dynamic "statement" {
-    for_each = var.bounded_context_account_ids
+    for_each = { for bc in var.bounded_context_account_ids : bc.domain => bc if bc.override_project_name == "" }
     content {
       sid = replace("AssumeRoleCrossAccountfor${statement.value.domain}", "-", "")
 
@@ -36,6 +36,22 @@ data "aws_iam_policy_document" "grafana_cross_account_access" {
 
       resources = [
         "arn:aws:iam::${statement.value.account_id}:role/${local.csi}-cross-access-role",
+      ]
+    }
+
+  }
+
+  dynamic "statement" {
+    for_each = { for bc in var.bounded_context_account_ids : bc.domain => bc if bc.override_project_name != "" }
+    content {
+      sid = replace("AssumeRoleCrossAccountfor${statement.value.domain}", "-", "")
+
+      actions = [
+        "sts:AssumeRole"
+      ]
+
+      resources = [
+        "arn:aws:iam::${statement.value.account_id}:role/${replace(local.csi, "nhs", "nhs-notify")}-cross-access-role",
       ]
     }
 

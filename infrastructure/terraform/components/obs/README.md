@@ -13,7 +13,7 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
-| <a name="input_bounded_context_account_ids"></a> [bounded\_context\_account\_ids](#input\_bounded\_context\_account\_ids) | A list of accounts Grafana can assume role into | <pre>list(object({<br/>    domain     = string<br/>    account_id = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_bounded_context_account_ids"></a> [bounded\_context\_account\_ids](#input\_bounded\_context\_account\_ids) | A list of accounts Grafana can assume role into | <pre>list(object({<br/>    domain                = string<br/>    account_id            = string<br/>    override_project_name = optional(string, "") # Optional override for Legacy Project Name used in Core/DNS<br/>  }))</pre> | `[]` | no |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"obs"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_delegated_grafana_admin_group_ids"></a> [delegated\_grafana\_admin\_group\_ids](#input\_delegated\_grafana\_admin\_group\_ids) | A list of SSO group ids that would be granted ADMIN access in Grafana | `list(string)` | n/a | yes |
@@ -40,8 +40,10 @@
 | <a name="module_kms_splunk"></a> [kms\_splunk](#module\_kms\_splunk) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v2.0.13 |
 | <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.6 |
 | <a name="module_s3bucket_splunk_firehose"></a> [s3bucket\_splunk\_firehose](#module\_s3bucket\_splunk\_firehose) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v2.0.13 |
+| <a name="module_s3bucket_splunk_firehose_us"></a> [s3bucket\_splunk\_firehose\_us](#module\_s3bucket\_splunk\_firehose\_us) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v2.0.13 |
 | <a name="module_splunk_logs_formatter_lambda"></a> [splunk\_logs\_formatter\_lambda](#module\_splunk\_logs\_formatter\_lambda) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.13 |
 | <a name="module_splunk_metrics_formatter_lambda"></a> [splunk\_metrics\_formatter\_lambda](#module\_splunk\_metrics\_formatter\_lambda) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.13 |
+| <a name="module_splunk_metrics_formatter_lambda_us"></a> [splunk\_metrics\_formatter\_lambda\_us](#module\_splunk\_metrics\_formatter\_lambda\_us) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.13 |
 ## Outputs
 
 No outputs.

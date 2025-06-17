@@ -2569,8 +2569,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-notify-main-app",
-          "value": "nhs-notify-main-app"
+          "text": "nhs-main-app",
+          "value": "nhs-main-app"
         },
         "description": "",
         "hide": 2,
@@ -2581,11 +2581,11 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-notify-main-app",
-            "value": "nhs-notify-main-app"
+            "text": "nhs-main-app",
+            "value": "nhs-main-app"
           }
         ],
-        "query": "nhs-notify-${env}-app",
+        "query": "nhs-${env}-app",
         "skipUrlSync": false,
         "type": "custom"
       },
@@ -2604,15 +2604,15 @@
         "query": "cloudwatch",
         "queryValue": "",
         "refresh": 1,
-        "regex": ".*template-mgmt",
+        "regex": ".*webui",
         "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "current": {
           "selected": false,
-          "text": "nhs-notify-main-app-api",
-          "value": "nhs-notify-main-app-api"
+          "text": "nhs-main-app-api",
+          "value": "nhs-main-app-api"
         },
         "hide": 2,
         "includeAll": false,
@@ -2622,8 +2622,8 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-notify-main-app-api",
-            "value": "nhs-notify-main-app-api"
+            "text": "nhs-main-app-api",
+            "value": "nhs-main-app-api"
           }
         ],
         "query": "${envCsi}-api",
@@ -2633,8 +2633,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-notify-main-app-backup-vault",
-          "value": "nhs-notify-main-app-backup-vault"
+          "text": "nhs-main-app-backup-vault",
+          "value": "nhs-main-app-backup-vault"
         },
         "hide": 2,
         "includeAll": false,
@@ -2644,8 +2644,8 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-notify-main-app-backup-vault",
-            "value": "nhs-notify-main-app-backup-vault"
+            "text": "nhs-main-app-backup-vault",
+            "value": "nhs-main-app-backup-vault"
           }
         ],
         "query": "${envCsi}-backup-vault",

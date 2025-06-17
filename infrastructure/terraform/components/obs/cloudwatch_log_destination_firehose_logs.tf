@@ -20,11 +20,11 @@ data "aws_iam_policy_document" "firehose_logs" {
         ["${var.aws_account_id}"]
       )
     }
-    actions   = ["logs:PutSubscriptionFilter"]
+    actions = ["logs:PutSubscriptionFilter"]
     resources = [
       aws_cloudwatch_log_destination.firehose_logs.arn,
       aws_cloudwatch_log_destination.firehose_logs_us.arn
-      ]
+    ]
   }
 }
 
