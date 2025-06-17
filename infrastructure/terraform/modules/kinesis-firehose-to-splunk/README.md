@@ -24,6 +24,7 @@ No requirements.
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The retention period in days for the Cloudwatch Logs events to be retained, default of 0 is indefinite | `number` | `0` | no |
 | <a name="input_project"></a> [project](#input\_project) | The name of the tfscaffold project | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The AWS Region | `string` | n/a | yes |
+| <a name="input_region_prefix"></a> [region\_prefix](#input\_region\_prefix) | The prefix to use for the region in the resource names | `string` | `""` | no |
 | <a name="input_s3_kinesis_firehose_buffer"></a> [s3\_kinesis\_firehose\_buffer](#input\_s3\_kinesis\_firehose\_buffer) | S3 backup buffer | `number` | `5` | no |
 | <a name="input_s3_kinesis_firehose_buffer_interval"></a> [s3\_kinesis\_firehose\_buffer\_interval](#input\_s3\_kinesis\_firehose\_buffer\_interval) | S3 backup buffer interval | `number` | `300` | no |
 | <a name="input_splunk_firehose_bucket_arn"></a> [splunk\_firehose\_bucket\_arn](#input\_splunk\_firehose\_bucket\_arn) | The ARN of the S3 bucket to use for the Splunk Firehose data | `string` | `null` | no |

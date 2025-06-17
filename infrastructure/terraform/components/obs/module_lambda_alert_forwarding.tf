@@ -12,7 +12,7 @@ module "lambda_alert_forwarding" {
   group          = var.group
 
   log_retention_in_days = var.log_retention_in_days
-  kms_key_arn           = module.kms_alert_forwarding.key_arn
+  kms_key_arn           = module.kms_logs.key_arn
 
   iam_policy_document = {
     body = data.aws_iam_policy_document.lambda_alert_forwarding.json
@@ -34,7 +34,7 @@ module "lambda_alert_forwarding" {
   enable_lambda_insights   = false
 
   lambda_env_vars = {
-    "TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.name,
+    "TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM"           = aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.name,
     "TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.name
   }
 }
@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "lambda_alert_forwarding" {
     ]
 
     resources = [
-      module.kms_alert_forwarding.key_arn,
+      module.kms_logs.key_arn,
     ]
   }
 

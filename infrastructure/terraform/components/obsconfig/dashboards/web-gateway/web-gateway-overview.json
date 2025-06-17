@@ -1684,10 +1684,10 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-notify-main-cdn",
-          "value": "nhs-notify-main-cdn"
+          "text": "nhs-main-cdn",
+          "value": "nhs-main-cdn"
         },
-        "description": "nhs-notify-main-cdn",
+        "description": "nhs-main-cdn",
         "hide": 2,
         "includeAll": false,
         "label": "Environment CSI Prefix",
@@ -1696,11 +1696,11 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-notify-main-cdn",
-            "value": "nhs-notify-main-cdn"
+            "text": "nhs-main-cdn",
+            "value": "nhs-main-cdn"
           }
         ],
-        "query": "nhs-notify-${env}-cdn",
+        "query": "nhs-${env}-cdn",
         "skipUrlSync": false,
         "type": "custom"
       },
@@ -1719,7 +1719,7 @@
         "query": "cloudwatch",
         "queryValue": "",
         "refresh": 1,
-        "regex": ".*web-gateway",
+        "regex": ".*webui",
         "skipUrlSync": false,
         "type": "datasource"
       },

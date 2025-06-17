@@ -13,10 +13,12 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
-| <a name="input_bounded_context_account_ids"></a> [bounded\_context\_account\_ids](#input\_bounded\_context\_account\_ids) | A list of accounts Grafana can assume role into | <pre>list(object({<br/>    domain     = string<br/>    account_id = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_bounded_context_account_ids"></a> [bounded\_context\_account\_ids](#input\_bounded\_context\_account\_ids) | A list of accounts Grafana can assume role into | <pre>list(object({<br/>    domain                = string<br/>    account_id            = string<br/>    override_project_name = optional(string, "") # Optional override for Legacy Project Name used in Core/DNS<br/>  }))</pre> | `[]` | no |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"obs"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_delegated_grafana_admin_group_ids"></a> [delegated\_grafana\_admin\_group\_ids](#input\_delegated\_grafana\_admin\_group\_ids) | A list of SSO group ids that would be granted ADMIN access in Grafana | `list(string)` | n/a | yes |
+| <a name="input_delegated_grafana_editor_group_ids"></a> [delegated\_grafana\_editor\_group\_ids](#input\_delegated\_grafana\_editor\_group\_ids) | A list of SSO group ids that would be granted EDITOR access in Grafana | `list(string)` | n/a | yes |
+| <a name="input_delegated_grafana_viewer_group_ids"></a> [delegated\_grafana\_viewer\_group\_ids](#input\_delegated\_grafana\_viewer\_group\_ids) | A list of SSO group ids that would be granted VIEWER access in Grafana | `list(string)` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
 | <a name="input_force_lambda_code_deploy"></a> [force\_lambda\_code\_deploy](#input\_force\_lambda\_code\_deploy) | If the lambda package in s3 has the same commit id tag as the terraform build branch, the lambda will not update automatically. Set to True if making changes to Lambda code from on the same commit for example during development | `bool` | `false` | no |
 | <a name="input_group"></a> [group](#input\_group) | The group variables are being inherited from (often synonmous with account short-name) | `string` | n/a | yes |
@@ -31,8 +33,17 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_kms_alert_forwarding"></a> [kms\_alert\_forwarding](#module\_kms\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v1.0.9 |
+| <a name="module_kinesis_firehose_to_splunk_logs"></a> [kinesis\_firehose\_to\_splunk\_logs](#module\_kinesis\_firehose\_to\_splunk\_logs) | ../../modules/kinesis-firehose-to-splunk | n/a |
+| <a name="module_kinesis_firehose_to_splunk_metrics"></a> [kinesis\_firehose\_to\_splunk\_metrics](#module\_kinesis\_firehose\_to\_splunk\_metrics) | ../../modules/kinesis-firehose-to-splunk | n/a |
+| <a name="module_kinesis_firehose_to_splunk_metrics_us"></a> [kinesis\_firehose\_to\_splunk\_metrics\_us](#module\_kinesis\_firehose\_to\_splunk\_metrics\_us) | ../../modules/kinesis-firehose-to-splunk | n/a |
+| <a name="module_kms_logs"></a> [kms\_logs](#module\_kms\_logs) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v2.0.13 |
+| <a name="module_kms_splunk"></a> [kms\_splunk](#module\_kms\_splunk) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms | v2.0.13 |
 | <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.6 |
+| <a name="module_s3bucket_splunk_firehose"></a> [s3bucket\_splunk\_firehose](#module\_s3bucket\_splunk\_firehose) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v2.0.13 |
+| <a name="module_s3bucket_splunk_firehose_us"></a> [s3bucket\_splunk\_firehose\_us](#module\_s3bucket\_splunk\_firehose\_us) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/s3bucket | v2.0.13 |
+| <a name="module_splunk_logs_formatter_lambda"></a> [splunk\_logs\_formatter\_lambda](#module\_splunk\_logs\_formatter\_lambda) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.13 |
+| <a name="module_splunk_metrics_formatter_lambda"></a> [splunk\_metrics\_formatter\_lambda](#module\_splunk\_metrics\_formatter\_lambda) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.13 |
+| <a name="module_splunk_metrics_formatter_lambda_us"></a> [splunk\_metrics\_formatter\_lambda\_us](#module\_splunk\_metrics\_formatter\_lambda\_us) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.13 |
 ## Outputs
 
 No outputs.

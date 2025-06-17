@@ -1,5 +1,9 @@
-module "kms_alert_forwarding" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms?ref=v1.0.9"
+module "kms_logs" {
+  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms?ref=v2.0.13"
+  providers = {
+    aws           = aws
+    aws.us-east-1 = aws.us-east-1
+  }
 
   aws_account_id = var.aws_account_id
   component      = var.component
@@ -12,9 +16,13 @@ module "kms_alert_forwarding" {
   alias                = "alias/${local.csi}"
   key_policy_documents = [data.aws_iam_policy_document.kms.json]
   iam_delegation       = true
+  is_multi_region      = true
 }
 
 data "aws_iam_policy_document" "kms" {
+  # '*' resource scope is permitted in access policies as as the resource is itself
+  # https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-services.html
+
   statement {
     sid    = "AllowCloudWatchEncrypt"
     effect = "Allow"
@@ -24,6 +32,7 @@ data "aws_iam_policy_document" "kms" {
 
       identifiers = [
         "logs.${var.region}.amazonaws.com",
+        "logs.us-east-1.amazonaws.com", # For multi-region keys
       ]
     }
 
@@ -45,6 +54,7 @@ data "aws_iam_policy_document" "kms" {
 
       values = [
         "arn:aws:logs:${var.region}:${var.aws_account_id}:log-group:*",
+        "arn:aws:logs:us-east-1:${var.aws_account_id}:log-group:*", # For multi-region keys
       ]
     }
   }
