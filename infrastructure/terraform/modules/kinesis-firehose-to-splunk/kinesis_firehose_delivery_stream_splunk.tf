@@ -37,7 +37,7 @@ resource "aws_kinesis_firehose_delivery_stream" "splunk_firehose" {
     }
 
     s3_configuration {
-      role_arn           = var.firehose_to_s3_role_arn
+      role_arn           = aws_iam_role.kinesis_firehose.arn
       bucket_arn         = var.splunk_firehose_bucket_arn
       buffering_size     = var.s3_kinesis_firehose_buffer
       buffering_interval = var.s3_kinesis_firehose_buffer_interval

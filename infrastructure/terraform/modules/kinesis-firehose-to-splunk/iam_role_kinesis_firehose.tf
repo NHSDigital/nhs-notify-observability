@@ -52,6 +52,22 @@ data "aws_iam_policy_document" "kinesis_firehose_policy_document" {
 
   statement {
     actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:ReEncrypt*",
+    ]
+
+    resources = [
+      var.kms_splunk_key_arn
+    ]
+
+    effect = "Allow"
+  }
+
+  statement {
+    actions = [
       "logs:PutLogEvents",
     ]
 
