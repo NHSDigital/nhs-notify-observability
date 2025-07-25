@@ -44,7 +44,7 @@ function run-terraform-docs-natively() {
 
 function run-terraform-docs-in-docker() {
 
-    # shellcheck disable=SC1091
+  # shellcheck disable=SC1091
   source ./scripts/docker/docker.lib.sh
   local dir_to_scan="$1"
 
