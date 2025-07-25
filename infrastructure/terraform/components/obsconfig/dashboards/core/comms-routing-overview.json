@@ -602,9 +602,8 @@
           "label": "",
           "logGroups": [
             {
-              "accountId": "746418818434",
-              "arn": "arn:aws:logs:eu-west-2:746418818434:log-group:/aws/lambda/comms-${env}-api-lll-tenant-load-limit:*",
-              "name": "/aws/lambda/comms-${env}-api-lll-tenant-load-limit"
+              "arn": "$tllLogId",
+              "name": "$tllLogId"
             }
           ],
           "matchExact": true,
@@ -1052,7 +1051,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "D $fifoReEnrichmentQueue"
+              "options": "D comms-$env-api-stl-reenrichment-queue.fifo"
             },
             "properties": [
               {
@@ -6742,7 +6741,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "J $fifoReEnrichmentQueue"
+              "options": "J comms-$env-api-stl-reenrichment-queue.fifo"
             },
             "properties": [
               {
@@ -7841,6 +7840,35 @@
         "query": "comms-${env}-api-stl-reenrichment-dlq.fifo",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "/aws/lambda/comms-prod-api-lll-tenant-load-limit",
+          "value": "arn:aws:logs:eu-west-2:746418818434:log-group:/aws/lambda/comms-prod-api-lll-tenant-load-limit:*"
+        },
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "${datasrc}"
+        },
+        "definition": "",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "tllLogId",
+        "options": [],
+        "query": {
+          "logGroupPrefix": "",
+          "queryType": "logGroups",
+          "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+          "region": "eu-west-2",
+          "resourceType": ""
+        },
+        "refresh": 1,
+        "regex": "/.*lll.*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
