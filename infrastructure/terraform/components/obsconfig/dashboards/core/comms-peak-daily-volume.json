@@ -109,18 +109,6 @@
           "options": {
             "include": {
               "names": [
-                "ENRICHMENT_04d7ce2d-7568-43e7-8db4-b9c95ccc79a8",
-                "ENRICHMENT_068ef454-e7c5-4f7c-8342-2bf1e5ae12c0",
-                "ENRICHMENT_3178f904-4875-46e7-9011-c463ff70be0a",
-                "ENRICHMENT_343de8e9-22d1-4821-b8ea-92aa4d3e173a",
-                "ENRICHMENT_43bee150-cd97-4572-80ce-89308b9db978",
-                "ENRICHMENT_4d554c99-ecb1-4577-8731-48e7d5e62e94",
-                "ENRICHMENT_52c5b62a-ac60-4a28-8654-e61d04e2873e",
-                "ENRICHMENT_a6ea62d9-0a3e-4895-a044-c672b2f38c19",
-                "ENRICHMENT_apim_integration_test",
-                "ENRICHMENT_b168187d-0dd7-4511-a2ea-0ef956751d1c",
-                "ENRICHMENT_b7e07e21-b7f1-4cee-94a1-fdebd8d7cc25",
-                "ENRICHMENT_bbed0d39-737f-4cc0-a8aa-0c217aafcbba"
               ],
               "pattern": "ENRICHMENT_.*"
             }
