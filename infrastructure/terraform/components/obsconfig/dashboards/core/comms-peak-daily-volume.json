@@ -1,0 +1,262 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 12,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "deog7e2wl2ccga"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 15,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "displayMode": "basic",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "deog7e2wl2ccga"
+          },
+          "dimensions": {
+            "Environment": "prod",
+            "status": "IN-FLIGHT"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "virtual_queue_insertion",
+          "metricQueryType": 0,
+          "namespace": "comms-process-queue-updates-lambda-metrics",
+          "period": "86400",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "eu-west-2",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Peak daily volume by Tenant",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "ENRICHMENT_04d7ce2d-7568-43e7-8db4-b9c95ccc79a8",
+                "ENRICHMENT_068ef454-e7c5-4f7c-8342-2bf1e5ae12c0",
+                "ENRICHMENT_3178f904-4875-46e7-9011-c463ff70be0a",
+                "ENRICHMENT_343de8e9-22d1-4821-b8ea-92aa4d3e173a",
+                "ENRICHMENT_43bee150-cd97-4572-80ce-89308b9db978",
+                "ENRICHMENT_4d554c99-ecb1-4577-8731-48e7d5e62e94",
+                "ENRICHMENT_52c5b62a-ac60-4a28-8654-e61d04e2873e",
+                "ENRICHMENT_a6ea62d9-0a3e-4895-a044-c672b2f38c19",
+                "ENRICHMENT_apim_integration_test",
+                "ENRICHMENT_b168187d-0dd7-4511-a2ea-0ef956751d1c",
+                "ENRICHMENT_b7e07e21-b7f1-4cee-94a1-fdebd8d7cc25",
+                "ENRICHMENT_bbed0d39-737f-4cc0-a8aa-0c217aafcbba"
+              ],
+              "pattern": "ENRICHMENT_.*"
+            }
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "max"
+            ]
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "ENRICHMENT_(.*)",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "deog7e2wl2ccga"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 9,
+        "x": 15,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "clientId"
+          }
+        ]
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "deog7e2wl2ccga"
+          },
+          "dimensions": {},
+          "expression": "filter description like /\\d+ items sent for client/\n | parse description \"* items sent for client *\" as itemCount, clientName2\n | stats latest(clientName2) as name by clientId",
+          "id": "",
+          "label": "",
+          "logGroups": [
+            {
+              "accountId": "746418818434",
+              "arn": "arn:aws:logs:eu-west-2:746418818434:log-group:/aws/lambda/comms-prod-api-lll-tenant-load-limit:*",
+              "name": "/aws/lambda/comms-prod-api-lll-tenant-load-limit"
+            }
+          ],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "",
+          "queryMode": "Logs",
+          "refId": "A",
+          "region": "eu-west-2",
+          "sqlExpression": "",
+          "statistic": "Average",
+          "statsGroups": [
+            "clientId"
+          ]
+        }
+      ],
+      "timeFrom": "5m",
+      "title": "Client Name by ID",
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6M",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Peak daily volume",
+  "uid": "bepf2nk0ucttse",
+  "version": 7,
+  "weekStart": ""
+}
