@@ -16,6 +16,7 @@ content: |-
   {{ .Modules }}
   {{ .Outputs }}
   {{ .Footer }}
+
 output:
   file: 'README.md'
   mode: inject
@@ -27,6 +28,7 @@ output:
     <!-- vale on -->
     <!-- markdownlint-enable -->
     <!-- END_TF_DOCS -->
+
 output-values:
   enabled: false
   from: ''
