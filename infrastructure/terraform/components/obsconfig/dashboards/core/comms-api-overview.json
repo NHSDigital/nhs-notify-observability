@@ -528,7 +528,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "comms-.*-api-stl-enrichment-dlq.fifo",
+            "regex": "comms-.*-api-stl-enrich-dlq",
             "renamePattern": "Request Enrichment DLQ"
           }
         },
@@ -1979,8 +1979,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-enrichment-queue.fifo",
-          "value": "comms-prod-api-stl-enrichment-queue.fifo"
+          "text": "comms-prod-api-stl-enrich-queue",
+          "value": "comms-prod-api-stl-enrich-queue"
         },
         "hide": 2,
         "includeAll": false,
@@ -1990,11 +1990,11 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-enrichment-queue.fifo",
-            "value": "comms-prod-api-stl-enrichment-queue.fifo"
+            "text": "comms-prod-api-stl-enrich-queue",
+            "value": "comms-prod-api-stl-enrich-queue"
           }
         ],
-        "query": "comms-${env}-api-stl-enrichment-queue.fifo",
+        "query": "comms-${env}-api-stl-enrich-queue",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -2137,8 +2137,8 @@
         "allValue": "",
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-enrichment-dlq.fifo",
-          "value": "comms-prod-api-stl-enrichment-dlq.fifo"
+          "text": "comms-prod-api-stl-enrich-dlq",
+          "value": "comms-prod-api-stl-enrich-dlq"
         },
         "description": "Dead Letter Queues",
         "hide": 2,
@@ -2148,8 +2148,8 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-enrichment-dlq.fifo",
-            "value": "comms-prod-api-stl-enrichment-dlq.fifo"
+            "text": "comms-prod-api-stl-enrich-dlq",
+            "value": "comms-prod-api-stl-enrich-dlq"
           },
           {
             "selected": false,
@@ -2177,7 +2177,7 @@
             "value": "comms-prod-api-stl-sftpsendprecisionproco-dlq"
           }
         ],
-        "query": "comms-${env}-api-stl-enrichment-dlq.fifo,\ncomms-${env}-api-stl-send-govuknotify-dlq,\ncomms-${env}-api-stl-send-nhsapp-dlq,\ncomms-${env}-api-lspl-sftpsend-dlq,\ncomms-${env}-api-stl-sftpsendsynertec-dlq,\ncomms-${env}-api-stl-sftpsendprecisionproco-dlq",
+        "query": "comms-${env}-api-stl-enrich-dlq,\ncomms-${env}-api-stl-send-govuknotify-dlq,\ncomms-${env}-api-stl-send-nhsapp-dlq,\ncomms-${env}-api-lspl-sftpsend-dlq,\ncomms-${env}-api-stl-sftpsendsynertec-dlq,\ncomms-${env}-api-stl-sftpsendprecisionproco-dlq",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
