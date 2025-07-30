@@ -769,7 +769,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -793,7 +793,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -818,7 +818,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -843,7 +843,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentDlq"
+            "QueueName": "$enrichmentDlqName"
           },
           "expression": "",
           "hide": false,
@@ -920,7 +920,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -959,7 +959,7 @@
                 {
                   "operator": {
                     "name": "=",
-                    "value": "$fifoEnrichmentQueue"
+                    "value": "$enrichmentQueueName"
                   },
                   "property": {
                     "name": "QueueName",
@@ -971,7 +971,7 @@
               "type": "and"
             }
           },
-          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$fifoEnrichmentQueue'",
+          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$enrichmentQueueName'",
           "statistic": "Sum"
         }
       ],
@@ -1051,7 +1051,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "D comms-$env-api-stl-reenrichment-queue.fifo"
+              "options": "D comms-$env-api-stl-reenrich-queue"
             },
             "properties": [
               {
@@ -1088,7 +1088,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": true,
@@ -1113,7 +1113,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": true,
@@ -1280,7 +1280,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -1304,7 +1304,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -1329,7 +1329,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -1354,7 +1354,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentDlq"
+            "QueueName": "$reEnrichmentDlqName"
           },
           "expression": "",
           "hide": false,
@@ -1431,7 +1431,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -1469,7 +1469,7 @@
                 {
                   "operator": {
                     "name": "=",
-                    "value": "$fifoReEnrichmentQueue"
+                    "value": "$reEnrichmentQueueName"
                   },
                   "property": {
                     "name": "QueueName",
@@ -1481,7 +1481,7 @@
               "type": "and"
             }
           },
-          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$fifoReEnrichmentQueue'",
+          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$reEnrichmentQueueName'",
           "statistic": "Sum"
         }
       ],
@@ -1560,7 +1560,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -1707,7 +1707,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -6741,7 +6741,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "J comms-$env-api-stl-reenrichment-queue.fifo"
+              "options": "J comms-$env-api-stl-reenrich-queue"
             },
             "properties": [
               {
@@ -7091,7 +7091,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-reenrichment-queue.fifo"
+            "QueueName": "comms-$env-api-stl-reenrich-queue"
           },
           "expression": "",
           "hide": true,
@@ -7320,7 +7320,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-reenrichment-queue.fifo"
+            "QueueName": "comms-$env-api-stl-reenrich-queue"
           },
           "expression": "",
           "hide": false,
@@ -7758,42 +7758,42 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-enrichment-queue.fifo",
-          "value": "comms-prod-api-stl-enrichment-queue.fifo"
+          "text": "comms-prod-api-stl-enrich-queue",
+          "value": "comms-prod-api-stl-enrich-queue"
         },
         "hide": 2,
         "includeAll": false,
         "multi": false,
-        "name": "fifoEnrichmentQueue",
+        "name": "enrichmentQueueName",
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-enrichment-queue.fifo",
-            "value": "comms-prod-api-stl-enrichment-queue.fifo"
+            "text": "comms-prod-api-stl-enrich-queue",
+            "value": "comms-prod-api-stl-enrich-queue"
           }
         ],
-        "query": "comms-${env}-api-stl-enrichment-queue.fifo",
+        "query": "comms-${env}-api-stl-enrich-queue",
         "skipUrlSync": false,
         "type": "custom"
       },
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-enrichment-dlq.fifo",
-          "value": "comms-prod-api-stl-enrichment-dlq.fifo"
+          "text": "comms-prod-api-stl-enrich-dlq",
+          "value": "comms-prod-api-stl-enrich-dlq"
         },
         "hide": 2,
         "includeAll": false,
         "multi": false,
-        "name": "fifoEnrichmentDlq",
+        "name": "enrichmentDlqName",
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-enrichment-dlq.fifo",
-            "value": "comms-prod-api-stl-enrichment-dlq.fifo"
+            "text": "comms-prod-api-stl-enrich-dlq",
+            "value": "comms-prod-api-stl-enrich-dlq"
           }
         ],
-        "query": "comms-${env}-api-stl-enrichment-dlq.fifo",
+        "query": "comms-${env}-api-stl-enrich-dlq",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -7801,21 +7801,21 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-reenrichment-queue.fifo",
-          "value": "comms-prod-api-stl-reenrichment-queue.fifo"
+          "text": "comms-prod-api-stl-reenrich-queue",
+          "value": "comms-prod-api-stl-reenrich-queue"
         },
         "hide": 2,
         "includeAll": false,
         "multi": false,
-        "name": "fifoReEnrichmentQueue",
+        "name": "reEnrichmentQueueName",
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-reenrichment-queue.fifo",
-            "value": "comms-prod-api-stl-reenrichment-queue.fifo"
+            "text": "comms-prod-api-stl-reenrich-queue",
+            "value": "comms-prod-api-stl-reenrich-queue"
           }
         ],
-        "query": "comms-${env}-api-stl-reenrichment-queue.fifo",
+        "query": "comms-${env}-api-stl-reenrich-queue",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -7823,8 +7823,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-reenrichment-dlq.fifo",
-          "value": "comms-prod-api-stl-reenrichment-dlq.fifo"
+          "text": "comms-prod-api-stl-reenrich-dlq",
+          "value": "comms-prod-api-stl-reenrich-dlq"
         },
         "hide": 2,
         "includeAll": false,
@@ -7833,11 +7833,11 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-reenrichment-dlq.fifo",
-            "value": "comms-prod-api-stl-reenrichment-dlq.fifo"
+            "text": "comms-prod-api-stl-reenrich-dlq",
+            "value": "comms-prod-api-stl-reenrich-dlq"
           }
         ],
-        "query": "comms-${env}-api-stl-reenrichment-dlq.fifo",
+        "query": "comms-${env}-api-stl-reenrich-dlq",
         "skipUrlSync": false,
         "type": "custom"
       },
