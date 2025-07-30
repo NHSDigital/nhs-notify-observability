@@ -1,0 +1,2513 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "A Dashboard showing grouped Service Failure indicators",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 13,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Ingestion",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 15,
+        "x": 9,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Notify Core",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 0,
+        "y": 2
+      },
+      "id": 2,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## APIM",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 15,
+        "x": 9,
+        "y": 2
+      },
+      "id": 17,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Enrichment",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 0,
+        "y": 4
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-commsapi-apim-reliability",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-commsapi-apim-performance",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "Inbound Requests",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 5,
+        "y": 4
+      },
+      "id": 20,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "#### Callbacks\n**TBC**",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 9,
+        "y": 4
+      },
+      "id": 10,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "#### Load Request\n**TBC**",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 14,
+        "y": 4
+      },
+      "id": 12,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "#### Enrichment Process\n**TBC**",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 19,
+        "y": 4
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-pds",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "PDS Connection",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 0,
+        "y": 7
+      },
+      "id": 7,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## MESH",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 10,
+        "x": 9,
+        "y": 7
+      },
+      "id": 16,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Routing",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 0,
+        "y": 9
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-mesh-reliability",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "Inbound Requests",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 5,
+        "y": 9
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-mesh-send-queue-backlog",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "Reports",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 9,
+        "y": 9
+      },
+      "id": 34,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "#### Reports\n**TBC**",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 18,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Messaging Suppliers",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 19,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## NHS App",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 22,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Gov Notify",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 16
+      },
+      "id": 37,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-ecl-send-nhsapp-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-send-nhsapp",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-send-nhsapp-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-send-nhsapp-queue-backlog ",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "NHS App Connection",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 16
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-nhsappcb-reliability",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-nhsappcb-performance",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "NHS App Callbacks",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 12,
+        "y": 16
+      },
+      "id": 38,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-ecl-send-govuknotify-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-send-govuknotify",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-send-govuknotify-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-send-govuknotify-queue-backlog ",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "GUN Connection",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 16
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-sendreqcb-reliability",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "GUN Callbacks",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 25,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## MBA",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 26,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Synertec",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 21
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-send-letters-sftp ",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-send-letters-sftp-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-send-letters-sftp-queue-backlog",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-ecl-send-letters-sftp-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "MBA Connection",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 21
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-csvreport-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-csvreport-queue-backlog",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-csvreport",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-ecl-csvreport-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "MBA Callbacks",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue",
+                "AlarmName"
+              ]
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": ".*precisionproco"
+                  }
+                },
+                "fieldName": "AlarmName"
+              },
+              {
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": ".*synertec"
+                  }
+                },
+                "fieldName": "AlarmName"
+              }
+            ],
+            "match": "any",
+            "type": "exclude"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 12,
+        "y": 21
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-sftpsendlambda-sftpsendsynertec-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-sftpsendsynertec",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-sftpsendsynertec-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-sftpsendsynertec-queue-backlog",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "Synertec Connection",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 21
+      },
+      "id": 43,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-csvreportsynertec-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-csvreportsynertec-queue-backlog",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-csvreportsynertec",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-csvreportlambda-csvreportsynertec-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "Synertec Callbacks",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue",
+                "AlarmName"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 27,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Precision Proco",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.4.1",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 26
+      },
+      "id": 44,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-sftpsendprecisionproco-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-sftpsendprecisionproco-queue-backlog",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-sftpsendprecisionproco",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-sftpsendlambda-sftpsendprecisionproco-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": false,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "Proco Connection",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "computest-cloudwatchalarm-datasource",
+        "uid": "${almDataSrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ALARM": {
+                  "color": "red",
+                  "index": 1
+                },
+                "INSUFFICIENT_DATA": {
+                  "color": "purple",
+                  "index": 2
+                },
+                "OK": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 26
+      },
+      "id": 45,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^StateValue$/",
+          "values": true
+        },
+        "showPercentChange": false,
+        "textMode": "name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-csvreportprecisionproco-dlq-messages-visible",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "A",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-lambda-errors-csvreportprecisionproco",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "B",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-csvreportlambda-csvreportprecisionproco-error-count",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "C",
+          "region": "eu-west-2"
+        },
+        {
+          "alarmNamePrefix": "comms-${env}-api-alm-csvreportprecisionproco-queue-backlog",
+          "datasource": {
+            "type": "computest-cloudwatchalarm-datasource",
+            "uid": "${almDataSrc}"
+          },
+          "hide": true,
+          "includeAlarm": true,
+          "includeInsufficientData": true,
+          "includeOk": true,
+          "includeTypeComposite": true,
+          "includeTypeMetric": true,
+          "refId": "D",
+          "region": "eu-west-2"
+        }
+      ],
+      "title": "Proco Callbacks",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "enum",
+                "enumConfig": {
+                  "text": [
+                    "INSUFFICIENT_DATA",
+                    "ALARM",
+                    "OK"
+                  ]
+                },
+                "targetField": "StateValue"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "AlarmDescription",
+                "StateValue",
+                "AlarmName"
+              ]
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "prod",
+          "value": "prod"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Environment",
+        "multi": false,
+        "name": "env",
+        "options": [
+          {
+            "selected": true,
+            "text": "prod",
+            "value": "prod"
+          },
+          {
+            "selected": false,
+            "text": "int",
+            "value": "int"
+          },
+          {
+            "selected": false,
+            "text": "internal-dev",
+            "value": "internal-dev"
+          },
+          {
+            "selected": false,
+            "text": "ref",
+            "value": "ref"
+          },
+          {
+            "selected": false,
+            "text": "ref2",
+            "value": "ref2"
+          },
+          {
+            "selected": false,
+            "text": "refmock",
+            "value": "refmock"
+          },
+          {
+            "selected": false,
+            "text": "refmock2",
+            "value": "refmock2"
+          },
+          {
+            "selected": false,
+            "text": "staging",
+            "value": "staging"
+          },
+          {
+            "selected": false,
+            "text": "uat",
+            "value": "uat"
+          }
+        ],
+        "query": "prod, int, internal-dev, ref, ref2, refmock, refmock2, staging, uat",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "CloudWatch-Alarms-core-prod",
+          "value": "ceog7e2w3l1xdb"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Alarm Data Source",
+        "multi": false,
+        "name": "almDataSrc",
+        "options": [],
+        "query": "computest-cloudwatchalarm-datasource",
+        "refresh": 1,
+        "regex": ".*-core-.*",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false
+  },
+  "timezone": "browser",
+  "title": "Overall Service Status",
+  "uid": "fepxm8y77z9xcd",
+  "version": 13,
+  "weekStart": ""
+}
