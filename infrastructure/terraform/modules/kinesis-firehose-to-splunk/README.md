@@ -13,7 +13,6 @@ No requirements.
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"acct"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
-| <a name="input_firehose_to_s3_role_arn"></a> [firehose\_to\_s3\_role\_arn](#input\_firehose\_to\_s3\_role\_arn) | The ARN of the IAM role to use for the Splunk Firehose to S3 | `string` | `null` | no |
 | <a name="input_formatter_lambda_buffer"></a> [formatter\_lambda\_buffer](#input\_formatter\_lambda\_buffer) | Formatter lambda buffer size | `number` | `1` | no |
 | <a name="input_formatter_lambda_buffer_interval"></a> [formatter\_lambda\_buffer\_interval](#input\_formatter\_lambda\_buffer\_interval) | Buffer for formatter lambda for the specified period of time, in seconds, before delivering it to the lambda | `number` | `60` | no |
 | <a name="input_formatter_lambda_function_arn"></a> [formatter\_lambda\_function\_arn](#input\_formatter\_lambda\_function\_arn) | Formatter function arn | `string` | `""` | no |
