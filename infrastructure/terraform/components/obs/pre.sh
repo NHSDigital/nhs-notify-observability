@@ -43,7 +43,7 @@ group="${group:-}"
 debug "Group variable is set to: ${group}"
 
 # Adjust group names for prod if needed
-if [[ -n "${group}" && "${group}" =~ "prod" ]]; then
+if [[ -n "${group}" && "${group}" =~ "observability-prod" ]]; then
   admin_group_name="AWS-NHSNotify-SharedInfra-ProdAdmins"
   debug "Admin group name: ${admin_group_name}"
 
