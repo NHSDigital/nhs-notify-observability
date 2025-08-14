@@ -186,7 +186,7 @@ module.exports = {
                 `.trim();
             } else if (event.source === "notify.sechub") {
                 title = `🛡️ Security Hub Notification: ${event.account} (${detail.accountName})`;
-                formattedMessage = extractSecurityHubSections(detail.message); 
+                formattedMessage = extractSecurityHubSections(detail.message);
             }
 
             const teamsPayload = JSON.stringify({
