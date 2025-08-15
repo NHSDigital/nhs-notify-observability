@@ -1,5 +1,5 @@
 resource "aws_lambda_permission" "sechub" {
-  statement_id  = "AllowExecutionFromCloudWatchSechub"
+  statement_id  = "AllowExecutionFromCloudWatchSecHub"
   action        = "lambda:InvokeFunction"
   function_name = module.lambda_alert_forwarding.function_name
   principal     = "events.amazonaws.com"
