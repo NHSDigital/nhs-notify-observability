@@ -19,6 +19,11 @@ resource "aws_iam_role_policy_attachment" "grafana_workspace_cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonGrafanaCloudWatchAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "grafana_workspace_athena" {
+  role       = aws_iam_role.grafana_workspace.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonGrafanaAthenaAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "grafana_workspace_xray" {
   role       = aws_iam_role.grafana_workspace.name
   policy_arn = "arn:aws:iam::aws:policy/AWSXrayReadOnlyAccess"
