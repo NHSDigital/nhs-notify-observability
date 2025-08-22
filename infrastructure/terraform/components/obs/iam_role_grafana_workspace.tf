@@ -65,7 +65,6 @@ data "aws_iam_policy_document" "grafana_cross_account_access" {
     effect  = "Allow"
     actions = [
       "s3:AbortMultipartUpload",
-      "s3:CreateBucket",
       "s3:GetBucketLocation",
       "s3:GetObject",
       "s3:ListBucket",
@@ -76,7 +75,8 @@ data "aws_iam_policy_document" "grafana_cross_account_access" {
     ]
 
     resources = [
-      "${local.acct.s3_buckets["observability"]["arn"]}/athena-output/*"
+      "${local.acct.s3_buckets["observability"]["arn"]}/*",
+      local.acct.s3_buckets["observability"]["arn"],
     ]
   }
 }
