@@ -109,7 +109,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 231
+                "value": 215
               }
             ]
           },
@@ -121,7 +121,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 151
+                "value": 145
               }
             ]
           },
@@ -145,7 +145,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 378
+                "value": 365
               }
             ]
           },
@@ -157,7 +157,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 277
+                "value": 352
               }
             ]
           },
@@ -181,14 +181,14 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 164
+                "value": 196
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 16,
         "w": 24,
         "x": 0,
         "y": 2
@@ -206,7 +206,12 @@
           "show": false
         },
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "bounded_context"
+          }
+        ]
       },
       "pluginVersion": "10.4.1",
       "targets": [
@@ -223,7 +228,7 @@
             "uid": "fevkyppe14934d"
           },
           "format": 1,
-          "rawSQL": "SELECT bounded_context, \"group\", environment, component, version_internal, version_bounded_context, commit_id_internal, commit_id_bounded_context, deployed_at\nFROM (\n  SELECT\n    t.*,\n    ROW_NUMBER() OVER (\n      PARTITION BY t.bounded_context, t.component, t.\"group\"\n      ORDER BY t.deployed_at DESC\n    ) AS rn\n  FROM \"nhs-main-acct-deployments\" t\n  WHERE t.environment = 'main'\n) sub\nWHERE sub.rn = 1;",
+          "rawSQL": "SELECT bounded_context, \"group\", environment, component, version_internal, version_bounded_context, deployed_at, commit_id_internal, commit_id_bounded_context\nFROM (\n  SELECT\n    t.*,\n    ROW_NUMBER() OVER (\n      PARTITION BY t.bounded_context, t.component, t.\"group\"\n      ORDER BY t.deployed_at DESC\n    ) AS rn\n  FROM \"nhs-main-acct-deployments\" t\n  WHERE t.environment = 'main'\n) sub\nWHERE sub.rn = 1;",
           "refId": "A",
           "table": "nhs-main-acct-deployments"
         }
@@ -235,7 +240,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 18
       },
       "id": 4,
       "options": {
@@ -317,7 +322,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 359
+                "value": 338
               }
             ]
           },
@@ -329,7 +334,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 315
+                "value": 152
               }
             ]
           },
@@ -341,7 +346,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 295
+                "value": 342
               }
             ]
           },
@@ -353,7 +358,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 419
+                "value": 357
               }
             ]
           },
@@ -399,7 +404,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 20
       },
       "id": 3,
       "options": {
@@ -431,7 +436,7 @@
             "uid": "fevkyppe14934d"
           },
           "format": 1,
-          "rawSQL": "SELECT bounded_context, \"group\", environment, component, version_internal, version_bounded_context, commit_id_internal, commit_id_bounded_context, deployed_at\nFROM (\n  SELECT\n    t.*,\n    ROW_NUMBER() OVER (\n      PARTITION BY t.bounded_context, t.component, t.\"group\"\n      ORDER BY t.deployed_at DESC\n    ) AS rn\n  FROM \"nhs-main-acct-deployments\" t\n  WHERE t.environment != 'main'\n  ORDER BY version_bounded_context\n) sub\nWHERE sub.rn = 1;",
+          "rawSQL": "SELECT bounded_context, \"group\", environment, component, version_internal, version_bounded_context, deployed_at, commit_id_internal, commit_id_bounded_context\nFROM (\n  SELECT\n    t.*,\n    ROW_NUMBER() OVER (\n      PARTITION BY t.bounded_context, t.component, t.\"group\"\n      ORDER BY t.deployed_at DESC\n    ) AS rn\n  FROM \"nhs-main-acct-deployments\" t\n  WHERE t.environment != 'main'\n  ORDER BY version_bounded_context\n) sub\nWHERE sub.rn = 1;",
           "refId": "A",
           "table": "nhs-main-acct-deployments"
         }

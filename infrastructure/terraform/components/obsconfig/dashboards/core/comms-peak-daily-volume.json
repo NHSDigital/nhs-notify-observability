@@ -108,8 +108,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "names": [
-              ],
+              "names": [],
               "pattern": "ENRICHMENT_.*"
             }
           }
