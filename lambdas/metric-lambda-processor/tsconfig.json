@@ -1,9 +1,11 @@
 {
+  "compilerOptions": {
+    "lib": [
+      "es2022"
+    ]
+  },
   "extends": "@tsconfig/node22/tsconfig.json",
   "include": [
     "**/*.ts"
-  ],
-  "compilerOptions": {
-    "lib": ["es2022"]
-  }
+  ]
 }
