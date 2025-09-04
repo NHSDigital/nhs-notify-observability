@@ -29,6 +29,27 @@ async function getTeamsWebhookUrl(parameterName) {
     }
 }
 
+function extractSecurityHubSections(message) {
+    let cleaned = message.replace(/\\\\n/g, '\n').replace(/\\n/g, '\n');
+    cleaned = cleaned.replace(/-+\n/g, '');
+    const rawSections = cleaned.split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+    return rawSections.map(section => {
+        const lines = section.split('\n').filter(Boolean);
+        if (lines.length < 2) return null;
+        const header = `**${lines[0]}**<br>`;
+        const findings = lines.slice(1)
+            .map(line => line.trim())
+            .filter(Boolean)
+            .map(line => {
+                const m = line.match(/^(\S+)\s+(\d+)$/);
+                return m ? `${m[1].padEnd(30)}${m[2]}<br>` : line + '<br>';
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.localeCompare(b));
+        return `${header}${findings.join('')}`;
+    }).filter(Boolean).join('<br><br>');
+}
+
 async function sendTeamsMessage(teamsPayload, url, retries = 3) {
     return new Promise((resolve, reject) => {
         const options = {
@@ -113,6 +134,8 @@ module.exports = {
             parameterName = process.env.TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM;
         } else if (event.source === "aws.backup") {
             parameterName = process.env.TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM;
+        } else if (event.source === "notify.sechub") {
+            parameterName = process.env.TEAMS_WEBHOOK_ALERTS_SECURITY_SSM_PARAM;
         } else {
             console.error("Unhandled event source:", event.source);
             return;
@@ -161,6 +184,9 @@ module.exports = {
 
 **Status Message:** ${detail.statusMessage || "N/A"}
                 `.trim();
+            } else if (event.source === "notify.sechub") {
+                title = `🛡️ Security Hub Notification: ${event.account} (${detail.accountName})`;
+                formattedMessage = extractSecurityHubSections(detail.message);
             }
 
             const teamsPayload = JSON.stringify({

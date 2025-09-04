@@ -17,8 +17,8 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
-  "id": 18,
+  "graphTooltip": 1,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -139,7 +139,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -159,7 +158,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
@@ -168,13 +167,13 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepAfter",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -202,8 +201,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 9,
+        "h": 7,
+        "w": 6,
         "x": 0,
         "y": 4
       },
@@ -216,7 +215,7 @@
           "showLegend": false
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -241,7 +240,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -258,6 +257,13 @@
             "include": {
               "pattern": "Time|ENRICHMENT_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
             }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "ENRICHMENT_(.*)",
+            "renamePattern": "$1"
           }
         }
       ],
@@ -295,7 +301,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -323,9 +329,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 9,
+        "h": 7,
+        "w": 6,
+        "x": 6,
         "y": 4
       },
       "id": 4,
@@ -337,7 +343,7 @@
           "showLegend": false
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -361,7 +367,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -397,7 +403,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "TPS",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "bars",
@@ -415,7 +421,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -443,9 +449,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 7,
-        "x": 17,
+        "h": 7,
+        "w": 5,
+        "x": 12,
         "y": 4
       },
       "id": 41,
@@ -457,7 +463,7 @@
           "showLegend": false
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -483,7 +489,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -496,7 +502,7 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$A/300",
+          "expression": "$A/60",
           "hide": false,
           "refId": "B",
           "type": "math"
@@ -524,11 +530,108 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 7,
+        "x": 17,
+        "y": 4
+      },
+      "id": 43,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "clientId"
+          }
+        ]
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {},
+          "expression": "filter description like /\\d+ items sent for client/\n | parse description \"* items sent for client *\" as itemCount, clientName2\n | sort @timestamp asc\n | stats latest(clientName2) as name by clientId",
+          "id": "",
+          "label": "",
+          "logGroups": [
+            {
+              "arn": "$tllLogId",
+              "name": "$tllLogId"
+            }
+          ],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "",
+          "queryMode": "Logs",
+          "refId": "A",
+          "region": "eu-west-2",
+          "sqlExpression": "",
+          "statistic": "Average",
+          "statsGroups": [
+            "clientId"
+          ]
+        }
+      ],
+      "timeFrom": "2m",
+      "title": "Client Name by ID",
+      "type": "table"
+    },
+    {
       "gridPos": {
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 11
       },
       "id": 11,
       "options": {
@@ -541,6 +644,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "10.4.1",
+      "transparent": true,
       "type": "text"
     },
     {
@@ -575,7 +679,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -624,16 +728,28 @@
                 "value": "right"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Queued|Processed/"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 13
       },
-      "id": 1,
+      "id": 45,
       "options": {
         "legend": {
           "calcs": [],
@@ -642,7 +758,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -653,7 +769,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -677,7 +793,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -702,32 +818,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentDlq"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "DLQ",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "ApproximateNumberOfMessagesVisible",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "C",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Maximum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -742,6 +833,31 @@
           "period": "",
           "queryMode": "Metrics",
           "refId": "D",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Maximum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "$enrichmentDlqName"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "DLQ",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "ApproximateNumberOfMessagesVisible",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "C",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Maximum"
@@ -774,141 +890,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 12,
-        "y": 15
-      },
-      "id": 6,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "sum"
-          ],
-          "fields": "/^200$/",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 1,
-          "namespace": "comms-enrichment-metrics",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sql": {
-            "from": {
-              "name": "SCHEMA",
-              "parameters": [
-                {
-                  "name": "comms-enrichment-metrics",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "client_id",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "Environment",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "http_status_code",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "request_id",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "sending_group_id",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            },
-            "groupBy": {
-              "expressions": [
-                {
-                  "property": {
-                    "name": "http_status_code",
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "type": "and"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "pds_message_sent",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(pds_message_sent) FROM SCHEMA(\"comms-enrichment-metrics\", client_id, Environment, http_status_code, request_id, sending_group_id) GROUP BY http_status_code",
-          "statistic": "Sum"
-        }
-      ],
-      "timeFrom": "3h",
-      "title": "Enrichment PDS HTTP response status (no campaign)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
         "h": 7,
         "w": 4,
-        "x": 16,
-        "y": 15
+        "x": 12,
+        "y": 13
       },
       "id": 8,
       "options": {
@@ -935,20 +920,21 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
+          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 1,
+          "metricName": "NumberOfMessagesDeleted",
+          "metricQueryType": 0,
           "namespace": "AWS/SQS",
           "period": "",
           "queryMode": "Metrics",
-          "refId": "A",
+          "refId": "B",
           "region": "default",
           "sql": {
             "from": {
@@ -973,7 +959,7 @@
                 {
                   "operator": {
                     "name": "=",
-                    "value": "$fifoEnrichmentQueue"
+                    "value": "$enrichmentQueueName"
                   },
                   "property": {
                     "name": "QueueName",
@@ -985,257 +971,11 @@
               "type": "and"
             }
           },
-          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$fifoEnrichmentQueue'",
+          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$enrichmentQueueName'",
           "statistic": "Sum"
         }
       ],
       "title": "Enrichment Count",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 4,
-        "x": 20,
-        "y": 15
-      },
-      "id": 9,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "sum"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 1,
-          "namespace": "AWS/SQS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/SQS",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "NumberOfMessagesDeleted",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            },
-            "where": {
-              "expressions": [
-                {
-                  "operator": {
-                    "name": "=",
-                    "value": "$fifoReEnrichmentQueue"
-                  },
-                  "property": {
-                    "name": "QueueName",
-                    "type": "string"
-                  },
-                  "type": "operator"
-                }
-              ],
-              "type": "and"
-            }
-          },
-          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$fifoReEnrichmentQueue'",
-          "statistic": "Sum"
-        }
-      ],
-      "title": "Re-enrichment Count",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 12,
-        "y": 20
-      },
-      "id": 7,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "sum"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 1,
-          "namespace": "comms-reenrichment-metrics",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sql": {
-            "from": {
-              "name": "SCHEMA",
-              "parameters": [
-                {
-                  "name": "comms-reenrichment-metrics",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "campaign_id",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "client_id",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "Environment",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "http_status_code",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "request_id",
-                  "type": "functionParameter"
-                },
-                {
-                  "name": "sending_group_id",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            },
-            "groupBy": {
-              "expressions": [
-                {
-                  "property": {
-                    "name": "http_status_code",
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "type": "and"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "pds_message_sent",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(pds_message_sent) FROM SCHEMA(\"comms-reenrichment-metrics\", campaign_id, client_id, Environment, http_status_code, request_id, sending_group_id) GROUP BY http_status_code",
-          "statistic": "Sum"
-        }
-      ],
-      "timeFrom": "3h",
-      "title": "Reenrichment PDS HTTP response status",
       "type": "stat"
     },
     {
@@ -1270,7 +1010,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -1311,7 +1051,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "D comms-prod-api-stl-reenrichment-queue.fifo"
+              "options": "D comms-$env-api-stl-reenrich-queue"
             },
             "properties": [
               {
@@ -1323,10 +1063,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 8,
         "x": 16,
-        "y": 22
+        "y": 13
       },
       "id": 10,
       "options": {
@@ -1337,7 +1077,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -1348,7 +1088,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": true,
@@ -1373,7 +1113,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$enrichmentQueueName"
           },
           "expression": "",
           "hide": true,
@@ -1415,7 +1155,7 @@
           "type": "math"
         }
       ],
-      "title": "Enrichment Rate",
+      "title": "Enrichment Rate (Stacked)",
       "type": "timeseries"
     },
     {
@@ -1450,7 +1190,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -1499,6 +1239,18 @@
                 "value": "right"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Queued|Processed/"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              }
+            ]
           }
         ]
       },
@@ -1506,7 +1258,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 23
+        "y": 20
       },
       "id": 2,
       "options": {
@@ -1517,7 +1269,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -1528,7 +1280,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -1552,7 +1304,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -1577,32 +1329,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoReEnrichmentDlq"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "DLQ",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "ApproximateNumberOfMessagesVisible",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "C",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Maximum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "$fifoReEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "hide": false,
@@ -1617,6 +1344,31 @@
           "period": "",
           "queryMode": "Metrics",
           "refId": "D",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Maximum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "$reEnrichmentDlqName"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "DLQ",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "ApproximateNumberOfMessagesVisible",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "C",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Maximum"
@@ -1649,12 +1401,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 4,
         "x": 12,
-        "y": 25
+        "y": 20
       },
-      "id": 5,
+      "id": 9,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -1664,7 +1416,7 @@
           "calcs": [
             "sum"
           ],
-          "fields": "/^200$/",
+          "fields": "",
           "values": false
         },
         "showPercentChange": false,
@@ -1679,7 +1431,136 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "$fifoEnrichmentQueue"
+            "QueueName": "$reEnrichmentQueueName"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesDeleted",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "AWS/SQS",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "NumberOfMessagesDeleted",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "operator": {
+                    "name": "=",
+                    "value": "$reEnrichmentQueueName"
+                  },
+                  "property": {
+                    "name": "QueueName",
+                    "type": "string"
+                  },
+                  "type": "operator"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "sqlExpression": "SELECT SUM(NumberOfMessagesDeleted) FROM \"AWS/SQS\" WHERE QueueName = '$reEnrichmentQueueName'",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Re-enrichment Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "fieldMinMax": false
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 16,
+        "y": 20
+      },
+      "hideTimeOverride": false,
+      "id": 5,
+      "interval": "1m",
+      "options": {
+        "calculate": false,
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "RdGy",
+          "steps": 64
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-09
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "mode": "single",
+          "showColorScale": false,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "$reEnrichmentQueueName"
           },
           "expression": "",
           "id": "",
@@ -1719,7 +1600,150 @@
                   "type": "functionParameter"
                 },
                 {
-                  "name": "request_id",
+                  "name": "sending_group_id",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            },
+            "groupBy": {
+              "expressions": [
+                {
+                  "property": {
+                    "name": "http_status_code",
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "type": "and"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "pds_message_sent",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            }
+          },
+          "sqlExpression": "SELECT SUM(pds_message_sent) FROM SCHEMA(\"comms-enrichment-metrics\", campaign_id, client_id, Environment, http_status_code, sending_group_id) GROUP BY http_status_code",
+          "statistic": "Sum"
+        }
+      ],
+      "timeFrom": "3h",
+      "title": "Enrichment PDS HTTP response status (campaign)",
+      "type": "heatmap"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 20,
+        "y": 20
+      },
+      "id": 7,
+      "interval": "1m",
+      "options": {
+        "calculate": false,
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "RdGy",
+          "steps": 64
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-09
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "mode": "single",
+          "showColorScale": false,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "$reEnrichmentQueueName"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesSent",
+          "metricQueryType": 1,
+          "namespace": "comms-reenrichment-metrics",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sql": {
+            "from": {
+              "name": "SCHEMA",
+              "parameters": [
+                {
+                  "name": "comms-reenrichment-metrics",
+                  "type": "functionParameter"
+                },
+                {
+                  "name": "campaign_id",
+                  "type": "functionParameter"
+                },
+                {
+                  "name": "client_id",
+                  "type": "functionParameter"
+                },
+                {
+                  "name": "Environment",
+                  "type": "functionParameter"
+                },
+                {
+                  "name": "http_status_code",
                   "type": "functionParameter"
                 },
                 {
@@ -1752,20 +1776,20 @@
               "type": "function"
             }
           },
-          "sqlExpression": "SELECT SUM(pds_message_sent) FROM SCHEMA(\"comms-enrichment-metrics\", campaign_id, client_id, Environment, http_status_code, request_id, sending_group_id) GROUP BY http_status_code",
+          "sqlExpression": "SELECT SUM(pds_message_sent) FROM SCHEMA(\"comms-reenrichment-metrics\", campaign_id, client_id, Environment, http_status_code, sending_group_id) GROUP BY http_status_code",
           "statistic": "Sum"
         }
       ],
       "timeFrom": "3h",
-      "title": "Enrichment PDS HTTP response status (campaign)",
-      "type": "stat"
+      "title": "Reenrichment PDS HTTP response status",
+      "type": "heatmap"
     },
     {
       "gridPos": {
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 27
       },
       "id": 12,
       "options": {
@@ -1778,6 +1802,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "10.4.1",
+      "transparent": true,
       "type": "text"
     },
     {
@@ -1809,7 +1834,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 32
+        "y": 29
       },
       "id": 19,
       "options": {
@@ -1892,7 +1917,6 @@
       ],
       "timeFrom": "3h",
       "title": "Dispatched",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -1924,7 +1948,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 32
+        "y": 29
       },
       "id": 23,
       "options": {
@@ -2007,7 +2031,6 @@
       ],
       "timeFrom": "3h",
       "title": "Callbacks",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -2027,9 +2050,9 @@
             "axisLabel": "",
             "axisPlacement": "left",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 7,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2045,11 +2068,11 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -2069,42 +2092,6 @@
           "unit": "none"
         },
         "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Queued"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Processed"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Send Errors"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
           {
             "matcher": {
               "id": "byName",
@@ -2128,6 +2115,18 @@
                 "value": "right"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Queued|Processed|Send Errors/"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              }
+            ]
           }
         ]
       },
@@ -2135,7 +2134,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 29
       },
       "id": 18,
       "options": {
@@ -2146,7 +2145,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -2267,31 +2266,6 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-send-nhsapp-dlq"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "DLQ",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "ApproximateNumberOfMessagesVisible",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "D",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Maximum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
             "QueueName": "comms-$env-api-stl-send-nhsapp-queue"
           },
           "expression": "",
@@ -2310,10 +2284,34 @@
           "region": "default",
           "sqlExpression": "",
           "statistic": "Maximum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-stl-send-nhsapp-dlq"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "DLQ",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "ApproximateNumberOfMessagesVisible",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "D",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Maximum"
         }
       ],
       "title": "NHS App Send Requests",
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -2333,26 +2331,26 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 0,
-            "gradientMode": "opacity",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
             "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -2374,7 +2372,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "comms-prod-api-rol-router-request-covid--letter-mba.fifo"
+              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
             },
             "properties": [
               {
@@ -2392,7 +2390,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 35
+        "y": 32
       },
       "id": 17,
       "options": {
@@ -2403,7 +2401,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -2496,7 +2494,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -2527,7 +2524,7 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
@@ -2591,7 +2588,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 42
+        "y": 39
       },
       "id": 20,
       "options": {
@@ -2602,7 +2599,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -2708,7 +2705,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -2731,7 +2727,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 55,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2739,12 +2735,12 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -2780,7 +2776,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "comms-prod-api-rol-router-request-covid--letter-mba.fifo"
+              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
             },
             "properties": [
               {
@@ -2798,7 +2794,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 43
+        "y": 40
       },
       "id": 21,
       "options": {
@@ -2809,7 +2805,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -2902,7 +2898,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -2924,7 +2919,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 7,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2940,11 +2935,11 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -3051,14 +3046,26 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Queued|Processed/"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 47
       },
       "id": 22,
       "options": {
@@ -3069,7 +3076,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -3211,7 +3218,6 @@
         }
       ],
       "title": "NHS App callbacks processed",
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -3231,16 +3237,16 @@
             "axisLabel": "",
             "axisPlacement": "left",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 0,
-            "gradientMode": "opacity",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepAfter",
             "lineStyle": {
               "fill": "solid"
             },
@@ -3249,11 +3255,11 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -3354,7 +3360,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 51
+        "y": 48
       },
       "id": 24,
       "options": {
@@ -3365,7 +3371,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -3455,7 +3461,6 @@
         }
       ],
       "title": "NHS App Expiry",
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -3463,7 +3468,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 56
       },
       "id": 15,
       "options": {
@@ -3476,6 +3481,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "10.4.1",
+      "transparent": true,
       "type": "text"
     },
     {
@@ -3507,7 +3513,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 61
+        "y": 58
       },
       "id": 27,
       "options": {
@@ -3590,7 +3596,6 @@
       ],
       "timeFrom": "3h",
       "title": "Dispatched",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -3622,7 +3627,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 61
+        "y": 58
       },
       "id": 31,
       "options": {
@@ -3705,7 +3710,6 @@
       ],
       "timeFrom": "3h",
       "title": "Callbacks",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -3727,7 +3731,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 7,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -3743,11 +3747,11 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -3767,30 +3771,6 @@
           "unit": "none"
         },
         "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Queued"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Processed"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
           {
             "matcher": {
               "id": "byName",
@@ -3844,7 +3824,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "GUN Messages Queued"
+              "options": "Queued"
             },
             "properties": [
               {
@@ -3859,7 +3839,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "GUN Messages Processed"
+              "options": "Processed"
             },
             "properties": [
               {
@@ -3870,6 +3850,18 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Queued|Processed/"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              }
+            ]
           }
         ]
       },
@@ -3877,7 +3869,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 61
+        "y": 58
       },
       "id": 26,
       "options": {
@@ -3888,7 +3880,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -3904,7 +3896,7 @@
           },
           "expression": "",
           "id": "",
-          "label": "GUN Messages Queued",
+          "label": "Queued",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -3964,7 +3956,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "GUN Messages Processed",
+          "label": "Processed",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -4030,7 +4022,6 @@
         }
       ],
       "title": "Gov.UK Notify messages sent (inc letters)",
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -4050,29 +4041,29 @@
             "axisLabel": "Count",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 0,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepAfter",
             "lineStyle": {
               "fill": "solid"
             },
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -4094,7 +4085,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "comms-prod-api-rol-router-request-covid--letter-mba.fifo"
+              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
             },
             "properties": [
               {
@@ -4139,21 +4130,21 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 9,
         "w": 12,
         "x": 0,
-        "y": 64
+        "y": 61
       },
       "id": 25,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -4246,7 +4237,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -4276,12 +4266,12 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -4309,7 +4299,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 69
+        "y": 66
       },
       "id": 28,
       "options": {
@@ -4320,7 +4310,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -4426,7 +4416,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -4449,7 +4438,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 55,
-            "gradientMode": "hue",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -4457,12 +4446,12 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -4498,7 +4487,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "comms-prod-api-rol-router-request-covid--letter-mba.fifo"
+              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
             },
             "properties": [
               {
@@ -4513,21 +4502,21 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 12,
         "x": 0,
-        "y": 74
+        "y": 70
       },
       "id": 29,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -4620,7 +4609,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -4658,11 +4646,11 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -4769,6 +4757,18 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/Queued|Processed/"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              }
+            ]
           }
         ]
       },
@@ -4776,7 +4776,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 77
+        "y": 74
       },
       "id": 30,
       "options": {
@@ -4787,7 +4787,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -4803,7 +4803,7 @@
           },
           "expression": "",
           "id": "",
-          "label": "GUN Callbacks Queued",
+          "label": "Queued",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -4863,7 +4863,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "GUN Callbacks Processed",
+          "label": "Processed",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -4929,7 +4929,6 @@
         }
       ],
       "title": "Gov UK callbacks processed",
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -4937,7 +4936,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 81
       },
       "id": 14,
       "options": {
@@ -4950,7 +4949,1300 @@
         "mode": "markdown"
       },
       "pluginVersion": "10.4.1",
+      "transparent": true,
       "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "Count",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepAfter",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73BF69",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "email-shared"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sms-shared"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 83
+      },
+      "id": 32,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "Environment": "$env",
+            "status": "PENDING"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "virtual_queue_insertion",
+          "metricQueryType": 0,
+          "namespace": "comms-process-queue-updates-lambda-metrics",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "eu-west-2",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "comms-process-queue-updates-lambda-metrics",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "virtual_queue_insertion",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "operator": {
+                    "name": "=",
+                    "value": "$env"
+                  },
+                  "property": {
+                    "name": "Environment",
+                    "type": "string"
+                  },
+                  "type": "operator"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Letters requests queued",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "byVariable": false,
+            "include": {
+              "pattern": "Time|comms-$env-api-rol-router-request.*letter-((mba|synertec)\\.fifo)"
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request-([a-zA-Z0-9]+).*(mba|synertec).*",
+            "renamePattern": "$1-$2"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepAfter",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 9,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GUN PDF Pipeline"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HH CSV Pipeline"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Synertec CSV Pipeline"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HH SFTP Send"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Synertec SFTP Send"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify Legacy"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f257bc",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/SFTP/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 83
+      },
+      "id": 33,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-lpl-render-pdf-queue"
+          },
+          "expression": "",
+          "id": "",
+          "label": "GUN PDF Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesSent",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "eu-west-2",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "comms-process-queue-updates-lambda-metrics",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "virtual_queue_insertion",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "operator": {
+                    "name": "=",
+                    "value": "$env"
+                  },
+                  "property": {
+                    "name": "Environment",
+                    "type": "string"
+                  },
+                  "type": "operator"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-lspl-csvbatch-queue"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "HH CSV Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesSent",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "C",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-stl-csvbatchsynertec-queue"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Synertec CSV Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesSent",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "FunctionName": "comms-$env-api-ecl-sftpsend"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "HH SFTP Send",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "D",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "FunctionName": "comms-$env-api-sftpsendlambda-sftpsendsynertec"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "Synertec SFTP Send",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "F",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-stl-csvbatchprecisionproco-queue"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Precision Proco CSV Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesReceived",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "G",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-rol-router-request-letter.fifo"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Notify Legacy",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesDeleted",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "E",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "FunctionName": "comms-$env-api-sftpsendlambda-sftpprecisionproco"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "Precision Proco SFTP Send",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "H",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Letters requests sent",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 9,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GUN PDF Pipeline"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HH CSV Pipeline"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Synertec CSV Pipeline"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HH SFTP Send"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Synertec SFTP Send"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify Legacy"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f257bc",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/SFTP/"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 83
+      },
+      "id": 44,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-lpl-render-pdf-queue"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "GUN PDF Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesSent",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "eu-west-2",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "comms-process-queue-updates-lambda-metrics",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "virtual_queue_insertion",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "operator": {
+                    "name": "=",
+                    "value": "$env"
+                  },
+                  "property": {
+                    "name": "Environment",
+                    "type": "string"
+                  },
+                  "type": "operator"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "Environment": "$env",
+            "QueueName": "comms-$env-api-lspl-csvbatch-queue"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "HH CSV Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesReceived",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "C",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-stl-csvbatchsynertec-queue"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "Synertec CSV Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesReceived",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "FunctionName": "comms-$env-api-ecl-sftpsend"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "HH SFTP Send",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "D",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "FunctionName": "comms-$env-api-sftpsendlambda-sftpsendsynertec"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Synertec SFTP Send",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "F",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-stl-csvbatchprecisionproco-queue"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "Precision Proco CSV Pipeline",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesReceived",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "G",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-rol-router-request-letter.fifo"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "Notify Legacy",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesDeleted",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "E",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "FunctionName": "comms-$env-api-sftpsendlambda-sftpprecisionproco"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Precision Proco SFTP Send",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Lambda",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "H",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "SFTP Uploads",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "Count",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 56,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73BF69",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "email-shared"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sms-shared"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 92
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "Environment": "$env",
+            "status": "PENDING"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "queue_length",
+          "metricQueryType": 0,
+          "namespace": "comms-publish-queue-stats-metrics",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "eu-west-2",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "comms-process-queue-updates-lambda-metrics",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "virtual_queue_insertion",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "operator": {
+                    "name": "=",
+                    "value": "$env"
+                  },
+                  "property": {
+                    "name": "Environment",
+                    "type": "string"
+                  },
+                  "type": "operator"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
+          "statistic": "Maximum"
+        }
+      ],
+      "title": "Letter backlog (letters only sent Sunday - Thursday)",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "byVariable": false,
+            "include": {
+              "pattern": "Time|comms-$env-api-rol-router-request.*letter-((mba|synertec)\\.fifo)"
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request-([a-zA-Z0-9]+).*(mba|synertec).*",
+            "renamePattern": "$1-$2"
+          }
+        }
+      ],
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -4977,10 +6269,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 7,
-        "x": 0,
-        "y": 86
+        "h": 3,
+        "w": 12,
+        "x": 12,
+        "y": 92
       },
       "id": 35,
       "options": {
@@ -5110,10 +6402,10 @@
             "mode": "reduceRow",
             "reduce": {
               "include": [
-                "comms-prod-api-lpl-render-pdf-queue NumberOfMessagesSent",
-                "comms-prod-api-lspl-csvbatch-queue NumberOfMessagesReceived",
-                "comms-prod-api-stl-csvbatchsynertec-queue NumberOfMessagesReceived",
-                "comms-prod-api-rol-router-request-letter.fifo NumberOfMessagesDeleted"
+                "comms-$env-api-lpl-render-pdf-queue NumberOfMessagesSent",
+                "comms-$env-api-lspl-csvbatch-queue NumberOfMessagesReceived",
+                "comms-$env-api-stl-csvbatchsynertec-queue NumberOfMessagesReceived",
+                "comms-$env-api-rol-router-request-letter.fifo NumberOfMessagesDeleted"
               ],
               "reducer": "sum"
             },
@@ -5121,7 +6413,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -5149,10 +6440,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 5,
-        "x": 7,
-        "y": 86
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 95
       },
       "id": 37,
       "options": {
@@ -5184,7 +6475,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "GUN PDF Pipeline",
+          "label": "GUN PDF",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -5209,7 +6500,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "HH CSV Pipeline",
+          "label": "HH CSV",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -5234,7 +6525,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "Synertec CSV Pipeline",
+          "label": "Synertec CSV",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -5244,6 +6535,31 @@
           "period": "60",
           "queryMode": "Metrics",
           "refId": "C",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-stl-csvbatchprecisionproco-queue"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Proco CSV",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesDeleted",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "E",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
@@ -5284,10 +6600,10 @@
             "mode": "reduceRow",
             "reduce": {
               "include": [
-                "comms-prod-api-lpl-render-pdf-queue NumberOfMessagesSent",
-                "comms-prod-api-lspl-csvbatch-queue NumberOfMessagesReceived",
-                "comms-prod-api-stl-csvbatchsynertec-queue NumberOfMessagesReceived",
-                "comms-prod-api-rol-router-request-letter.fifo NumberOfMessagesDeleted"
+                "comms-$env-api-lpl-render-pdf-queue NumberOfMessagesSent",
+                "comms-$env-api-lspl-csvbatch-queue NumberOfMessagesReceived",
+                "comms-$env-api-stl-csvbatchsynertec-queue NumberOfMessagesReceived",
+                "comms-$env-api-rol-router-request-letter.fifo NumberOfMessagesDeleted"
               ],
               "reducer": "sum"
             },
@@ -5295,811 +6611,14 @@
           }
         }
       ],
-      "transparent": true,
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisGridShow": false,
-            "axisLabel": "",
-            "axisPlacement": "left",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 7,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 9,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "fieldMinMax": false,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "GUN PDF Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HH CSV Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Synertec CSV Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HH SFTP Send"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Synertec SFTP Send"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Notify Legacy"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f257bc",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 86
-      },
-      "id": 33,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "comms-$env-api-lpl-render-pdf-queue"
-          },
-          "expression": "",
-          "id": "",
-          "label": "GUN PDF Pipeline",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "eu-west-2",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "comms-process-queue-updates-lambda-metrics",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "virtual_queue_insertion",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            },
-            "where": {
-              "expressions": [
-                {
-                  "operator": {
-                    "name": "=",
-                    "value": "$env"
-                  },
-                  "property": {
-                    "name": "Environment",
-                    "type": "string"
-                  },
-                  "type": "operator"
-                }
-              ],
-              "type": "and"
-            }
-          },
-          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "Environment": "$env",
-            "QueueName": "comms-$env-api-lspl-csvbatch-queue"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "HH CSV Pipeline",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesReceived",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "C",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "comms-$env-api-stl-csvbatchsynertec-queue"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "Synertec CSV Pipeline",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesReceived",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "B",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "FunctionName": "comms-$env-api-ecl-sftpsend"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "HH SFTP Send",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "Invocations",
-          "metricQueryType": 0,
-          "namespace": "AWS/Lambda",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "D",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "FunctionName": "comms-$env-api-sftpsendlambda-sftpsendsynertec"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "Synertec SFTP Send",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "Invocations",
-          "metricQueryType": 0,
-          "namespace": "AWS/Lambda",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "F",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "QueueName": "comms-$env-api-rol-router-request-letter.fifo"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "Notify Legacy",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesDeleted",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "E",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        }
-      ],
-      "title": "Letters requests sent",
-      "transparent": true,
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisGridShow": false,
-            "axisLabel": "Count",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "comms-prod-api-rol-router-request-covid--letter-mba.fifo"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "email-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "sms-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 94
-      },
-      "id": 32,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "Environment": "$env",
-            "status": "PENDING"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "virtual_queue_insertion",
-          "metricQueryType": 0,
-          "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "eu-west-2",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "comms-process-queue-updates-lambda-metrics",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "virtual_queue_insertion",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            },
-            "where": {
-              "expressions": [
-                {
-                  "operator": {
-                    "name": "=",
-                    "value": "$env"
-                  },
-                  "property": {
-                    "name": "Environment",
-                    "type": "string"
-                  },
-                  "type": "operator"
-                }
-              ],
-              "type": "and"
-            }
-          },
-          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
-          "statistic": "Sum"
-        }
-      ],
-      "title": "Letters requests queued",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "byVariable": false,
-            "include": {
-              "pattern": "Time|comms-$env-api-rol-router-request.*letter-((mba|synertec)\\.fifo)"
-            }
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+).*(mba|synertec).*",
-            "renamePattern": "$1-$2"
-          }
-        }
-      ],
-      "transparent": true,
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisGridShow": false,
-            "axisLabel": "Count",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 56,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "comms-prod-api-rol-router-request-covid--letter-mba.fifo"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "email-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "sms-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 94
-      },
-      "id": 36,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "Environment": "$env",
-            "status": "PENDING"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "queue_length",
-          "metricQueryType": 0,
-          "namespace": "comms-publish-queue-stats-metrics",
-          "period": "60",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "eu-west-2",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "comms-process-queue-updates-lambda-metrics",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "virtual_queue_insertion",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            },
-            "where": {
-              "expressions": [
-                {
-                  "operator": {
-                    "name": "=",
-                    "value": "$env"
-                  },
-                  "property": {
-                    "name": "Environment",
-                    "type": "string"
-                  },
-                  "type": "operator"
-                }
-              ],
-              "type": "and"
-            }
-          },
-          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
-          "statistic": "Maximum"
-        }
-      ],
-      "title": "Letter backlog (letters only sent Sunday - Thursday)",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "byVariable": false,
-            "include": {
-              "pattern": "Time|comms-$env-api-rol-router-request.*letter-((mba|synertec)\\.fifo)"
-            }
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+).*(mba|synertec).*",
-            "renamePattern": "$1-$2"
-          }
-        }
-      ],
-      "transparent": true,
-      "type": "timeseries"
     },
     {
       "gridPos": {
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 103
+        "y": 101
       },
       "id": 13,
       "options": {
@@ -6112,6 +6631,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "10.4.1",
+      "transparent": true,
       "type": "text"
     },
     {
@@ -6142,12 +6662,12 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 9,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -6173,7 +6693,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "F comms-prod-api-lspl-csvbatch-queue"
+              "options": "F comms-$env-api-lspl-csvbatch-queue"
             },
             "properties": [
               {
@@ -6185,7 +6705,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "G comms-prod-api-stl-send-nhsapp-queue"
+              "options": "G comms-$env-api-stl-send-nhsapp-queue"
             },
             "properties": [
               {
@@ -6197,7 +6717,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "H comms-prod-api-stl-send-govuknotify-queue"
+              "options": "H comms-$env-api-stl-send-govuknotify-queue"
             },
             "properties": [
               {
@@ -6209,7 +6729,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "I comms-prod-api-stl-csvbatchsynertec-queue"
+              "options": "I comms-$env-api-stl-csvbatchsynertec-queue"
             },
             "properties": [
               {
@@ -6221,7 +6741,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "J comms-prod-api-stl-reenrichment-queue.fifo"
+              "options": "J comms-$env-api-stl-reenrich-queue"
             },
             "properties": [
               {
@@ -6229,14 +6749,26 @@
                 "value": "Reenrichment"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "L comms-$env-api-stl-csvbatchprecisionproco-queue"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Precision Proco"
+              }
+            ]
           }
         ]
       },
       "gridPos": {
         "h": 11,
-        "w": 15,
+        "w": 12,
         "x": 0,
-        "y": 105
+        "y": 103
       },
       "id": 38,
       "options": {
@@ -6247,7 +6779,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -6271,7 +6803,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -6331,7 +6863,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -6391,7 +6923,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "C",
           "region": "default",
@@ -6451,7 +6983,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "D",
           "region": "default",
@@ -6499,7 +7031,67 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-reenrichment-queue.fifo"
+            "QueueName": "comms-$env-api-stl-csvbatchprecisionproco-queue"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "",
+          "label": "PrecisionProco",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesDeleted",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "K",
+          "region": "default",
+          "sql": {
+            "from": {
+              "property": {
+                "name": "comms-process-queue-updates-lambda-metrics",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "select": {
+              "name": "SUM",
+              "parameters": [
+                {
+                  "name": "virtual_queue_insertion",
+                  "type": "functionParameter"
+                }
+              ],
+              "type": "function"
+            },
+            "where": {
+              "expressions": [
+                {
+                  "operator": {
+                    "name": "=",
+                    "value": "$env"
+                  },
+                  "property": {
+                    "name": "Environment",
+                    "type": "string"
+                  },
+                  "type": "operator"
+                }
+              ],
+              "type": "and"
+            }
+          },
+          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "QueueName": "comms-$env-api-stl-reenrich-queue"
           },
           "expression": "",
           "hide": true,
@@ -6511,7 +7103,7 @@
           "metricName": "NumberOfMessagesSent",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "300",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "E",
           "region": "default",
@@ -6559,7 +7151,7 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$A/300",
+          "expression": "$A/60",
           "hide": false,
           "refId": "F",
           "type": "math"
@@ -6570,7 +7162,7 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$B/300",
+          "expression": "$B/60",
           "hide": false,
           "refId": "G",
           "type": "math"
@@ -6581,7 +7173,7 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$C/300",
+          "expression": "$C/60",
           "hide": false,
           "refId": "H",
           "type": "math"
@@ -6592,7 +7184,7 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$D/300",
+          "expression": "$D/60",
           "hide": false,
           "refId": "I",
           "type": "math"
@@ -6603,14 +7195,24 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "$E/300",
+          "expression": "$E/60",
           "hide": false,
           "refId": "J",
+          "type": "math"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$K/60",
+          "hide": false,
+          "refId": "L",
           "type": "math"
         }
       ],
       "title": "Post-router Throughput (Avg TPS - Stacked)",
-      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -6639,9 +7241,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 9,
-        "x": 15,
-        "y": 105
+        "w": 12,
+        "x": 12,
+        "y": 103
       },
       "id": 40,
       "options": {
@@ -6718,7 +7320,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-reenrichment-queue.fifo"
+            "QueueName": "comms-$env-api-stl-reenrich-queue"
           },
           "expression": "",
           "hide": false,
@@ -6809,7 +7411,6 @@
           }
         }
       ],
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -6844,12 +7445,12 @@
             "lineStyle": {
               "fill": "solid"
             },
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 3,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -6950,9 +7551,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 9,
-        "x": 15,
-        "y": 108
+        "w": 12,
+        "x": 12,
+        "y": 106
       },
       "id": 39,
       "options": {
@@ -6963,7 +7564,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -7044,7 +7645,6 @@
         }
       ],
       "title": "Router Duration",
-      "transparent": true,
       "type": "timeseries"
     }
   ],
@@ -7158,42 +7758,42 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-enrichment-queue.fifo",
-          "value": "comms-prod-api-stl-enrichment-queue.fifo"
+          "text": "comms-prod-api-stl-enrich-queue",
+          "value": "comms-prod-api-stl-enrich-queue"
         },
         "hide": 2,
         "includeAll": false,
         "multi": false,
-        "name": "fifoEnrichmentQueue",
+        "name": "enrichmentQueueName",
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-enrichment-queue.fifo",
-            "value": "comms-prod-api-stl-enrichment-queue.fifo"
+            "text": "comms-prod-api-stl-enrich-queue",
+            "value": "comms-prod-api-stl-enrich-queue"
           }
         ],
-        "query": "comms-${env}-api-stl-enrichment-queue.fifo",
+        "query": "comms-${env}-api-stl-enrich-queue",
         "skipUrlSync": false,
         "type": "custom"
       },
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-enrichment-dlq.fifo",
-          "value": "comms-prod-api-stl-enrichment-dlq.fifo"
+          "text": "comms-prod-api-stl-enrich-dlq",
+          "value": "comms-prod-api-stl-enrich-dlq"
         },
         "hide": 2,
         "includeAll": false,
         "multi": false,
-        "name": "fifoEnrichmentDlq",
+        "name": "enrichmentDlqName",
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-enrichment-dlq.fifo",
-            "value": "comms-prod-api-stl-enrichment-dlq.fifo"
+            "text": "comms-prod-api-stl-enrich-dlq",
+            "value": "comms-prod-api-stl-enrich-dlq"
           }
         ],
-        "query": "comms-${env}-api-stl-enrichment-dlq.fifo",
+        "query": "comms-${env}-api-stl-enrich-dlq",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -7201,21 +7801,21 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-reenrichment-queue.fifo",
-          "value": "comms-prod-api-stl-reenrichment-queue.fifo"
+          "text": "comms-prod-api-stl-reenrich-queue",
+          "value": "comms-prod-api-stl-reenrich-queue"
         },
         "hide": 2,
         "includeAll": false,
         "multi": false,
-        "name": "fifoReEnrichmentQueue",
+        "name": "reEnrichmentQueueName",
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-reenrichment-queue.fifo",
-            "value": "comms-prod-api-stl-reenrichment-queue.fifo"
+            "text": "comms-prod-api-stl-reenrich-queue",
+            "value": "comms-prod-api-stl-reenrich-queue"
           }
         ],
-        "query": "comms-${env}-api-stl-reenrichment-queue.fifo",
+        "query": "comms-${env}-api-stl-reenrich-queue",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -7223,8 +7823,8 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-reenrichment-dlq.fifo",
-          "value": "comms-prod-api-stl-reenrichment-dlq.fifo"
+          "text": "comms-prod-api-stl-reenrich-dlq",
+          "value": "comms-prod-api-stl-reenrich-dlq"
         },
         "hide": 2,
         "includeAll": false,
@@ -7233,18 +7833,47 @@
         "options": [
           {
             "selected": true,
-            "text": "comms-prod-api-stl-reenrichment-dlq.fifo",
-            "value": "comms-prod-api-stl-reenrichment-dlq.fifo"
+            "text": "comms-prod-api-stl-reenrich-dlq",
+            "value": "comms-prod-api-stl-reenrich-dlq"
           }
         ],
-        "query": "comms-${env}-api-stl-reenrichment-dlq.fifo",
+        "query": "comms-${env}-api-stl-reenrich-dlq",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "/aws/lambda/comms-prod-api-lll-tenant-load-limit",
+          "value": "arn:aws:logs:eu-west-2:746418818434:log-group:/aws/lambda/comms-prod-api-lll-tenant-load-limit:*"
+        },
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "${datasrc}"
+        },
+        "definition": "",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "tllLogId",
+        "options": [],
+        "query": {
+          "logGroupPrefix": "",
+          "queryType": "logGroups",
+          "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+          "region": "eu-west-2",
+          "resourceType": ""
+        },
+        "refresh": 1,
+        "regex": "/.*lll.*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-12h",
     "to": "now"
   },
   "timepicker": {},

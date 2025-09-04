@@ -541,7 +541,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "nhs-.*-app-(.*)",
+            "regex": "nhs-notify-.*-app-(.*)",
             "renamePattern": "$1"
           }
         }
@@ -678,7 +678,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "pattern": "Time|^nhs-${env}-[^\\s]+$"
+              "pattern": "Time|^nhs-notify-${env}-[^\\s]+$"
             }
           }
         },
@@ -973,7 +973,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "pattern": "Time|^nhs-${env}-[^\\s]+$"
+              "pattern": "Time|^nhs-notify-${env}-[^\\s]+$"
             }
           }
         },
@@ -1710,8 +1710,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-main",
-          "value": "nhs-main"
+          "text": "nhs-notify-main",
+          "value": "nhs-notify-main"
         },
         "description": "",
         "hide": 2,
@@ -1722,11 +1722,11 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-main",
-            "value": "nhs-main"
+            "text": "nhs-notify-main",
+            "value": "nhs-notify-main"
           }
         ],
-        "query": "nhs-${env}",
+        "query": "nhs-notify-${env}",
         "skipUrlSync": false,
         "type": "custom"
       },
@@ -1745,15 +1745,15 @@
         "query": "cloudwatch",
         "queryValue": "",
         "refresh": 1,
-        "regex": ".*webui",
+        "regex": ".*iam",
         "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "current": {
           "selected": false,
-          "text": "nhs-main-api",
-          "value": "nhs-main-api"
+          "text": "nhs-notify-main-api",
+          "value": "nhs-notify-main-api"
         },
         "hide": 2,
         "includeAll": false,
@@ -1763,8 +1763,8 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-main-api",
-            "value": "nhs-main-api"
+            "text": "nhs-notify-main-api",
+            "value": "nhs-notify-main-api"
           }
         ],
         "query": "${envCsi}-api",
@@ -1774,8 +1774,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-main-backup-vault",
-          "value": "nhs-main-backup-vault"
+          "text": "nhs-notify-main-backup-vault",
+          "value": "nhs-notify-main-backup-vault"
         },
         "hide": 2,
         "includeAll": false,
@@ -1785,8 +1785,8 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-main-backup-vault",
-            "value": "nhs-main-backup-vault"
+            "text": "nhs-notify-main-backup-vault",
+            "value": "nhs-notify-main-backup-vault"
           }
         ],
         "query": "${envCsi}-backup-vault",
@@ -1816,8 +1816,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-main-app",
-          "value": "nhs-main-app"
+          "text": "nhs-notify-main-app",
+          "value": "nhs-notify-main-app"
         },
         "hide": 2,
         "includeAll": false,
@@ -1827,8 +1827,8 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-main-app",
-            "value": "nhs-main-app"
+            "text": "nhs-notify-main-app",
+            "value": "nhs-notify-main-app"
           }
         ],
         "query": "${envCsi}-app",
@@ -1838,8 +1838,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-main-app-api",
-          "value": "nhs-main-app-api"
+          "text": "nhs-notify-main-app-api",
+          "value": "nhs-notify-main-app-api"
         },
         "description": "The API isn't in the API component for... reasons",
         "hide": 2,
@@ -1850,8 +1850,8 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-main-app-api",
-            "value": "nhs-main-app-api"
+            "text": "nhs-notify-main-app-api",
+            "value": "nhs-notify-main-app-api"
           }
         ],
         "query": "${envCsi}-app-api",
