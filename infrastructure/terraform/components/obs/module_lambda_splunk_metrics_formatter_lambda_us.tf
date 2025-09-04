@@ -1,8 +1,9 @@
 module "splunk_metrics_formatter_lambda_us" {
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
+
   providers = {
     aws = aws.us-east-1
   }
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.13"
 
   function_name = "us-splunk-metrics-formatter"
   description   = "A function for formatting metrics for Splunk"
