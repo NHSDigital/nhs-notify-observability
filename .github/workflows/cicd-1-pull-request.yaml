@@ -27,6 +27,7 @@ jobs:
       version: ${{ steps.variables.outputs.version }}
       is_version_prerelease: ${{ steps.variables.outputs.is_version_prerelease }}
       does_pull_request_exist: ${{ steps.pr_exists.outputs.does_pull_request_exist }}
+      pr_number: ${{ steps.pr_exists.outputs.pr_number }}
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
