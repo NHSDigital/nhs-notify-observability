@@ -56,7 +56,7 @@ jobs:
         run: |
           bash .github/scripts/dispatch_internal_repo_workflow.sh \
             --releaseVersion "main" \
-            --targetWorkflow "dispatch-deploy-static-notify-observability-env.yaml " \
+            --targetWorkflow "dispatch-deploy-static-notify-observability-env.yaml" \
             --targetEnvironment "main" \
             --targetAccountGroup "nhs-notify-observability-dev" \
             --targetComponent "${{ matrix.component }}" \

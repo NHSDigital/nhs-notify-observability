@@ -1,5 +1,5 @@
 module "lambda_alert_forwarding" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v2.0.6"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
 
   function_name = "alert-forwarding"
   description   = "A function for formatting and sending Cloudwatch alerts to Teams"

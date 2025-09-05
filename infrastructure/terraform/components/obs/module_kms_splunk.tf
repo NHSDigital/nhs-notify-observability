@@ -1,5 +1,5 @@
 module "kms_splunk" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/kms?ref=v2.0.13"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-kms.zip"
   providers = {
     aws           = aws
     aws.us-east-1 = aws.us-east-1
