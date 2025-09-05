@@ -36,6 +36,4 @@ jobs:
             --targetEnvironment "main" \
             --targetAccountGroup "nhs-notify-observability-nonprod" \
             --targetComponent "${{ matrix.component }}" \
-            --terraformAction "apply" \
-            --overrideProjectName "nhs" \
-            --overrideRoleName "nhs-main-acct-observability-github-deploy"
+            --terraformAction "apply"
