@@ -17,9 +17,9 @@
 # ==============================================================================
 
 # Default group names
-admin_group_name="AWS-NHSNotify-SharedInfra-Admins"
-viewer_group_name="AWS-NHSNotify-SharedInfra-ReadOnly"
-editor_group_name="AWS-NHSNotify-SharedInfra-Developers"
+admin_group_name="AWS-NHSNotify-SharedInfra-GrafanaAdmin"
+viewer_group_name="AWS-NHSNotify-SharedInfra-GrafanaViewer"
+editor_group_name="AWS-NHSNotify-SharedInfra-GrafanaEditor"
 
 # Debug print function
 debug() {
@@ -44,13 +44,13 @@ debug "Group variable is set to: ${group}"
 
 # Adjust group names for prod if needed
 if [[ -n "${group}" && "${group}" =~ "observability-prod" ]]; then
-  admin_group_name="AWS-NHSNotify-SharedInfra-ProdAdmins"
+  admin_group_name="AWS-NHSNotify-SharedInfra-ProdGrafanaAdmin"
   debug "Admin group name: ${admin_group_name}"
 
-  viewer_group_name="AWS-NHSNotify-SharedInfra-ProdReadonly"
+  viewer_group_name="AWS-NHSNotify-SharedInfra-ProdGrafanaViewer"
   debug "Viewer group name: ${viewer_group_name}"
 
-  editor_group_name="AWS-NHSNotify-SharedInfra-ProdDevelopers"
+  editor_group_name="AWS-NHSNotify-SharedInfra-ProdGrafanaEditor"
   debug "Editor group name: ${editor_group_name}"
 fi
 
