@@ -5243,7 +5243,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "HH CSV Pipeline"
+              "options": "MBA CSV Pipeline"
             },
             "properties": [
               {
@@ -5274,7 +5274,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "HH SFTP Send"
+              "options": "MBA SFTP Send"
             },
             "properties": [
               {
@@ -5429,7 +5429,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "HH CSV Pipeline",
+          "label": "MBA CSV Pipeline",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -5479,7 +5479,7 @@
           "expression": "",
           "hide": true,
           "id": "",
-          "label": "HH SFTP Send",
+          "label": "MBA SFTP Send",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -5679,7 +5679,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "HH CSV Pipeline"
+              "options": "MBA CSV Pipeline"
             },
             "properties": [
               {
@@ -5710,7 +5710,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "HH SFTP Send"
+              "options": "MBA SFTP Send"
             },
             "properties": [
               {
@@ -5806,7 +5806,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "HH SFTP Send",
+          "label": "MBA SFTP Send",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -6008,13 +6008,14 @@
           },
           "dimensions": {
             "Environment": "$env",
+            "queue_name": "*",
             "status": "PENDING"
           },
           "expression": "",
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
           "metricName": "queue_length",
           "metricQueryType": 0,
@@ -6069,14 +6070,14 @@
           "options": {
             "byVariable": false,
             "include": {
-              "pattern": "Time|comms-$env-api-rol-router-request.*letter-((mba|synertec)\\.fifo)"
+              "pattern": "Time|comms-$env-api-rol-router-request.*letter-.*\\.fifo"
             }
           }
         },
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+).*(mba|synertec).*",
+            "regex": ".*-request-(\\w+).*-(.*).*\\.fifo",
             "renamePattern": "$1-$2"
           }
         }
@@ -6098,8 +6099,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -6113,10 +6113,10 @@
         "x": 12,
         "y": 92
       },
-      "id": 35,
+      "id": 37,
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -6141,8 +6141,9 @@
             "QueueName": "comms-$env-api-lpl-render-pdf-queue"
           },
           "expression": "",
+          "hide": false,
           "id": "",
-          "label": "",
+          "label": "GUN PDF",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -6167,7 +6168,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "",
+          "label": "MBA CSV",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -6192,7 +6193,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "",
+          "label": "Synertec CSV",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -6212,12 +6213,37 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
+            "QueueName": "comms-$env-api-stl-csvbatchprecisionproco-queue"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "Proco CSV",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NumberOfMessagesDeleted",
+          "metricQueryType": 0,
+          "namespace": "AWS/SQS",
+          "period": "60",
+          "queryMode": "Metrics",
+          "refId": "E",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
             "QueueName": "comms-$env-api-rol-router-request-letter.fifo"
           },
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "",
+          "label": "Notify Legacy",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -6232,7 +6258,7 @@
           "statistic": "Sum"
         }
       ],
-      "title": "Letter Count",
+      "title": "Total Letters Sent",
       "transformations": [
         {
           "id": "calculateField",
@@ -6241,10 +6267,11 @@
             "mode": "reduceRow",
             "reduce": {
               "include": [
-                "comms-$env-api-lpl-render-pdf-queue NumberOfMessagesSent",
-                "comms-$env-api-lspl-csvbatch-queue NumberOfMessagesReceived",
-                "comms-$env-api-stl-csvbatchsynertec-queue NumberOfMessagesReceived",
-                "comms-$env-api-rol-router-request-letter.fifo NumberOfMessagesDeleted"
+                "GUN PDF",
+                "MBA CSV",
+                "Synertec CSV",
+                "Proco CSV",
+                "Notify Legacy"
               ],
               "reducer": "sum"
             },
@@ -6339,7 +6366,7 @@
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "HH CSV",
+          "label": "MBA CSV",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -7056,7 +7083,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "[A-Z] comms-prod-api-(\\w+)-(.*)-queue",
+            "regex": "[A-Z] comms-.*-api-(\\w+)-(.*)-queue",
             "renamePattern": "$2"
           }
         }
