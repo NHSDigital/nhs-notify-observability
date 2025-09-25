@@ -240,7 +240,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "60",
+          "period": "",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -367,7 +367,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "60",
+          "period": "",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -1125,7 +1125,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "1",
+          "period": "60",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -2829,7 +2829,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "60",
+          "period": "",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -4168,7 +4168,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "60",
+          "period": "",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -4540,7 +4540,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "60",
+          "period": "",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -5097,7 +5097,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "60",
+          "period": "",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -5220,123 +5220,7 @@
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "GUN PDF Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "MBA CSV Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Synertec CSV Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "MBA SFTP Send"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Synertec SFTP Send"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Notify Legacy"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f257bc",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/SFTP/"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
@@ -5656,123 +5540,7 @@
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "GUN PDF Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "MBA CSV Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Synertec CSV Pipeline"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "left"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "MBA SFTP Send"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Synertec SFTP Send"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Notify Legacy"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f257bc",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/SFTP/"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
@@ -6020,7 +5788,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "60",
+          "period": "",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -6311,7 +6079,7 @@
         "x": 12,
         "y": 95
       },
-      "id": 37,
+      "id": 46,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
