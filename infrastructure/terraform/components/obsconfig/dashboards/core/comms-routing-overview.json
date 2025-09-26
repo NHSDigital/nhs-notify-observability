@@ -7364,7 +7364,7 @@
         "current": {
           "selected": false,
           "text": "CloudWatch-core-prod",
-          "value": "deog7e2wl2ccga"
+          "value": "cesw1wlf2xddsf"
         },
         "hide": 0,
         "includeAll": false,
@@ -7383,7 +7383,7 @@
         "current": {
           "selected": false,
           "text": "CloudWatch-Alarms-core-prod",
-          "value": "ceog7e2w3l1xdb"
+          "value": "desw1wlm0n7y8d"
         },
         "hide": 0,
         "includeAll": false,
@@ -7466,27 +7466,6 @@
       {
         "current": {
           "selected": false,
-          "text": "comms-prod-api-stl-reenrich-dlq",
-          "value": "comms-prod-api-stl-reenrich-dlq"
-        },
-        "hide": 2,
-        "includeAll": false,
-        "multi": false,
-        "name": "fifoReEnrichmentDlq",
-        "options": [
-          {
-            "selected": true,
-            "text": "comms-prod-api-stl-reenrich-dlq",
-            "value": "comms-prod-api-stl-reenrich-dlq"
-          }
-        ],
-        "query": "comms-${env}-api-stl-reenrich-dlq",
-        "skipUrlSync": false,
-        "type": "custom"
-      },
-      {
-        "current": {
-          "selected": true,
           "text": "/aws/lambda/comms-prod-api-lll-tenant-load-limit",
           "value": "arn:aws:logs:eu-west-2:746418818434:log-group:/aws/lambda/comms-prod-api-lll-tenant-load-limit:*"
         },
@@ -7512,6 +7491,28 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "comms-prod-api-stl-reenrich-dlq",
+          "value": "comms-prod-api-stl-reenrich-dlq"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "reEnrichmentDlqName",
+        "options": [
+          {
+            "selected": true,
+            "text": "comms-prod-api-stl-reenrich-dlq",
+            "value": "comms-prod-api-stl-reenrich-dlq"
+          }
+        ],
+        "query": "comms-${env}-api-stl-reenrich-dlq",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
