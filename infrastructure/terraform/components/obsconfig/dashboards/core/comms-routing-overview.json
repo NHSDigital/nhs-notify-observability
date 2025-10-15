@@ -2487,7 +2487,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+)-.*",
+            "regex": ".*-request-(.+)--.*",
             "renamePattern": "$1"
           }
         },
@@ -2892,7 +2892,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+)-.*",
+            "regex": ".*-request-(.+)--.*",
             "renamePattern": "$1"
           }
         },
@@ -2957,7 +2957,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -4234,15 +4235,15 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+).*(email|sms)-notify.*",
-            "renamePattern": "$1-$2"
+            "regex": ".*-request-(.+)--(.*)-notify.*",
+            "renamePattern": "[$2] $1"
           }
         },
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-(email|sms)\\.fifo",
-            "renamePattern": "$1-shared"
+            "regex": ".*-(.*)\\.fifo",
+            "renamePattern": "[$1] shared"
           }
         }
       ],
@@ -4413,15 +4414,15 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+).*(email|sms)-notify.*",
-            "renamePattern": "$1-$2"
+            "regex": ".*-request-(.+)--(.*)-notify.*",
+            "renamePattern": "[$2] $1"
           }
         },
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-(email|sms)\\.fifo.*",
-            "renamePattern": "$1-shared"
+            "regex": ".*-(.*)\\.fifo.*",
+            "renamePattern": "[$1] shared"
           }
         }
       ],
@@ -4607,15 +4608,15 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+).*(email|sms)-notify.*",
-            "renamePattern": "$1-$2"
+            "regex": ".*-request-(.+)--(.*)-notify.*",
+            "renamePattern": "[$2] $1"
           }
         },
         {
           "id": "renameByRegex",
           "options": {
             "regex": ".*-(email|sms)\\.fifo",
-            "renamePattern": "$1-shared"
+            "renamePattern": "[$1] shared"
           }
         }
       ],
@@ -5166,8 +5167,15 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+).*(mba|synertec).*",
-            "renamePattern": "$1-$2"
+            "regex": ".*-request-(.+)--letter-(.*).fifo",
+            "renamePattern": "[$2] $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request-letter-(.*).fifo",
+            "renamePattern": "[$1] shared"
           }
         }
       ],
@@ -5858,8 +5866,15 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(\\w+).*-(.*).*\\.fifo",
-            "renamePattern": "$1-$2"
+            "regex": ".*-request-(.+)--letter-(.*).fifo",
+            "renamePattern": "[$2] $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request-letter-(.*).fifo",
+            "renamePattern": "[$1] shared"
           }
         }
       ],
