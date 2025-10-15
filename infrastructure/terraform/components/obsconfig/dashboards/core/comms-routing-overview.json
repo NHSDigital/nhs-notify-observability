@@ -2134,7 +2134,7 @@
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 12,
         "y": 29
@@ -2391,7 +2391,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 12,
         "w": 12,
         "x": 0,
         "y": 32
@@ -2403,7 +2403,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
@@ -2590,10 +2590,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 12,
         "w": 12,
         "x": 12,
-        "y": 38
+        "y": 40
       },
       "id": 20,
       "options": {
@@ -2601,7 +2601,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
@@ -2796,10 +2796,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 12,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 44
       },
       "id": 21,
       "maxDataPoints": 500,
@@ -2808,7 +2808,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
@@ -3068,10 +3068,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 12,
         "w": 12,
         "x": 12,
-        "y": 46
+        "y": 52
       },
       "id": 22,
       "maxDataPoints": 500,
@@ -3367,7 +3367,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 56
       },
       "id": 24,
       "maxDataPoints": 500,
@@ -3476,7 +3476,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "id": 15,
       "options": {
@@ -3521,7 +3521,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 58
+        "y": 66
       },
       "id": 27,
       "options": {
@@ -3635,7 +3635,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 58
+        "y": 66
       },
       "id": 31,
       "options": {
@@ -3874,10 +3874,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 12,
         "x": 12,
-        "y": 58
+        "y": 66
       },
       "id": 26,
       "maxDataPoints": 500,
@@ -4139,10 +4139,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 12,
         "w": 12,
         "x": 0,
-        "y": 61
+        "y": 69
       },
       "id": 25,
       "maxDataPoints": 500,
@@ -4151,7 +4151,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
@@ -4306,10 +4306,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 12,
-        "y": 66
+        "y": 75
       },
       "id": 28,
       "options": {
@@ -4317,7 +4317,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
@@ -4512,10 +4512,10 @@
         ]
       },
       "gridPos": {
-        "h": 11,
+        "h": 13,
         "w": 12,
         "x": 0,
-        "y": 71
+        "y": 81
       },
       "id": 29,
       "maxDataPoints": 500,
@@ -4524,7 +4524,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
@@ -4784,10 +4784,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 12,
         "x": 12,
-        "y": 74
+        "y": 85
       },
       "id": 30,
       "maxDataPoints": 500,
@@ -4948,7 +4948,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 82
+        "y": 94
       },
       "id": 14,
       "options": {
@@ -5071,10 +5071,10 @@
         ]
       },
       "gridPos": {
-        "h": 11,
+        "h": 10,
         "w": 12,
         "x": 0,
-        "y": 84
+        "y": 96
       },
       "id": 32,
       "maxDataPoints": 500,
@@ -5243,10 +5243,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 10,
         "w": 6,
         "x": 12,
-        "y": 84
+        "y": 96
       },
       "id": 33,
       "options": {
@@ -5563,10 +5563,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 10,
         "w": 6,
         "x": 18,
-        "y": 84
+        "y": 96
       },
       "id": 44,
       "options": {
@@ -5769,10 +5769,10 @@
         ]
       },
       "gridPos": {
-        "h": 11,
+        "h": 10,
         "w": 12,
         "x": 0,
-        "y": 95
+        "y": 106
       },
       "id": 36,
       "maxDataPoints": 500,
@@ -5908,7 +5908,7 @@
         "h": 3,
         "w": 12,
         "x": 12,
-        "y": 95
+        "y": 106
       },
       "id": 37,
       "options": {
@@ -6103,10 +6103,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 12,
         "x": 12,
-        "y": 98
+        "y": 109
       },
       "id": 46,
       "options": {
@@ -6281,7 +6281,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 106
+        "y": 116
       },
       "id": 13,
       "options": {
@@ -6431,7 +6431,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 108
+        "y": 118
       },
       "id": 38,
       "options": {
@@ -6915,7 +6915,7 @@
         "h": 3,
         "w": 12,
         "x": 12,
-        "y": 108
+        "y": 118
       },
       "id": 40,
       "options": {
@@ -7225,7 +7225,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 111
+        "y": 121
       },
       "id": 39,
       "options": {
