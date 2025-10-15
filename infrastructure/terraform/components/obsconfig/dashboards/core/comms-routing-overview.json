@@ -207,6 +207,7 @@
         "y": 4
       },
       "id": 3,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -240,7 +241,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -335,6 +336,7 @@
         "y": 4
       },
       "id": 4,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -367,7 +369,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -750,6 +752,7 @@
         "y": 13
       },
       "id": 45,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -780,7 +783,7 @@
           "metricName": "NumberOfMessagesSent",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -805,7 +808,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -830,7 +833,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "D",
           "region": "default",
@@ -855,7 +858,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "C",
           "region": "default",
@@ -932,7 +935,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -1442,7 +1445,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
@@ -2137,6 +2140,7 @@
         "y": 29
       },
       "id": 18,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -2168,7 +2172,7 @@
           "metricName": "NumberOfMessagesSent",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -2228,7 +2232,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -2253,7 +2257,7 @@
           "metricName": "comms-$env-api-srnl-sendrequests-nhsapp-error-count",
           "metricQueryType": 0,
           "namespace": "comms-$env-lambda-errors",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "C",
           "region": "default",
@@ -2278,7 +2282,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "E",
           "region": "default",
@@ -2303,7 +2307,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "D",
           "region": "default",
@@ -2393,6 +2397,7 @@
         "y": 32
       },
       "id": 17,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -2425,7 +2430,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -2544,7 +2549,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue"
+                "color": "blue",
+                "value": null
               }
             ]
           },
@@ -2692,7 +2698,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-([a-zA-Z0-9]+)-.*",
+            "regex": ".*-request-(.+)--.*",
             "renamePattern": "$1"
           }
         },
@@ -2764,7 +2770,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -2795,6 +2802,7 @@
         "y": 40
       },
       "id": 21,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -2827,7 +2835,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -3065,6 +3073,7 @@
         "y": 47
       },
       "id": 22,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -3096,7 +3105,7 @@
           "metricName": "NumberOfMessagesSent",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -3156,7 +3165,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -3181,7 +3190,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "D",
           "region": "default",
@@ -3206,7 +3215,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "E",
           "region": "default",
@@ -3268,7 +3277,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -3359,6 +3369,7 @@
         "y": 48
       },
       "id": 24,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -3388,7 +3399,7 @@
           "metricName": "PollRequestTtlItemsDeleted",
           "metricQueryType": 0,
           "namespace": "comms-poll-request-ttl-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -3448,7 +3459,7 @@
           "metricName": "TimeToLiveDeletedItemCount",
           "metricQueryType": 0,
           "namespace": "AWS/DynamoDB",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -3496,7 +3507,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -3609,7 +3621,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -3757,7 +3770,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -3865,6 +3879,7 @@
         "y": 58
       },
       "id": 26,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -3896,7 +3911,7 @@
           "metricName": "NumberOfMessagesSent",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -3956,7 +3971,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -3981,7 +3996,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "D",
           "region": "default",
@@ -4006,7 +4021,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "E",
           "region": "default",
@@ -4067,7 +4082,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -4128,6 +4144,7 @@
         "y": 61
       },
       "id": 25,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -4160,7 +4177,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -4278,7 +4295,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue"
+                "color": "blue",
+                "value": null
               }
             ]
           },
@@ -4467,7 +4485,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -4498,6 +4517,7 @@
         "y": 70
       },
       "id": 29,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -4530,7 +4550,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -4652,7 +4672,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -4768,6 +4789,7 @@
         "y": 74
       },
       "id": 30,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -4799,7 +4821,7 @@
           "metricName": "NumberOfMessagesSent",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -4859,7 +4881,7 @@
           "metricName": "NumberOfMessagesDeleted",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "B",
           "region": "default",
@@ -4884,7 +4906,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "D",
           "region": "default",
@@ -4909,7 +4931,7 @@
           "metricName": "ApproximateNumberOfMessagesVisible",
           "metricQueryType": 0,
           "namespace": "AWS/SQS",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "E",
           "region": "default",
@@ -4992,7 +5014,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -5053,6 +5076,7 @@
         "y": 83
       },
       "id": 32,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -5085,7 +5109,7 @@
           "metricName": "virtual_queue_insertion",
           "metricQueryType": 0,
           "namespace": "comms-process-queue-updates-lambda-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -5201,7 +5225,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -5520,7 +5545,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -5679,7 +5705,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -5740,6 +5767,7 @@
         "y": 92
       },
       "id": 36,
+      "maxDataPoints": 500,
       "options": {
         "legend": {
           "calcs": [],
@@ -5773,7 +5801,7 @@
           "metricName": "queue_length",
           "metricQueryType": 0,
           "namespace": "comms-publish-queue-stats-metrics",
-          "period": "",
+          "period": "$__interval",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "eu-west-2",
@@ -5852,7 +5880,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -6049,7 +6078,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -6300,7 +6330,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue"
+                "color": "blue",
+                "value": null
               }
             ]
           },
@@ -6856,7 +6887,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -7090,7 +7122,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
