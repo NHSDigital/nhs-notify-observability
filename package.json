@@ -37,6 +37,7 @@
   },
   "workspaces": [
     "lambdas/metric-lambda-processor",
+    "lambdas/alert-forwarding",
     "utils/logger"
   ]
 }

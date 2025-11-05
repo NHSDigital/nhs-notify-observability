@@ -1,5 +1,6 @@
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
 const https = require('https');
+const axios = require('axios');
 
 const ssmClient = new SSMClient({ region: "eu-west-2" });
 
@@ -123,14 +124,180 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
     });
 }
 
+function formatAlarmTime(iso) {
+  if (!iso) return 'unknown';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const pad = n => n.toString().padStart(2, '0');
+  const year = d.getUTCFullYear();
+  const month = pad(d.getUTCMonth() + 1);
+  const day = pad(d.getUTCDate());
+  const hrs = pad(d.getUTCHours());
+  const mins = pad(d.getUTCMinutes());
+  const secs = pad(d.getUTCSeconds());
+  return `${year}-${month}-${day} ${hrs}:${mins}:${secs} UTC`;
+}
+
+function buildJiraIssueEndpoint(rawUrl) {
+  const trimmed = rawUrl.trim();
+  const withoutTrailing = trimmed.replace(/\/+$/, '');
+  const withScheme = /^https?:\/\//i.test(withoutTrailing)
+    ? withoutTrailing
+    : `https://${withoutTrailing}`;
+  return `${withScheme}/rest/api/2/issue`;
+}
+
+function buildJiraIssueData(input) {
+  const { alarmName, environment, accountName, accountId, boundedContext, component, description, detail, region, time, source } = input;
+  if (source === "notify.envDestroyFailed") {
+    if (!environment || !accountId || !boundedContext || !component) {
+        console.warn('environment, accountId, boundedContext or component is missing or undefined');
+        throw new Error('Necessary fields missing to raise JIRA issue for PR Environment Destroy')
+    }
+    console.log('These are the params')
+    console.log(`Environment: ${environment}`);
+    console.log(`Account ID: ${accountId}`);
+    console.log(`Bounded Context: ${boundedContext}`);
+    console.log(`Component: ${component}`);
+    return {
+      fields: {
+        project: { key: 'CCM' },
+        summary: `Env failed to destroy: ${environment || 'unknown'} for ${boundedContext || 'unknown'} Bounded Context`,
+        description: [
+          ` * *Time of the alarm:* _${formatAlarmTime(time)}_`,
+          ` * *Account Id:* _${accountId || 'unknown'}_`,
+          ` * *Env name:* _${environment || 'unknown'}_`,
+          ` * *Bounded Context:* _${boundedContext || 'unknown'}_`,
+          ` * *Component:* _${component || 'unknown'}_`,
+        ].join('\n'),
+        issuetype: { name: 'Task' },
+        components: [{ name: 'Support' }, { name: 'Platform' }],
+      },
+    };
+  } else {
+  // Default for other sources
+  if (!alarmName || !accountName) {
+        console.warn('alarmName or accountName is missing or undefined');
+        throw new Error('Necessary fields missing to raise JIRA issue for Alarms')
+  }
+  return {
+    fields: {
+      project: { key: 'CCM' },
+      summary: `Alarm triggered: ${alarmName ?? 'Unknown alarm'}`,
+      description: [
+        `This ticket has been raised for a production alarm reported in the *Alerts* Teams channel.`,
+        'h2. Details',
+        ` * *Time of the alarm:* _${formatAlarmTime(time)}_`,
+        ` * *Account Name:* _${accountName || 'unknown'}_`,
+        ` * *Alarm name:* _${alarmName || 'unknown'}_`,
+        ` * *Error message:* _${description || 'n/a'}_`,
+        ` * *CloudWatch console link:* https://console.aws.amazon.com/cloudwatch/home?region=${encodeURIComponent(
+          region || 'unknown-region'
+        )}#alarmsV2:alarm/${encodeURIComponent(alarmName || '')}`,
+      ].join('\n'),
+      issuetype: { name: 'Task' },
+      components: [{ name: 'Support' }],
+    },
+  };
+ }
+}
+
+async function createJiraTicket(event) {
+  const alarmName = event?.detail?.alarmName;
+  const environment = event?.detail?.environment;
+  const accountName = event?.detail?.accountName;
+  const source = event.source;
+  console.log(`Jira:create:start`);
+
+  // Replace with your own credentials retrieval logic
+  const urlPath = process.env.JIRA_URL_PARAM_NAME;
+  const patPath = process.env.JIRA_PAT_PARAM_NAME;
+
+  const url = await getJiraParam(urlPath);
+  const patToken = await getJiraParam(patPath);
+
+  console.log('Jira:credentials:fetched');
+
+  if (!url || !patToken) {
+    console.error(`[Jira:credentials:missing] haveUrl=${!!url} havePat=${!!patToken}`);
+    return;
+  }
+
+  const issueEndpoint = buildJiraIssueEndpoint(url);
+  console.log(`[Jira:issue:endpoint] url="${issueEndpoint}"`);
+
+  const issueData = buildJiraIssueData({
+    alarmName,
+    environment,
+    accountName,
+    accountId: event.detail?.accountId,
+    boundedContext: event.detail?.boundedContext,
+    component: event.detail?.component,
+    description: event.detail?.configuration?.description,
+    detail: event.detailType || null,
+    region: event.region,
+    time: event.time,
+    source,
+  });
+
+  const payloadStr = JSON.stringify(issueData);
+  console.log(payloadStr)
+  console.log(`[Jira:issue:payload] project=${issueData.fields.project.key} summary="${issueData.fields.summary}" size=${payloadStr.length}`);
+
+  const authHeader = `Bearer ${patToken}`;
+
+  try {
+    const response = await axios.post(issueEndpoint, issueData, {
+      headers: {
+        Authorization: authHeader,
+        'Content-Type': 'application/json',
+      },
+      timeout: 10000,
+    });
+
+    if (response.status < 200 || response.status > 299) {
+      const bodyPreview = JSON.stringify(response.data).slice(0, 200);
+      console.error(`[Jira:issue:non_success] status=${response.status} statusText="${response.statusText}" bodyPreview="${bodyPreview}"`);
+      return;
+    }
+
+    console.log(`[Jira:issue:created] status=${response.status} key=${response.data?.key}`);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[Jira:issue:error] message="${msg}"`);
+  }
+
+  return;
+}
+
+async function getJiraParam(paramName) {
+  try {
+    const command = new GetParameterCommand({ Name: paramName, WithDecryption: true });
+    const response = await ssmClient.send(command);
+    const value = response?.Parameter?.Value;
+    if (!value) {
+      throw new Error(`SSM parameter ${paramName} has no Value property`);
+    }
+    return value;
+  } catch (err) {
+    throw new Error(`Failed to read SSM parameter ${paramName}: ${err}`);
+  }
+}
+
 module.exports = {
     getTeamsWebhookUrl,
     sendTeamsMessage,
+    extractSecurityHubSections,
+    createJiraTicket,
+    buildJiraIssueData,
     handler: async (event) => {
         console.log("Event Received:", JSON.stringify(event, null, 2));
 
         let parameterName;
-        if (event.source === "aws.cloudwatch") {
+        if (event.source === "notify.envDestroyFailed") {
+            await createJiraTicket(event);
+            return;
+        } else if (event.source === "aws.cloudwatch") {
             parameterName = process.env.TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM;
         } else if (event.source === "aws.backup") {
             parameterName = process.env.TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM;

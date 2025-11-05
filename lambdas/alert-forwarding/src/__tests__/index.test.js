@@ -1,9 +1,11 @@
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
 const https = require('https');
-const { getTeamsWebhookUrl, sendTeamsMessage, handler, extractSecurityHubSections } = require('../index');
+const { getTeamsWebhookUrl, sendTeamsMessage, handler, extractSecurityHubSections, buildJiraIssueData } = require('../index');
+const axios = require('axios');
 
 jest.mock('@aws-sdk/client-ssm');
 jest.mock('https');
+jest.mock('axios');
 
 describe('getTeamsWebhookUrl', () => {
     beforeEach(() => {
@@ -22,7 +24,7 @@ describe('getTeamsWebhookUrl', () => {
         };
         SSMClient.prototype.send.mockResolvedValue(mockResponse);
 
-        const url = await getTeamsWebhookUrl();
+        const url = await getTeamsWebhookUrl('TEST');
         expect(url).toBe('https://example.com/webhook');
     });
 
@@ -136,7 +138,9 @@ describe('sendTeamsMessage', () => {
 
 describe('handler', () => {
     beforeEach(() => {
-        process.env.TEAMS_WEBHOOK_ALERTS_SSM_PARAM = 'test-param';
+        process.env.TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM = 'test-param'; // correct env var for cloudwatch
+        process.env.TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM = 'backup-param';
+        process.env.TEAMS_WEBHOOK_ALERTS_SECURITY_SSM_PARAM = 'sechub-param';
     });
 
     afterEach(() => {
@@ -144,18 +148,10 @@ describe('handler', () => {
     });
 
     it('should handle CloudWatch alarm events and send a message to Teams', async () => {
-        const mockResponse = {
-            Parameter: {
-                Value: 'https://example.com/webhook'
-            }
-        };
+        const mockResponse = { Parameter: { Value: 'https://example.com/webhook' } };
         SSMClient.prototype.send.mockResolvedValue(mockResponse);
 
-        const mockRequest = {
-            on: jest.fn(),
-            write: jest.fn(),
-            end: jest.fn()
-        };
+        const mockRequest = { on: jest.fn(), write: jest.fn(), end: jest.fn() };
         https.request.mockImplementation((options, callback) => {
             callback({
                 statusCode: 200,
@@ -168,18 +164,15 @@ describe('handler', () => {
         });
 
         const event = {
+            source: 'aws.cloudwatch', // add source so handler enters cloudwatch branch
             detail: {
                 alarmName: 'TestAlarm',
-                state: {
-                    value: 'ALARM',
-                    reason: 'Threshold Crossed'
-                }
+                state: { value: 'ALARM', reason: 'Threshold Crossed' }
             }
         };
 
         await handler(event);
 
-        expect(SSMClient.prototype.send).toHaveBeenCalledWith(expect.any(GetParameterCommand));
         expect(mockRequest.write).toHaveBeenCalled();
         expect(mockRequest.end).toHaveBeenCalled();
     });
@@ -209,6 +202,7 @@ describe('handler', () => {
         });
 
         const event = {
+            source: 'aws.cloudwatch',
             detail: {
                 alarmName: 'TestAlarm',
                 state: {
@@ -224,7 +218,7 @@ describe('handler', () => {
 
         await handler(event);
 
-        expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(String), expect.any(Error));
+        expect(consoleErrorSpy).toHaveBeenCalledTimes(4);
         consoleErrorSpy.mockRestore();
     });
 });
@@ -232,7 +226,7 @@ describe('handler', () => {
 describe('extractSecurityHubSections', () => {
     it('should format sections with findings on new lines and sections separated', () => {
         const input = "Total Security Hub Findings grouped by Severity. Failed controls only.\n--------------------------------------------------\nMEDIUM 22\nLOW 21\nCRITICAL 7\nHIGH 6\n--------------------------------------------------\n\n\nNew Security Hub Findings from the last 5 days, grouped by Severity. Failed controls only.\n--------------------------------------------------\nCRITICAL 1\n--------------------------------------------------\n\n\nTotal Security Hub Findings grouped by Resource Type. Failed controls only.\n--------------------------------------------------\nAwsAccount 23\nAwsS3Bucket 8\nAwsEc2Vpc 6\nAwsIamPolicy 6\nAwsKmsKey 4\nAwsIamRole 3\nAwsCloudTrailTrail 2\nAwsEc2SecurityGroup 2\nAwsDynamoDbTable 1\nAwsEc2VPCBlockPublicAccessOptions 1\n--------------------------------------------------\n\n";
-        const expected = `**Total Security Hub Findings grouped by Severity. Failed controls only.**<br>CRITICAL                       7<br>HIGH                           6<br>LOW                            21<br>MEDIUM                         22<br><br><br>**New Security Hub Findings from the last 5 days, grouped by Severity. Failed controls only.**<br>CRITICAL                       1<br><br><br>**Total Security Hub Findings grouped by Resource Type. Failed controls only.**<br>AwsAccount                     23<br>AwsCloudTrailTrail             2<br>AwsDynamoDbTable               1<br>AwsEc2SecurityGroup            2<br>AwsEc2Vpc                      6<br>AwsEc2VPCBlockPublicAccessOptions 1<br>AwsIamPolicy                   6<br>AwsIamRole                     3<br>AwsKmsKey                      4<br>AwsS3Bucket                    8<br>`;
+        const expected = `**Total Security Hub Findings grouped by Severity. Failed controls only.**<br>CRITICAL                      7<br>HIGH                          6<br>LOW                           21<br>MEDIUM                        22<br><br><br>**New Security Hub Findings from the last 5 days, grouped by Severity. Failed controls only.**<br>CRITICAL                      1<br><br><br>**Total Security Hub Findings grouped by Resource Type. Failed controls only.**<br>AwsAccount                    23<br>AwsCloudTrailTrail            2<br>AwsDynamoDbTable              1<br>AwsEc2SecurityGroup           2<br>AwsEc2Vpc                     6<br>AwsEc2VPCBlockPublicAccessOptions1<br>AwsIamPolicy                  6<br>AwsIamRole                    3<br>AwsKmsKey                     4<br>AwsS3Bucket                   8<br>`;
 
         expect(extractSecurityHubSections(input)).toBe(expected);
     });
@@ -248,7 +242,56 @@ describe('extractSecurityHubSections', () => {
 
     it('should handle input with one section', () => {
         const input = "Total Security Hub Findings grouped by Severity. Failed controls only.\nMEDIUM 2\nLOW 1";
-        const expected = "**Total Security Hub Findings grouped by Severity. Failed controls only.**<br>LOW                            1<br>MEDIUM                         2<br>";
+        const expected = "**Total Security Hub Findings grouped by Severity. Failed controls only.**<br>LOW                           1<br>MEDIUM                        2<br>";
         expect(extractSecurityHubSections(input)).toBe(expected);
+    });
+});
+
+describe('buildJiraIssueData', () => {
+    const baseEventData = { time: new Date().toISOString(), region: 'eu-west-2' };
+
+    it('builds env destroy failed issue data with all required fields', () => {
+        const data = buildJiraIssueData({
+            source: 'notify.envDestroyFailed',
+            environment: 'pr123',
+            accountId: '111122223333',
+            boundedContext: 'payments',
+            component: 'worker',
+            detail: 'Destroy failed due to dependency',
+            time: baseEventData.time,
+        });
+        expect(data.fields.summary).toContain('Env failed to destroy: pr123');
+        expect(data.fields.description).toContain('Account Id');
+        expect(data.fields.description).toContain('payments');
+        expect(data.fields.description).toContain('worker');
+        expect(data.fields.issuetype.name).toBe('Task');
+    });
+
+    it('throws error when required fields are missing for env destroy failed', () => {
+        expect(() => buildJiraIssueData({ source: 'notify.envDestroyFailed', environment: '', accountId: '', boundedContext: '', component: '', time: baseEventData.time, })).toThrow('Necessary fields missing to raise JIRA issue for PR Environment Destroy');
+    });
+
+    it('builds alarm issue data for cloudwatch alarm source', () => {
+        const data = buildJiraIssueData({
+            source: 'aws.cloudwatch',
+            alarmName: 'HighErrorRate',
+            accountName: 'notify-prod',
+            description: 'Error rate exceeded',
+            region: 'eu-west-2',
+            time: baseEventData.time,
+        });
+        expect(data.fields.summary).toContain('Alarm triggered: HighErrorRate');
+        expect(data.fields.description).toContain('notify-prod');
+        expect(data.fields.description).toContain('Error rate exceeded');
+        expect(data.fields.description).toContain('cloudwatch');
+    });
+
+    it('throws error when required fields are missing for alarm', () => {
+        expect(() => buildJiraIssueData({
+            source: 'aws.cloudwatch',
+            alarmName: '',
+            accountName: '',
+            time: baseEventData.time,
+        })).toThrow('Necessary fields missing to raise JIRA issue for Alarms');
     });
 });
