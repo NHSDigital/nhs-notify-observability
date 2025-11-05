@@ -199,7 +199,7 @@ function buildJiraIssueData(input) {
       components: [{ name: 'Support' }],
     },
   };
- }
+  }
 }
 
 async function createJiraTicket(event) {
