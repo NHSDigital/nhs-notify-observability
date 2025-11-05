@@ -181,24 +181,24 @@ function buildJiraIssueData(input) {
         throw new Error('Necessary fields missing to raise JIRA issue for Alarms')
   }
   return {
-    fields: {
-      project: { key: 'CCM' },
-      summary: `Alarm triggered: ${alarmName ?? 'Unknown alarm'}`,
-      description: [
-        `This ticket has been raised for a production alarm reported in the *Alerts* Teams channel.`,
-        'h2. Details',
-        ` * *Time of the alarm:* _${formatAlarmTime(time)}_`,
-        ` * *Account Name:* _${accountName || 'unknown'}_`,
-        ` * *Alarm name:* _${alarmName || 'unknown'}_`,
-        ` * *Error message:* _${description || 'n/a'}_`,
-        ` * *CloudWatch console link:* https://console.aws.amazon.com/cloudwatch/home?region=${encodeURIComponent(
-          region || 'unknown-region'
-        )}#alarmsV2:alarm/${encodeURIComponent(alarmName || '')}`,
-      ].join('\n'),
-      issuetype: { name: 'Task' },
-      components: [{ name: 'Support' }],
-    },
-  };
+      fields: {
+        project: { key: 'CCM' },
+        summary: `Alarm triggered: ${alarmName ?? 'Unknown alarm'}`,
+        description: [
+            `This ticket has been raised for a production alarm reported in the *Alerts* Teams channel.`,
+            'h2. Details',
+            ` * *Time of the alarm:* _${formatAlarmTime(time)}_`,
+            ` * *Account Name:* _${accountName || 'unknown'}_`,
+            ` * *Alarm name:* _${alarmName || 'unknown'}_`,
+            ` * *Error message:* _${description || 'n/a'}_`,
+            ` * *CloudWatch console link:* https://console.aws.amazon.com/cloudwatch/home?region=${encodeURIComponent(
+            region || 'unknown-region'
+            )}#alarmsV2:alarm/${encodeURIComponent(alarmName || '')}`,
+        ].join('\n'),
+        issuetype: { name: 'Task' },
+        components: [{ name: 'Support' }],
+      },
+    };
   }
 }
 
