@@ -1,13 +1,15 @@
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
 const https = require('https');
 const axios = require('axios');
+const pino = require('pino');
 
+const logger = pino();
 const ssmClient = new SSMClient({ region: "eu-west-2" });
 
 async function getTeamsWebhookUrl(parameterName) {
-    console.log("SSM Parameter Name:", parameterName);
+    logger.info({ msg: 'SSM Parameter Name', parameterName });
     if (!parameterName) {
-        console.error("No SSM parameter name found in environment variables");
+        logger.error({ msg: 'No SSM parameter name found in environment variables' });
         return null;
     }
     try {
@@ -16,16 +18,14 @@ async function getTeamsWebhookUrl(parameterName) {
             WithDecryption: true,
         });
         const response = await ssmClient.send(command);
-        console.log("SSM Parameter Response:", response);
+        logger.debug({ msg: 'SSM Parameter Response', response });
         if (!response.Parameter) {
-            console.error("SSM Parameter not found");
+            logger.error({ msg: 'SSM Parameter not found' });
             return null;
         }
         return response.Parameter.Value || null;
     } catch (error) {
-        console.error("Error retrieving SSM Parameter:", error);
-        console.error("Error details:", error.message);
-        console.error("Error stack:", error.stack);
+        logger.error({ msg: 'Error retrieving SSM Parameter', error, details: error.message, stack: error.stack });
         return null;
     }
 }
@@ -64,8 +64,8 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
             timeout: 5000,
         };
 
-        console.log("Request options:", options);
-        console.log("Payload:", teamsPayload);
+        logger.info({ msg: 'Request options', options });
+        logger.debug({ msg: 'Payload', payload: teamsPayload });
 
         const req = https.request(options, (res) => {
             let data = '';
@@ -127,15 +127,8 @@ async function sendTeamsMessage(teamsPayload, url, retries = 3) {
 function formatAlarmTime(iso) {
   if (!iso) return 'unknown';
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  const pad = n => n.toString().padStart(2, '0');
-  const year = d.getUTCFullYear();
-  const month = pad(d.getUTCMonth() + 1);
-  const day = pad(d.getUTCDate());
-  const hrs = pad(d.getUTCHours());
-  const mins = pad(d.getUTCMinutes());
-  const secs = pad(d.getUTCSeconds());
-  return `${year}-${month}-${day} ${hrs}:${mins}:${secs} UTC`;
+  if (isNaN(d)) return iso;
+  return d.toISOString().replace('T', ' ').replace('Z', ' UTC');
 }
 
 function buildJiraIssueEndpoint(rawUrl) {
@@ -154,11 +147,6 @@ function buildJiraIssueData(input) {
         console.warn('environment, accountId, boundedContext or component is missing or undefined');
         throw new Error('Necessary fields missing to raise JIRA issue for PR Environment Destroy')
     }
-    console.log('These are the params')
-    console.log(`Environment: ${environment}`);
-    console.log(`Account ID: ${accountId}`);
-    console.log(`Bounded Context: ${boundedContext}`);
-    console.log(`Component: ${component}`);
     return {
       fields: {
         project: { key: 'CCM' },

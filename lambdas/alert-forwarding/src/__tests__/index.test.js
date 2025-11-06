@@ -218,7 +218,7 @@ describe('handler', () => {
 
         await handler(event);
 
-        expect(consoleErrorSpy).toHaveBeenCalledTimes(4);
+        expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
         consoleErrorSpy.mockRestore();
     });
 });

@@ -4,6 +4,6 @@ resource "aws_cloudwatch_event_rule" "env_destroy" {
   description    = "Triggers Lambda when an env destroy event is received"
 
   event_pattern = jsonencode({
-    source        = ["notify.envDestroyFailed"]
+    source = ["notify.envDestroyFailed"]
   })
 }
