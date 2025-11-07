@@ -5269,65 +5269,6 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-lpl-render-pdf-queue"
-          },
-          "expression": "",
-          "id": "",
-          "label": "GUN PDF Pipeline",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "eu-west-2",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "comms-process-queue-updates-lambda-metrics",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "virtual_queue_insertion",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            },
-            "where": {
-              "expressions": [
-                {
-                  "operator": {
-                    "name": "=",
-                    "value": "$env"
-                  },
-                  "property": {
-                    "name": "Environment",
-                    "type": "string"
-                  },
-                  "type": "operator"
-                }
-              ],
-              "type": "and"
-            }
-          },
-          "sqlExpression": "SELECT SUM(virtual_queue_insertion) FROM \"comms-process-queue-updates-lambda-metrics\" WHERE Environment = '$env'",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
             "QueueName": "comms-$env-api-lspl-csvbatch-queue"
           },
           "expression": "",
@@ -5935,31 +5876,6 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-lpl-render-pdf-queue"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "GUN PDF",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
             "QueueName": "comms-$env-api-lspl-csvbatch-queue"
           },
           "expression": "",
@@ -6133,31 +6049,6 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-lpl-render-pdf-queue"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "GUN PDF",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NumberOfMessagesSent",
-          "metricQueryType": 0,
-          "namespace": "AWS/SQS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
             "QueueName": "comms-$env-api-lspl-csvbatch-queue"
           },
           "expression": "",
@@ -6263,7 +6154,6 @@
             "mode": "reduceRow",
             "reduce": {
               "include": [
-                "comms-$env-api-lpl-render-pdf-queue NumberOfMessagesSent",
                 "comms-$env-api-lspl-csvbatch-queue NumberOfMessagesReceived",
                 "comms-$env-api-stl-csvbatchsynertec-queue NumberOfMessagesReceived",
                 "comms-$env-api-rol-router-request-letter.fifo NumberOfMessagesDeleted"
