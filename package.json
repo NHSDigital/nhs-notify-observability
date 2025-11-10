@@ -36,6 +36,7 @@
     "typecheck": "npm run --workspaces typecheck --if-present"
   },
   "workspaces": [
+    "lambdas/alert-forwarding",
     "lambdas/metric-lambda-processor",
     "utils/logger"
   ]

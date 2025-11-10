@@ -61,8 +61,8 @@ data "aws_iam_policy_document" "grafana_cross_account_access" {
     }
   }
   statement {
-    sid     = "AllowAthenaWorkspaceAccess"
-    effect  = "Allow"
+    sid    = "AllowAthenaWorkspaceAccess"
+    effect = "Allow"
     actions = [
       "s3:AbortMultipartUpload",
       "s3:GetBucketLocation",
