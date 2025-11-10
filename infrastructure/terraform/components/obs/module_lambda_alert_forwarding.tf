@@ -20,7 +20,7 @@ module "lambda_alert_forwarding" {
 
   function_s3_bucket      = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
   function_code_base_path = local.aws_lambda_functions_dir_path
-  function_code_dir       = "alert-forwarding/src"
+  function_code_dir       = "alert-forwarding/dist"
   function_include_common = true
   function_module_name    = "index"
   handler_function_name   = "handler"
@@ -37,6 +37,8 @@ module "lambda_alert_forwarding" {
     "TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM"           = aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.name,
     "TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.name
     "TEAMS_WEBHOOK_ALERTS_SECURITY_SSM_PARAM"      = aws_ssm_parameter.teams_webhook_url_alerts_security.name
+    "JIRA_URL_PARAM_NAME"                          = local.jira_url_path
+    "JIRA_PAT_PARAM_NAME"                          = local.jira_pat_token_path
   }
 }
 
@@ -66,7 +68,11 @@ data "aws_iam_policy_document" "lambda_alert_forwarding" {
     resources = [
       aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.arn,
       aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.arn,
-      aws_ssm_parameter.teams_webhook_url_alerts_security.arn
+      aws_ssm_parameter.teams_webhook_url_alerts_security.arn,
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.jira_url_path}",
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.jira_pat_token_path}",
+      # aws_ssm_parameter.jira_pat_token.arn,
+      # aws_ssm_parameter.jira_url.arn
     ]
   }
 }
