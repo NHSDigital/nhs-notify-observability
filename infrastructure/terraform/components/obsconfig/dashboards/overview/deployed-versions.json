@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 68,
+  "id": 13,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -45,7 +45,7 @@
     {
       "datasource": {
         "type": "grafana-athena-datasource",
-        "uid": "fevkyppe14934d"
+        "uid": "${datasrc}"
       },
       "fieldConfig": {
         "defaults": {
@@ -218,14 +218,14 @@
         {
           "connectionArgs": {
             "catalog": "__default",
-            "database": "nhs-main-acct",
+            "database": "__default",
             "region": "__default",
             "resultReuseEnabled": false,
             "resultReuseMaxAgeInMinutes": 60
           },
           "datasource": {
             "type": "grafana-athena-datasource",
-            "uid": "fevkyppe14934d"
+            "uid": "${datasrc}"
           },
           "format": 1,
           "rawSQL": "SELECT bounded_context, \"group\", environment, component, version_internal, version_bounded_context, deployed_at, commit_id_internal, commit_id_bounded_context\nFROM (\n  SELECT\n    t.*,\n    ROW_NUMBER() OVER (\n      PARTITION BY t.bounded_context, t.component, t.\"group\"\n      ORDER BY t.deployed_at DESC\n    ) AS rn\n  FROM \"nhs-main-acct-deployments\" t\n  WHERE t.environment = 'main'\n) sub\nWHERE sub.rn = 1;",
@@ -258,7 +258,7 @@
     {
       "datasource": {
         "type": "grafana-athena-datasource",
-        "uid": "fevkyppe14934d"
+        "uid": "${datasrc}"
       },
       "fieldConfig": {
         "defaults": {
@@ -426,14 +426,14 @@
         {
           "connectionArgs": {
             "catalog": "__default",
-            "database": "nhs-main-acct",
+            "database": "__default",
             "region": "__default",
             "resultReuseEnabled": false,
             "resultReuseMaxAgeInMinutes": 60
           },
           "datasource": {
             "type": "grafana-athena-datasource",
-            "uid": "fevkyppe14934d"
+            "uid": "${datasrc}"
           },
           "format": 1,
           "rawSQL": "SELECT bounded_context, \"group\", environment, component, version_internal, version_bounded_context, deployed_at, commit_id_internal, commit_id_bounded_context\nFROM (\n  SELECT\n    t.*,\n    ROW_NUMBER() OVER (\n      PARTITION BY t.bounded_context, t.component, t.\"group\"\n      ORDER BY t.deployed_at DESC\n    ) AS rn\n  FROM \"nhs-main-acct-deployments\" t\n  WHERE t.environment != 'main'\n  ORDER BY version_bounded_context\n) sub\nWHERE sub.rn = 1;",
@@ -447,7 +447,26 @@
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "nhs-main-obsconfig-athena-deployments",
+          "value": "devrdqg1nj5z4a"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasrc",
+        "options": [],
+        "query": "grafana-athena-datasource",
+        "refresh": 1,
+        "regex": "nhs-main-obsconfig-athena-deployments",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -458,5 +477,7 @@
   },
   "timezone": "browser",
   "title": "Deployed Component Versions",
+  "uid": "fevrdqh5wrmrke",
+  "version": 10,
   "weekStart": ""
 }
