@@ -1,5 +1,5 @@
 module "splunk_metrics_formatter_lambda" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip"
 
   function_name = "splunk-metrics-formatter"
   description   = "A function for formatting metrics for Splunk"
@@ -26,6 +26,8 @@ module "splunk_metrics_formatter_lambda" {
   runtime                 = "nodejs22.x"
   memory                  = 512
   timeout                 = 900
+
+  send_to_firehose = false
 
   lambda_env_vars = {
     ENVIRONMENT                  = var.environment
