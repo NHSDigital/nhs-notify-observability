@@ -493,6 +493,7 @@
         "type": "cloudwatch",
         "uid": "${datasrc}"
       },
+      "description": "Number of Messages sent based on AWS SQS CloudWatch metrics",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -507,6 +508,14 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 200
               }
             ]
           },
@@ -1388,7 +1397,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 3,
         "x": 0,
         "y": 27
@@ -1544,7 +1553,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 3,
         "y": 27
@@ -1635,12 +1644,45 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
           },
           "decimals": 0,
           "displayName": "ms",
           "fieldMinMax": false,
           "mappings": [],
+          "max": 5100,
           "noValue": "0",
           "thresholds": {
             "mode": "absolute",
@@ -1648,6 +1690,10 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 5000
               }
             ]
           },
@@ -1656,26 +1702,23 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 3,
         "x": 5,
         "y": 27
       },
       "id": 34,
       "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "10.4.1",
       "targets": [
@@ -1726,7 +1769,7 @@
         }
       ],
       "title": "APIM Refresh Token Duration",
-      "type": "gauge"
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -1757,7 +1800,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 3,
         "x": 8,
         "y": 27
@@ -2214,10 +2257,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 3,
-        "y": 31
+        "y": 32
       },
       "id": 33,
       "options": {
@@ -2428,114 +2471,6 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 251
-              },
-              {
-                "color": "red",
-                "value": 501
-              },
-              {
-                "color": "dark-red",
-                "value": 1001
-              }
-            ]
-          },
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 11,
-        "x": 0,
-        "y": 35
-      },
-      "id": 20,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "OriginLatency",
-          "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "us-east-1",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/CloudFront",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "4xxErrorRate",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Average"
-        }
-      ],
-      "title": "Cloudfront Origin Latency",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
             "mode": "palette-classic"
           },
           "custom": {
@@ -2611,8 +2546,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 10,
-        "x": 11,
+        "w": 21,
+        "x": 0,
         "y": 37
       },
       "id": 36,
@@ -2801,133 +2736,6 @@
       ],
       "title": "Cloudfront Error Rate",
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "${datasrc}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "scaleDistribution": {
-              "type": "linear"
-            }
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 11,
-        "x": 0,
-        "y": 39
-      },
-      "id": 17,
-      "options": {
-        "calculate": false,
-        "cellGap": 1,
-        "color": {
-          "exponent": 0.5,
-          "fill": "dark-orange",
-          "mode": "scheme",
-          "reverse": false,
-          "scale": "exponential",
-          "scheme": "Spectral",
-          "steps": 64
-        },
-        "exemplars": {
-          "color": "rgba(255,0,255,0.7)"
-        },
-        "filterValues": {
-          "le": 1e-09
-        },
-        "legend": {
-          "show": true
-        },
-        "rowsFrame": {
-          "layout": "auto"
-        },
-        "tooltip": {
-          "mode": "single",
-          "showColorScale": false,
-          "yHistogram": false
-        },
-        "yAxis": {
-          "axisPlacement": "left",
-          "reverse": false,
-          "unit": "none"
-        }
-      },
-      "pluginVersion": "10.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "${datasrc}"
-          },
-          "dimensions": {
-            "DistributionId": "$cfDist"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "OriginLatency",
-          "metricQueryType": 0,
-          "namespace": "AWS/CloudFront",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "us-east-1",
-          "sql": {
-            "from": {
-              "property": {
-                "name": "AWS/CloudFront",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "select": {
-              "name": "SUM",
-              "parameters": [
-                {
-                  "name": "4xxErrorRate",
-                  "type": "functionParameter"
-                }
-              ],
-              "type": "function"
-            }
-          },
-          "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
-          "statistic": "Average"
-        }
-      ],
-      "title": "Cloudfront Origin Latency",
-      "transformations": [
-        {
-          "id": "heatmap",
-          "options": {
-            "xBuckets": {
-              "mode": "size"
-            },
-            "yBuckets": {
-              "mode": "size",
-              "scale": {
-                "type": "linear"
-              }
-            }
-          }
-        }
-      ],
-      "type": "heatmap"
     }
   ],
   "refresh": "",
@@ -3020,7 +2828,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
