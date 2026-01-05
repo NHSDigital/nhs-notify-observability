@@ -1,5 +1,5 @@
 module "lambda_alert_forwarding" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip"
 
   function_name = "alert-forwarding"
   description   = "A function for formatting and sending Cloudwatch alerts to Teams"
@@ -32,6 +32,8 @@ module "lambda_alert_forwarding" {
 
   force_lambda_code_deploy = var.force_lambda_code_deploy
   enable_lambda_insights   = false
+
+  send_to_firehose = false
 
   lambda_env_vars = {
     "TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM"           = aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.name,
