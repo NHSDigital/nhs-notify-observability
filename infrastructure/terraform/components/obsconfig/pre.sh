@@ -15,7 +15,7 @@
 # ==============================================================================
 
 # Fetch workspace ID from SSM Parameter Store
-workspace_id=$(aws ssm get-parameter --with-decryption --name nhs-notify-${2}-obs-workspace-id | jq -r '.Parameter.Value')
+workspace_id=$(aws ssm get-parameter --with-decryption --name nhs-${2}-obs-workspace-id | jq -r '.Parameter.Value')
 
 if [[ -z "$workspace_id" ]]; then
   echo "Error: workspace_id is empty or null"

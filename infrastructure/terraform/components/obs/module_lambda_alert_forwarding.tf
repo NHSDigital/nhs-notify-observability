@@ -1,5 +1,5 @@
 module "lambda_alert_forwarding" {
-  source = "git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda?ref=v1.0.9"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
 
   function_name = "alert-forwarding"
   description   = "A function for formatting and sending Cloudwatch alerts to Teams"
@@ -12,7 +12,7 @@ module "lambda_alert_forwarding" {
   group          = var.group
 
   log_retention_in_days = var.log_retention_in_days
-  kms_key_arn           = module.kms_alert_forwarding.key_arn
+  kms_key_arn           = module.kms_logs.key_arn
 
   iam_policy_document = {
     body = data.aws_iam_policy_document.lambda_alert_forwarding.json
@@ -20,11 +20,11 @@ module "lambda_alert_forwarding" {
 
   function_s3_bucket      = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
   function_code_base_path = local.aws_lambda_functions_dir_path
-  function_code_dir       = "alert-forwarding/src"
+  function_code_dir       = "alert-forwarding/dist"
   function_include_common = true
   function_module_name    = "index"
   handler_function_name   = "handler"
-  runtime                 = "nodejs20.x"
+  runtime                 = "nodejs22.x"
   memory                  = 128
   timeout                 = 5
   log_level               = var.log_level
@@ -34,8 +34,11 @@ module "lambda_alert_forwarding" {
   enable_lambda_insights   = false
 
   lambda_env_vars = {
-    "TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.name,
+    "TEAMS_WEBHOOK_CLOUDWATCH_SSM_PARAM"           = aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.name,
     "TEAMS_WEBHOOK_ALERTS_BACKUP_ERRORS_SSM_PARAM" = aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.name
+    "TEAMS_WEBHOOK_ALERTS_SECURITY_SSM_PARAM"      = aws_ssm_parameter.teams_webhook_url_alerts_security.name
+    "JIRA_URL_PARAM_NAME"                          = local.jira_url_path
+    "JIRA_PAT_PARAM_NAME"                          = local.jira_pat_token_path
   }
 }
 
@@ -50,7 +53,7 @@ data "aws_iam_policy_document" "lambda_alert_forwarding" {
     ]
 
     resources = [
-      module.kms_alert_forwarding.key_arn,
+      module.kms_logs.key_arn,
     ]
   }
 
@@ -64,7 +67,12 @@ data "aws_iam_policy_document" "lambda_alert_forwarding" {
 
     resources = [
       aws_ssm_parameter.teams_webhook_url_cloudwatch_alarms.arn,
-      aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.arn
+      aws_ssm_parameter.teams_webhook_url_alerts_backup_errors.arn,
+      aws_ssm_parameter.teams_webhook_url_alerts_security.arn,
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.jira_url_path}",
+      "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter${local.jira_pat_token_path}",
+      # aws_ssm_parameter.jira_pat_token.arn,
+      # aws_ssm_parameter.jira_url.arn
     ]
   }
 }

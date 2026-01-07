@@ -66,14 +66,15 @@ variable "log_retention_in_days" {
 variable "service_account_token" {
   type        = string
   description = "Service Account Token for Grafana"
-  ephemeral = true
+  ephemeral   = true
 }
 
-variable "delegated_grafana_account_ids" {
+variable "bounded_context_account_ids" {
   type = list(object({
-    domain            = string
-    account_id        = string
-    custom_namespaces = optional(list(string),[])
+    domain                = string
+    account_id            = string
+    custom_namespaces     = optional(list(string), [])
+    override_project_name = optional(string, "")
   }))
   description = "A list of accounts Observability can assume role into"
   default     = []

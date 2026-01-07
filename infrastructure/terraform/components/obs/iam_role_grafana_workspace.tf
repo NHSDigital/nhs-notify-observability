@@ -19,6 +19,11 @@ resource "aws_iam_role_policy_attachment" "grafana_workspace_cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonGrafanaCloudWatchAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "grafana_workspace_athena" {
+  role       = aws_iam_role.grafana_workspace.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonGrafanaAthenaAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "grafana_workspace_xray" {
   role       = aws_iam_role.grafana_workspace.name
   policy_arn = "arn:aws:iam::aws:policy/AWSXrayReadOnlyAccess"
@@ -26,7 +31,7 @@ resource "aws_iam_role_policy_attachment" "grafana_workspace_xray" {
 
 data "aws_iam_policy_document" "grafana_cross_account_access" {
   dynamic "statement" {
-    for_each = var.delegated_grafana_account_ids
+    for_each = { for bc in var.bounded_context_account_ids : bc.domain => bc if bc.override_project_name == "" }
     content {
       sid = replace("AssumeRoleCrossAccountfor${statement.value.domain}", "-", "")
 
@@ -41,6 +46,39 @@ data "aws_iam_policy_document" "grafana_cross_account_access" {
 
   }
 
+  dynamic "statement" {
+    for_each = { for bc in var.bounded_context_account_ids : bc.domain => bc if bc.override_project_name != "" }
+    content {
+      sid = replace("AssumeRoleCrossAccountfor${statement.value.domain}", "-", "")
+
+      actions = [
+        "sts:AssumeRole"
+      ]
+
+      resources = [
+        "arn:aws:iam::${statement.value.account_id}:role/${replace(local.csi, "nhs", "nhs-notify")}-cross-access-role",
+      ]
+    }
+  }
+  statement {
+    sid    = "AllowAthenaWorkspaceAccess"
+    effect = "Allow"
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:ListMultipartUploadParts",
+      "s3:PutBucketPublicAccessBlock",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${local.acct.s3_buckets["observability"]["arn"]}/*",
+      local.acct.s3_buckets["observability"]["arn"],
+    ]
+  }
 }
 
 resource "aws_iam_policy" "grafana_cross_account_access" {

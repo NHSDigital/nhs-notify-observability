@@ -31,6 +31,10 @@ on:
         description: "Version of the software, set by the CI/CD pipeline workflow"
         required: true
         type: string
+      pr_number:
+        description: "The pull request number, set by the CI/CD pipeline workflow"
+        required: false
+        type: string
 
 jobs:
   environment-set-up:
