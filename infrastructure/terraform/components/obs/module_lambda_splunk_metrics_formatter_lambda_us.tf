@@ -1,5 +1,5 @@
 module "splunk_metrics_formatter_lambda_us" {
-  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip"
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip"
 
   providers = {
     aws = aws.us-east-1
@@ -30,6 +30,8 @@ module "splunk_metrics_formatter_lambda_us" {
   runtime                 = "nodejs22.x"
   memory                  = 512
   timeout                 = 900
+
+  send_to_firehose = false
 
   lambda_env_vars = {
     ENVIRONMENT                  = var.environment
