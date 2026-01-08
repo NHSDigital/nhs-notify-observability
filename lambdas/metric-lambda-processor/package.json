@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "pino": "^8.6.1"
+    "pino": "^10.1.0"
   },
   "devDependencies": {
     "@nhs-notify-observability/utils-logger": "^0.0.1",
