@@ -38,12 +38,12 @@
 | <a name="module_kinesis_firehose_to_splunk_metrics_us"></a> [kinesis\_firehose\_to\_splunk\_metrics\_us](#module\_kinesis\_firehose\_to\_splunk\_metrics\_us) | ../../modules/kinesis-firehose-to-splunk | n/a |
 | <a name="module_kms_logs"></a> [kms\_logs](#module\_kms\_logs) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-kms.zip | n/a |
 | <a name="module_kms_splunk"></a> [kms\_splunk](#module\_kms\_splunk) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-kms.zip | n/a |
-| <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
+| <a name="module_lambda_alert_forwarding"></a> [lambda\_alert\_forwarding](#module\_lambda\_alert\_forwarding) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
 | <a name="module_s3bucket_splunk_firehose"></a> [s3bucket\_splunk\_firehose](#module\_s3bucket\_splunk\_firehose) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip | n/a |
 | <a name="module_s3bucket_splunk_firehose_us"></a> [s3bucket\_splunk\_firehose\_us](#module\_s3bucket\_splunk\_firehose\_us) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip | n/a |
-| <a name="module_splunk_logs_formatter_lambda"></a> [splunk\_logs\_formatter\_lambda](#module\_splunk\_logs\_formatter\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
-| <a name="module_splunk_metrics_formatter_lambda"></a> [splunk\_metrics\_formatter\_lambda](#module\_splunk\_metrics\_formatter\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
-| <a name="module_splunk_metrics_formatter_lambda_us"></a> [splunk\_metrics\_formatter\_lambda\_us](#module\_splunk\_metrics\_formatter\_lambda\_us) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-lambda.zip | n/a |
+| <a name="module_splunk_logs_formatter_lambda"></a> [splunk\_logs\_formatter\_lambda](#module\_splunk\_logs\_formatter\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
+| <a name="module_splunk_metrics_formatter_lambda"></a> [splunk\_metrics\_formatter\_lambda](#module\_splunk\_metrics\_formatter\_lambda) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
+| <a name="module_splunk_metrics_formatter_lambda_us"></a> [splunk\_metrics\_formatter\_lambda\_us](#module\_splunk\_metrics\_formatter\_lambda\_us) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip | n/a |
 ## Outputs
 
 No outputs.
