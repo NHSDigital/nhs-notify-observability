@@ -1978,7 +1978,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-nhsapp-callback-queue"
+            "QueueName": "comms-$env-api-stl-nhsapp-cb-queue"
           },
           "expression": "",
           "id": "",
@@ -3095,7 +3095,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-nhsapp-callback-queue"
+            "QueueName": "comms-$env-api-stl-nhsapp-cb-queue"
           },
           "expression": "",
           "id": "",
@@ -3154,7 +3154,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-nhsapp-callback-queue"
+            "QueueName": "comms-$env-api-stl-nhsapp-cb-queue"
           },
           "expression": "",
           "hide": false,
@@ -3179,7 +3179,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-nhsapp-callback-dlq"
+            "QueueName": "comms-$env-api-stl-nhsapp-cb-dlq"
           },
           "expression": "",
           "hide": false,
@@ -3204,7 +3204,7 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-stl-nhsapp-callback-queue"
+            "QueueName": "comms-$env-api-stl-nhsapp-cb-queue"
           },
           "expression": "",
           "hide": false,
