@@ -97,20 +97,19 @@
       },
       "id": 26,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "sum"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "10.4.1",
       "targets": [
@@ -124,7 +123,7 @@
             "QueueName": "${envCsi}-inbound-event-queue"
           },
           "expression": "",
-          "hide": false,
+          "hide": true,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -158,10 +157,21 @@
           },
           "sqlExpression": "SELECT SUM(\"4xxErrorRate\") FROM \"AWS/CloudFront\"",
           "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$A/60",
+          "hide": false,
+          "refId": "B",
+          "type": "math"
         }
       ],
-      "title": "Ingress Events",
-      "type": "stat"
+      "title": "Ingress Events/Min",
+      "type": "gauge"
     },
     {
       "datasource": {
@@ -275,7 +285,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*nhs-.*-nudge-(.*)",
+            "regex": ".*nhs-.*-callbacks-(.*)",
             "renamePattern": "$1"
           }
         }
@@ -605,8 +615,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -743,8 +752,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -881,8 +889,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "#EAB839",
@@ -1005,8 +1012,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1108,8 +1114,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1211,8 +1216,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1314,8 +1318,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1416,8 +1419,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "yellow",
@@ -1506,8 +1508,8 @@
       {
         "current": {
           "selected": false,
-          "text": "nhs-pr16-callbacks",
-          "value": "nhs-pr16-callbacks"
+          "text": "nhs-main-callbacks",
+          "value": "nhs-main-callbacks"
         },
         "description": "nhs-main-callbacks",
         "hide": 2,
@@ -1518,8 +1520,8 @@
         "options": [
           {
             "selected": true,
-            "text": "nhs-pr16-callbacks",
-            "value": "nhs-pr16-callbacks"
+            "text": "nhs-main-callbacks",
+            "value": "nhs-main-callbacks"
           }
         ],
         "query": "nhs-${env}-callbacks",
@@ -1548,8 +1550,8 @@
       {
         "current": {
           "selected": false,
-          "text": "pr16",
-          "value": "pr16"
+          "text": "main",
+          "value": "main"
         },
         "hide": 0,
         "label": "Environment",
@@ -1557,24 +1559,24 @@
         "options": [
           {
             "selected": true,
-            "text": "pr16",
-            "value": "pr16"
+            "text": "main",
+            "value": "main"
           }
         ],
-        "query": "pr16",
+        "query": "main",
         "skipUrlSync": false,
         "type": "textbox"
       }
     ]
   },
   "time": {
-    "from": "2026-01-09T00:00:00.000Z",
-    "to": "2026-01-09T23:59:59.000Z"
+    "from": "now-3h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Client Callbacks Overview",
   "uid": "ff9xrhncwiiv4c",
-  "version": 58,
+  "version": 62,
   "weekStart": ""
 }
