@@ -302,7 +302,7 @@ describe('buildJiraIssueData', () => {
             },
         });
 
-        expect(data.fields.summary).toBe('Security Hub HIGH finding on AwsS3Bucket: my-bucket');
+        expect(data.fields.summary).toBe('Security Hub HIGH finding on AwsS3Bucket in notify-prod');
         expect(data.fields.priority.name).toBe('High');
         expect(data.fields.description).toContain('Finding description');
         expect(data.fields.description).toContain('The bucket policy allows public access.');
