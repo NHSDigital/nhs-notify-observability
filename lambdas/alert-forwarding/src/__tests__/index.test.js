@@ -265,6 +265,7 @@ describe('buildJiraIssueData', () => {
         expect(data.fields.description).toContain('payments');
         expect(data.fields.description).toContain('worker');
         expect(data.fields.issuetype.name).toBe('Task');
+        expect(data.fields.priority.name).toBe('Low');
     });
 
     it('throws error when required fields are missing for env destroy failed', () => {
@@ -284,6 +285,27 @@ describe('buildJiraIssueData', () => {
         expect(data.fields.description).toContain('notify-prod');
         expect(data.fields.description).toContain('Error rate exceeded');
         expect(data.fields.description).toContain('cloudwatch');
+    });
+
+    it('builds Security Hub per-finding issue data with high priority', () => {
+        const data = buildJiraIssueData({
+            source: 'notify.sechub',
+            accountName: 'notify-prod',
+            time: baseEventData.time,
+            finding: {
+                severity: 'HIGH',
+                resourceType: 'AwsS3Bucket',
+                resourceId: 'my-bucket',
+                title: 'S3 bucket is public',
+                description: 'The bucket policy allows public access.',
+                id: 'finding-123',
+            },
+        });
+
+        expect(data.fields.summary).toBe('Security Hub HIGH finding on AwsS3Bucket: my-bucket');
+        expect(data.fields.priority.name).toBe('High');
+        expect(data.fields.description).toContain('Finding description');
+        expect(data.fields.description).toContain('The bucket policy allows public access.');
     });
 
     it('throws error when required fields are missing for alarm', () => {
