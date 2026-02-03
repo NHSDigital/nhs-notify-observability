@@ -140,8 +140,178 @@ function buildJiraIssueEndpoint(rawUrl) {
   return `${withScheme}/rest/api/2/issue`;
 }
 
+function buildJiraSearchEndpoint(rawUrl) {
+    const trimmed = rawUrl.trim();
+    const withoutTrailing = trimmed.replace(/\/+$/, '');
+    const withScheme = /^https?:\/\//i.test(withoutTrailing)
+        ? withoutTrailing
+        : `https://${withoutTrailing}`;
+    return `${withScheme}/rest/api/2/search`;
+}
+
+function escapeForJql(value) {
+    if (!value) return '';
+    return String(value).replace(/["\\]/g, '\\$&');
+}
+
+async function hasExistingJira({
+    searchEndpoint,
+    authHeader,
+    source,
+    alarmName,
+    accountName,
+    description,
+    environment,
+    boundedContext,
+    accountId,
+    finding,
+}) {
+    try {
+        const jqlParts = [
+            'project = CCM',
+            'statusCategory != Done',
+        ];
+
+        if (source === 'notify.envDestroyFailed') {
+            jqlParts.push('summary ~ "Env failed to destroy"');
+            if (environment) {
+                jqlParts.push(`description ~ "${escapeForJql(environment)}"`);
+            }
+            if (boundedContext) {
+                jqlParts.push(`description ~ "${escapeForJql(boundedContext)}"`);
+            }
+            if (accountId) {
+                jqlParts.push(`description ~ "${escapeForJql(accountId)}"`);
+            }
+        } else if (source === 'notify.sechub' && finding) {
+            const { severity, resourceType, resourceId, title, id } = finding || {};
+
+            if (accountName) {
+                jqlParts.push(`summary ~ "${escapeForJql(accountName)}"`);
+            }
+            if (severity) {
+                jqlParts.push(`summary ~ "${escapeForJql(severity)}"`);
+            }
+            if (resourceType) {
+                jqlParts.push(`summary ~ "${escapeForJql(resourceType)}"`);
+            }
+            const identity = resourceId || title || id;
+            if (identity) {
+                jqlParts.push(`description ~ "${escapeForJql(identity)}"`);
+            }
+        } else {
+            const descriptionSnippet = (description || '').slice(0, 200);
+
+            if (alarmName) {
+                jqlParts.push(`summary ~ "${escapeForJql(alarmName)}"`);
+            }
+            if (accountName) {
+                jqlParts.push(`description ~ "${escapeForJql(accountName)}"`);
+            }
+            if (descriptionSnippet) {
+                jqlParts.push(`description ~ "${escapeForJql(descriptionSnippet)}"`);
+            }
+        }
+
+        const jql = jqlParts.join(' AND ');
+        const label = source || 'unknown';
+
+        console.log(`[Jira:search:${label}] endpoint="${searchEndpoint}" jql="${jql}"`);
+
+        const response = await axios.get(searchEndpoint, {
+            params: {
+                jql,
+                maxResults: 1,
+                fields: 'key',
+            },
+            headers: {
+                Authorization: authHeader,
+                'Content-Type': 'application/json',
+            },
+            timeout: 10000,
+        });
+
+        const total = response?.data?.total ?? 0;
+        console.log(`[Jira:search:${label}:result] total=${total}`);
+        return total > 0;
+    } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        const label = source || 'unknown';
+        console.error(`[Jira:search:${label}:error] message="${msg}"`);
+        return false;
+    }
+}
+
+async function createOrSkipJira({
+    issueEndpoint,
+    searchEndpoint,
+    authHeader,
+    source,
+    buildInput,
+}) {
+    const {
+        alarmName,
+        accountName,
+        description,
+        environment,
+        boundedContext,
+        accountId,
+        finding,
+    } = buildInput;
+
+    const alreadyExists = await hasExistingJira({
+        searchEndpoint,
+        authHeader,
+        source,
+        alarmName,
+        accountName,
+        description,
+        environment,
+        boundedContext,
+        accountId,
+        finding,
+    });
+
+    if (alreadyExists) {
+        const scope = finding ? 'Security Hub finding' : 'event';
+        console.log(`[Jira:create:skip] Existing Jira found for this ${scope} (source=${source})`);
+        return;
+    }
+
+    const issueData = buildJiraIssueData(buildInput);
+
+    const payloadStr = JSON.stringify(issueData);
+    console.log(payloadStr);
+    console.log(
+        `[Jira:issue:payload] project=${issueData.fields.project.key} summary="${issueData.fields.summary}" size=${payloadStr.length}`,
+    );
+
+    try {
+        const response = await axios.post(issueEndpoint, issueData, {
+            headers: {
+                Authorization: authHeader,
+                'Content-Type': 'application/json',
+            },
+            timeout: 10000,
+        });
+
+        if (response.status < 200 || response.status > 299) {
+            const bodyPreview = JSON.stringify(response.data).slice(0, 200);
+            console.error(
+                `[Jira:issue:non_success] status=${response.status} statusText="${response.statusText}" bodyPreview="${bodyPreview}"`,
+            );
+            return;
+        }
+
+        console.log(`[Jira:issue:created] status=${response.status} key=${response.data?.key}`);
+    } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        console.error(`[Jira:issue:error] message="${msg}"`);
+    }
+}
+
 function buildJiraIssueData(input) {
-  const { alarmName, environment, accountName, accountId, boundedContext, component, description, detail, region, time, source } = input;
+    const { alarmName, environment, accountName, accountId, boundedContext, component, description, region, time, source, finding } = input;
   if (source === "notify.envDestroyFailed") {
     if (!environment || !accountId || !boundedContext || !component) {
         console.warn('environment, accountId, boundedContext or component is missing or undefined');
@@ -159,9 +329,53 @@ function buildJiraIssueData(input) {
           ` * *Component:* _${component || 'unknown'}_`,
         ].join('\n'),
         issuetype: { name: 'Task' },
-        components: [{ name: 'Support' }, { name: 'Platform' }],
+                priority: { name: 'Low' },
+        components: [{ name: 'Platform' }],
       },
     };
+    } else if (source === "notify.sechub") {
+        if (!accountName || !finding) {
+            console.warn('accountName or finding is missing or undefined for notify.sechub');
+            throw new Error('Necessary fields missing to raise JIRA issue for Security Hub finding');
+        }
+
+        const severity = finding.severity || 'UNKNOWN';
+        const resourceType = finding.resourceType || 'Unknown resource type';
+
+        // Map Security Hub severity to a valid Jira priority name.
+        // Jira project CCM uses standard names like "High" rather than "HIGH"/"CRITICAL".
+        const severityMap = {
+            LOW: 'Low',
+            MEDIUM: 'Medium',
+            CRITICAL: 'High',
+            HIGH: 'High'
+        };
+
+        const normalisedSeverity = String(severity).toUpperCase();
+        const jiraPriorityName = severityMap[normalisedSeverity] ?? 'High';
+
+        return {
+            fields: {
+                project: { key: 'CCM' },
+                summary: `Security Hub ${severity} finding on ${resourceType} in ${accountName}`,
+                description: [
+                    'This ticket has been raised for an individual Security Hub finding reported in the *Notify Security* Teams channel.',
+                    'h2. Details',
+                    ` * *Time of the alarm:* _${formatAlarmTime(time)}_`,
+                    ` * *Account Name:* _${accountName || 'unknown'}_`,
+                    ` * *Severity:* _${severity}_`,
+                    ` * *Resource type:* _${resourceType}_`,
+                    ` * *Resource ID:* _${finding.resourceId || 'n/a'}_`,
+                    ` * *Finding title:* _${finding.title || 'n/a'}_`,
+                    finding.description ? '' : null,
+                    finding.description ? 'h3. Finding description' : null,
+                    finding.description || null,
+                ].filter(Boolean).join('\n'),
+                issuetype: { name: 'Task' },
+                priority: { name: jiraPriorityName },
+                components: [{ name: 'Platform' }],
+            },
+        };
   } else {
   // Default for other sources
   if (!alarmName || !accountName) {
@@ -212,50 +426,56 @@ async function createJiraTicket(event) {
   }
 
   const issueEndpoint = buildJiraIssueEndpoint(url);
+  const searchEndpoint = buildJiraSearchEndpoint(url);
   console.log(`[Jira:issue:endpoint] url="${issueEndpoint}"`);
 
-  const issueData = buildJiraIssueData({
-    alarmName,
-    environment,
-    accountName,
-    accountId: event.detail?.accountId,
-    boundedContext: event.detail?.boundedContext,
-    component: event.detail?.component,
-    description: event.detail?.configuration?.description,
-    detail: event.detailType || null,
-    region: event.region,
-    time: event.time,
-    source,
-  });
+    const authHeader = `Bearer ${patToken}`;
 
-  const payloadStr = JSON.stringify(issueData);
-  console.log(payloadStr)
-  console.log(`[Jira:issue:payload] project=${issueData.fields.project.key} summary="${issueData.fields.summary}" size=${payloadStr.length}`);
+    if (source === "notify.sechub" && Array.isArray(event.detail?.highCriticalFindings) && event.detail.highCriticalFindings.length > 0) {
+        const findings = event.detail.highCriticalFindings;
 
-  const authHeader = `Bearer ${patToken}`;
+        for (const finding of findings) {
+            await createOrSkipJira({
+                issueEndpoint,
+                searchEndpoint,
+                authHeader,
+                source,
+                buildInput: {
+                    source,
+                    accountName,
+                    time: event.time,
+                    finding,
+                },
+            });
+        }
 
-  try {
-    const response = await axios.post(issueEndpoint, issueData, {
-      headers: {
-        Authorization: authHeader,
-        'Content-Type': 'application/json',
-      },
-      timeout: 10000,
-    });
-
-    if (response.status < 200 || response.status > 299) {
-      const bodyPreview = JSON.stringify(response.data).slice(0, 200);
-      console.error(`[Jira:issue:non_success] status=${response.status} statusText="${response.statusText}" bodyPreview="${bodyPreview}"`);
-      return;
+        return;
     }
 
-    console.log(`[Jira:issue:created] status=${response.status} key=${response.data?.key}`);
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    console.error(`[Jira:issue:error] message="${msg}"`);
-  }
+    const rawDescription = event.detail?.configuration?.description;
+    const description = rawDescription;
 
-  return;
+    await createOrSkipJira({
+        issueEndpoint,
+        searchEndpoint,
+        authHeader,
+        source,
+        buildInput: {
+            alarmName,
+            environment,
+            accountName,
+            accountId: event.detail?.accountId,
+            boundedContext: event.detail?.boundedContext,
+            component: event.detail?.component,
+            description,
+            detail: event.detailType || null,
+            region: event.region,
+            time: event.time,
+            source,
+        },
+    });
+
+    return;
 }
 
 async function getJiraParam(paramName) {
@@ -342,6 +562,7 @@ module.exports = {
             } else if (event.source === "notify.sechub") {
                 title = `🛡️ Security Hub Notification: ${event.account} (${detail.accountName})`;
                 formattedMessage = extractSecurityHubSections(detail.message);
+                await createJiraTicket(event);
             }
 
             const teamsPayload = JSON.stringify({
