@@ -149,51 +149,37 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 70,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
-            "lineInterpolation": "stepAfter",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "lineWidth": 1
           },
+          "fieldMinMax": true,
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
                 "color": "green",
                 "value": null
               },
               {
+                "color": "#EAB839",
+                "value": 10
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 20
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 30
               }
             ]
           }
@@ -201,22 +187,24 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 6,
+        "h": 10,
+        "w": 12,
         "x": 0,
         "y": 4
       },
       "id": 3,
-      "maxDataPoints": 500,
+      "maxDataPoints": 100,
       "options": {
+        "colWidth": 0.9,
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
+        "rowHeight": 0.9,
+        "showValue": "auto",
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "none"
         }
       },
@@ -263,12 +251,12 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "ENRICHMENT_(.*)",
+            "regex": "ENRICHMENT_(\\w*).*",
             "renamePattern": "$1"
           }
         }
       ],
-      "type": "timeseries"
+      "type": "status-history"
     },
     {
       "datasource": {
@@ -332,7 +320,7 @@
       "gridPos": {
         "h": 7,
         "w": 6,
-        "x": 6,
+        "x": 12,
         "y": 4
       },
       "id": 4,
@@ -452,8 +440,8 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 5,
-        "x": 12,
+        "w": 6,
+        "x": 18,
         "y": 4
       },
       "id": 41,
@@ -567,10 +555,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 7,
-        "x": 17,
-        "y": 4
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 11
       },
       "id": 43,
       "options": {
@@ -629,11 +617,114 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "${datasrc}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 47,
+      "maxDataPoints": 500,
+      "options": {
+        "displayMode": "basic",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "text"
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "${datasrc}"
+          },
+          "dimensions": {
+            "Environment": "$env",
+            "status": "PENDING"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "virtual_queue_insertion",
+          "metricQueryType": 0,
+          "namespace": "comms-process-queue-updates-lambda-metrics",
+          "period": "$__interval",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Total Client Requests Queued",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "byVariable": false,
+            "include": {
+              "pattern": "Time|ENRICHMENT_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "ENRICHMENT_(\\w*).*",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
       "gridPos": {
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 25
       },
       "id": 11,
       "options": {
@@ -749,7 +840,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 13
+        "y": 27
       },
       "id": 45,
       "maxDataPoints": 500,
@@ -896,7 +987,7 @@
         "h": 7,
         "w": 4,
         "x": 12,
-        "y": 13
+        "y": 27
       },
       "id": 8,
       "options": {
@@ -1069,7 +1160,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 13
+        "y": 27
       },
       "id": 10,
       "options": {
@@ -1261,7 +1352,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 20
+        "y": 34
       },
       "id": 2,
       "options": {
@@ -1407,7 +1498,7 @@
         "h": 7,
         "w": 4,
         "x": 12,
-        "y": 20
+        "y": 34
       },
       "id": 9,
       "options": {
@@ -1516,7 +1607,7 @@
         "h": 7,
         "w": 4,
         "x": 16,
-        "y": 20
+        "y": 34
       },
       "hideTimeOverride": false,
       "id": 5,
@@ -1664,7 +1755,7 @@
         "h": 7,
         "w": 4,
         "x": 20,
-        "y": 20
+        "y": 34
       },
       "id": 7,
       "interval": "1m",
@@ -1792,7 +1883,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 41
       },
       "id": 12,
       "options": {
@@ -1837,7 +1928,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 29
+        "y": 43
       },
       "id": 19,
       "options": {
@@ -1951,7 +2042,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 29
+        "y": 43
       },
       "id": 23,
       "options": {
@@ -2137,7 +2228,7 @@
         "h": 11,
         "w": 12,
         "x": 12,
-        "y": 29
+        "y": 43
       },
       "id": 18,
       "maxDataPoints": 500,
@@ -2326,87 +2417,63 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 70,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
-            "lineInterpolation": "stepAfter",
-            "lineWidth": 1,
-            "pointSize": 9,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "lineWidth": 1
           },
+          "fieldMinMax": true,
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 10
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 20
+              },
+              {
+                "color": "red",
+                "value": 30
               }
             ]
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 46
       },
       "id": 17,
-      "maxDataPoints": 500,
+      "maxDataPoints": 100,
       "options": {
+        "colWidth": 0.9,
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
+        "rowHeight": 0.9,
+        "showValue": "never",
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "none"
         }
       },
@@ -2487,7 +2554,14 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--.*",
+            "regex": ".*-request-([0-9a-f]{8})-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}--.*",
+            "renamePattern": "$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request.*-(.+)--.*",
             "renamePattern": "$1"
           }
         },
@@ -2499,7 +2573,7 @@
           }
         }
       ],
-      "type": "timeseries"
+      "type": "status-history"
     },
     {
       "datasource": {
@@ -2544,6 +2618,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -2593,14 +2668,17 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 54
       },
       "id": 20,
+      "interval": "60s",
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "max"
+          ],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -2698,7 +2776,14 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--.*",
+            "regex": ".*-request-([0-9a-f]{8})-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}--.*",
+            "renamePattern": "$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request.*-(.+)--.*",
             "renamePattern": "$1"
           }
         },
@@ -2799,20 +2884,22 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 44
+        "y": 58
       },
       "id": 21,
       "maxDataPoints": 500,
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "max"
+          ],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "pluginVersion": "10.4.1",
@@ -2892,7 +2979,14 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--.*",
+            "regex": ".*-request-([0-9a-f]{8})-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}--.*",
+            "renamePattern": "$1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request.*-(.+)--.*",
             "renamePattern": "$1"
           }
         },
@@ -3071,7 +3165,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 52
+        "y": 66
       },
       "id": 22,
       "maxDataPoints": 500,
@@ -3367,7 +3461,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 56
+        "y": 70
       },
       "id": 24,
       "maxDataPoints": 500,
@@ -3476,7 +3570,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 64
+        "y": 78
       },
       "id": 15,
       "options": {
@@ -3521,7 +3615,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 66
+        "y": 80
       },
       "id": 27,
       "options": {
@@ -3635,7 +3729,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 66
+        "y": 80
       },
       "id": 31,
       "options": {
@@ -3877,7 +3971,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 66
+        "y": 80
       },
       "id": 26,
       "maxDataPoints": 500,
@@ -4041,120 +4135,63 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Count",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 70,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
-            "lineInterpolation": "stepAfter",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "lineWidth": 1
           },
+          "fieldMinMax": true,
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 10
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 20
+              },
+              {
+                "color": "red",
+                "value": 30
               }
             ]
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "email-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "sms-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 69
+        "y": 83
       },
       "id": 25,
       "maxDataPoints": 500,
       "options": {
+        "colWidth": 0.9,
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
+        "rowHeight": 0.9,
+        "showValue": "auto",
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "none"
         }
       },
@@ -4228,6 +4265,9 @@
           "options": {
             "byVariable": false,
             "include": {
+              "names": [
+                "Time"
+              ],
               "pattern": "Time|comms-$env-api-rol-router-request.*-((email|sms)(?:-notify)?\\.fifo)"
             }
           }
@@ -4235,7 +4275,14 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--(.*)-notify.*",
+            "regex": ".*-request-([0-9a-f]{8})-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}--(.*)-notify.*",
+            "renamePattern": "[$2] $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request.*-(.+)--(.*)-notify.*",
             "renamePattern": "[$2] $1"
           }
         },
@@ -4247,7 +4294,7 @@
           }
         }
       ],
-      "type": "timeseries"
+      "type": "status-history"
     },
     {
       "datasource": {
@@ -4291,6 +4338,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -4309,14 +4357,16 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 75
+        "y": 89
       },
       "id": 28,
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "max"
+          ],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -4414,7 +4464,14 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--(.*)-notify.*",
+            "regex": ".*-request-([0-9a-f]{8})-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}--(.*)-notify.*",
+            "renamePattern": "[$2] $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request.*-(.+)--(.*)-notify.*",
             "renamePattern": "[$2] $1"
           }
         },
@@ -4515,15 +4572,17 @@
         "h": 13,
         "w": 12,
         "x": 0,
-        "y": 81
+        "y": 95
       },
       "id": 29,
       "maxDataPoints": 500,
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "max"
+          ],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -4608,7 +4667,14 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--(.*)-notify.*",
+            "regex": ".*-request-([0-9a-f]{8})-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}--(.*)-notify.*",
+            "renamePattern": "[$2] $1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".*-request.*-(.+)--(.*)-notify.*",
             "renamePattern": "[$2] $1"
           }
         },
@@ -4787,7 +4853,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 85
+        "y": 99
       },
       "id": 30,
       "maxDataPoints": 500,
@@ -4948,7 +5014,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 94
+        "y": 108
       },
       "id": 14,
       "options": {
@@ -4972,121 +5038,63 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisGridShow": false,
-            "axisLabel": "Count",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 70,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
-            "lineInterpolation": "stepAfter",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "lineWidth": 1
           },
+          "fieldMinMax": true,
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 10
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 20
+              },
+              {
+                "color": "red",
+                "value": 30
               }
             ]
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "comms-$env-api-rol-router-request-covid--letter-mba.fifo"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "email-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "sms-shared"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 96
+        "y": 110
       },
       "id": 32,
-      "maxDataPoints": 500,
+      "maxDataPoints": 100,
       "options": {
+        "colWidth": 0.9,
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
+        "rowHeight": 0.9,
+        "showValue": "never",
         "tooltip": {
-          "mode": "multi",
+          "mode": "single",
           "sort": "none"
         }
       },
@@ -5160,14 +5168,14 @@
           "options": {
             "byVariable": false,
             "include": {
-              "pattern": "Time|comms-$env-api-rol-router-request.*letter-((mba|synertec)\\.fifo)"
+              "pattern": "Time|comms-$env-api-rol-router-request.*letter-((.*)\\.fifo)"
             }
           }
         },
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--letter-(.*).fifo",
+            "regex": ".*-request.*-(.+)--letter-(.*).fifo",
             "renamePattern": "[$2] $1"
           }
         },
@@ -5179,7 +5187,7 @@
           }
         }
       ],
-      "type": "timeseries"
+      "type": "status-history"
     },
     {
       "datasource": {
@@ -5246,7 +5254,7 @@
         "h": 10,
         "w": 6,
         "x": 12,
-        "y": 96
+        "y": 110
       },
       "id": 33,
       "options": {
@@ -5394,12 +5402,12 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-rol-router-request-letter.fifo"
+            "QueueName": "comms-$env-api-ecl-letterrenderer-queue"
           },
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "Notify Legacy",
+          "label": "Prerender",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -5507,7 +5515,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 96
+        "y": 110
       },
       "id": 44,
       "options": {
@@ -5713,20 +5721,22 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 106
+        "y": 120
       },
       "id": 36,
       "maxDataPoints": 500,
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "max"
+          ],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "pluginVersion": "10.4.1",
@@ -5807,7 +5817,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": ".*-request-(.+)--letter-(.*).fifo",
+            "regex": ".*-request.*-(.+)--letter-(.*).fifo",
             "renamePattern": "[$2] $1"
           }
         },
@@ -5849,7 +5859,7 @@
         "h": 3,
         "w": 12,
         "x": 12,
-        "y": 106
+        "y": 120
       },
       "id": 37,
       "options": {
@@ -5951,12 +5961,12 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-rol-router-request-letter.fifo"
+            "QueueName": "comms-$env-api-ecl-letterrenderer-queue"
           },
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "Notify Legacy",
+          "label": "Prerender",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -5965,7 +5975,7 @@
           "namespace": "AWS/SQS",
           "period": "",
           "queryMode": "Metrics",
-          "refId": "D",
+          "refId": "A",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
@@ -6022,7 +6032,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 109
+        "y": 123
       },
       "id": 46,
       "options": {
@@ -6124,12 +6134,12 @@
             "uid": "${datasrc}"
           },
           "dimensions": {
-            "QueueName": "comms-$env-api-rol-router-request-letter.fifo"
+            "QueueName": "comms-$env-api-ecl-letterrenderer-queue"
           },
           "expression": "",
           "hide": false,
           "id": "",
-          "label": "Notify Legacy",
+          "label": "Prerender",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -6171,7 +6181,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 116
+        "y": 130
       },
       "id": 13,
       "options": {
@@ -6321,7 +6331,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 118
+        "y": 132
       },
       "id": 38,
       "options": {
@@ -6805,7 +6815,7 @@
         "h": 3,
         "w": 12,
         "x": 12,
-        "y": 118
+        "y": 132
       },
       "id": 40,
       "options": {
@@ -7115,7 +7125,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 121
+        "y": 135
       },
       "id": 39,
       "options": {
