@@ -1,4 +1,5 @@
 module "kinesis_firehose_to_splunk_logs" {
+  count  = var.ship_logs_to_splunk ? 1 : 0
   source = "../../modules/kinesis-firehose-to-splunk"
 
   project        = var.project
@@ -12,6 +13,6 @@ module "kinesis_firehose_to_splunk_logs" {
   log_retention_in_days         = var.log_retention_in_days
   type                          = "logs"
   kms_splunk_key_arn            = module.kms_splunk.key_arn
-  splunk_firehose_bucket_arn    = module.s3bucket_splunk_firehose.arn
-  formatter_lambda_function_arn = module.splunk_logs_formatter_lambda.function_arn
+  splunk_firehose_bucket_arn    = module.s3bucket_splunk_firehose[0].arn
+  formatter_lambda_function_arn = module.splunk_logs_formatter_lambda[0].function_arn
 }

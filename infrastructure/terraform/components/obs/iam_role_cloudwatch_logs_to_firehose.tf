@@ -1,9 +1,11 @@
 resource "aws_iam_role" "cloudwatch_logs_to_firehose" {
+  count              = var.ship_logs_to_splunk ? 1 : 0
   name               = "${local.csi}-cloudwatch-logs-to-firehose-role"
-  assume_role_policy = data.aws_iam_policy_document.cloudwatch_logs_to_firehose_assume_role_policy.json
+  assume_role_policy = data.aws_iam_policy_document.cloudwatch_logs_to_firehose_assume_role_policy[0].json
 }
 
 data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_assume_role_policy" {
+  count = var.ship_logs_to_splunk ? 1 : 0
   statement {
     effect = "Allow"
     principals {
@@ -25,11 +27,13 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_assume_role_policy" 
 }
 
 resource "aws_iam_policy" "cloudwatch_logs_to_firehose_policy" {
+  count  = var.ship_logs_to_splunk ? 1 : 0
   name   = "${local.csi}-cloudwatch-logs-to-firehose-policy"
-  policy = data.aws_iam_policy_document.cloudwatch_logs_to_firehose_policy.json
+  policy = data.aws_iam_policy_document.cloudwatch_logs_to_firehose_policy[0].json
 }
 
 data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_policy" {
+  count = var.ship_logs_to_splunk ? 1 : 0
   statement {
     effect = "Allow"
     actions = [
@@ -37,12 +41,13 @@ data "aws_iam_policy_document" "cloudwatch_logs_to_firehose_policy" {
       "firehose:PutRecordBatch"
     ]
     resources = [
-      module.kinesis_firehose_to_splunk_logs.kinesis_firehose_arn
+      module.kinesis_firehose_to_splunk_logs[0].kinesis_firehose_arn
     ]
   }
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_logs_to_firehose_attachment" {
-  role       = aws_iam_role.cloudwatch_logs_to_firehose.name
-  policy_arn = aws_iam_policy.cloudwatch_logs_to_firehose_policy.arn
+  count      = var.ship_logs_to_splunk ? 1 : 0
+  role       = aws_iam_role.cloudwatch_logs_to_firehose[0].name
+  policy_arn = aws_iam_policy.cloudwatch_logs_to_firehose_policy[0].arn
 }

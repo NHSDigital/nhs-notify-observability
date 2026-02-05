@@ -1,4 +1,5 @@
 module "splunk_logs_formatter_lambda" {
+  count  = var.ship_logs_to_splunk ? 1 : 0
   source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-lambda.zip"
 
   function_name = "splunk-logs-formatter"

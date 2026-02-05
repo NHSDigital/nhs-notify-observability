@@ -1,4 +1,5 @@
 module "s3bucket_splunk_firehose_us" {
+  count  = var.ship_metrics_to_splunk ? 1 : 0
   source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.20/terraform-s3bucket.zip"
   providers = {
     aws = aws.us-east-1
@@ -41,7 +42,7 @@ module "s3bucket_splunk_firehose_us" {
   ]
 
   policy_documents = [
-    data.aws_iam_policy_document.s3bucket_splunk_firehose_us.json
+    data.aws_iam_policy_document.s3bucket_splunk_firehose_us[0].json
   ]
 
   bucket_logging_target = {
@@ -61,6 +62,7 @@ module "s3bucket_splunk_firehose_us" {
 }
 
 data "aws_iam_policy_document" "s3bucket_splunk_firehose_us" {
+  count = var.ship_metrics_to_splunk ? 1 : 0
   statement {
     sid    = "DontAllowNonSecureConnection"
     effect = "Deny"
@@ -70,8 +72,8 @@ data "aws_iam_policy_document" "s3bucket_splunk_firehose_us" {
     ]
 
     resources = [
-      module.s3bucket_splunk_firehose_us.arn,
-      "${module.s3bucket_splunk_firehose_us.arn}/*",
+      module.s3bucket_splunk_firehose_us[0].arn,
+      "${module.s3bucket_splunk_firehose_us[0].arn}/*",
     ]
 
     principals {
@@ -101,7 +103,7 @@ data "aws_iam_policy_document" "s3bucket_splunk_firehose_us" {
     ]
 
     resources = [
-      module.s3bucket_splunk_firehose_us.arn,
+      module.s3bucket_splunk_firehose_us[0].arn,
     ]
 
     principals {
@@ -121,7 +123,7 @@ data "aws_iam_policy_document" "s3bucket_splunk_firehose_us" {
     ]
 
     resources = [
-      "${module.s3bucket_splunk_firehose_us.arn}/*",
+      "${module.s3bucket_splunk_firehose_us[0].arn}/*",
     ]
 
     principals {

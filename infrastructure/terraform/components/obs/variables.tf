@@ -100,6 +100,18 @@ variable "kms_deletion_window" {
   default     = "30"
 }
 
+variable "ship_metrics_to_splunk" {
+  type        = bool
+  description = "Whether to ship metrics to Splunk via Kinesis Firehose. Set to false for dev environments to save costs."
+  default     = true
+}
+
+variable "ship_logs_to_splunk" {
+  type        = bool
+  description = "Whether to ship logs to Splunk via Kinesis Firehose. Set to false for dev environments to save costs."
+  default     = true
+}
+
 variable "force_lambda_code_deploy" {
   type        = bool
   description = "If the lambda package in s3 has the same commit id tag as the terraform build branch, the lambda will not update automatically. Set to True if making changes to Lambda code from on the same commit for example during development"

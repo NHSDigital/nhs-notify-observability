@@ -29,6 +29,8 @@
 | <a name="input_project"></a> [project](#input\_project) | The name of the tfscaffold project | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The AWS Region | `string` | n/a | yes |
 | <a name="input_root_domain_name"></a> [root\_domain\_name](#input\_root\_domain\_name) | The service's root DNS root nameespace, like nonprod.nhsnotify.national.nhs.uk | `string` | `"nonprod.nhsnotify.national.nhs.uk"` | no |
+| <a name="input_ship_logs_to_splunk"></a> [ship\_logs\_to\_splunk](#input\_ship\_logs\_to\_splunk) | Whether to ship logs to Splunk via Kinesis Firehose. Set to false for dev environments to save costs. | `bool` | `true` | no |
+| <a name="input_ship_metrics_to_splunk"></a> [ship\_metrics\_to\_splunk](#input\_ship\_metrics\_to\_splunk) | Whether to ship metrics to Splunk via Kinesis Firehose. Set to false for dev environments to save costs. | `bool` | `true` | no |
 ## Modules
 
 | Name | Source | Version |

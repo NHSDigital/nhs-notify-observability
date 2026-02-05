@@ -1,4 +1,5 @@
 module "kinesis_firehose_to_splunk_metrics_us" {
+  count  = var.ship_metrics_to_splunk ? 1 : 0
   source = "../../modules/kinesis-firehose-to-splunk"
 
   providers = {
@@ -17,6 +18,6 @@ module "kinesis_firehose_to_splunk_metrics_us" {
   type                          = "metrics"
   region_prefix                 = "us"
   kms_splunk_key_arn            = module.kms_splunk.replica_key_arn
-  splunk_firehose_bucket_arn    = module.s3bucket_splunk_firehose_us.arn
-  formatter_lambda_function_arn = module.splunk_metrics_formatter_lambda_us.function_arn
+  splunk_firehose_bucket_arn    = module.s3bucket_splunk_firehose_us[0].arn
+  formatter_lambda_function_arn = module.splunk_metrics_formatter_lambda_us[0].function_arn
 }

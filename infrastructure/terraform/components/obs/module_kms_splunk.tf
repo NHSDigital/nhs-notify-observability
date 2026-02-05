@@ -48,10 +48,10 @@ data "aws_iam_policy_document" "kms_splunk" {
       test     = "StringEquals"
       variable = "kms:EncryptionContext:aws:s3:arn"
 
-      values = [
-        module.s3bucket_splunk_firehose.arn,
-        "${module.s3bucket_splunk_firehose.arn}/*",
-      ]
+      values = var.ship_logs_to_splunk || var.ship_metrics_to_splunk ? [
+        module.s3bucket_splunk_firehose[0].arn,
+        "${module.s3bucket_splunk_firehose[0].arn}/*",
+      ] : []
     }
   }
 
