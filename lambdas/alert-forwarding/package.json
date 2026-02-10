@@ -3,7 +3,7 @@
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.980.0",
     "node-fetch": "^3.3.2",
-    "axios": "^1.6.2"
+    "axios": "^1.13.5"
   },
   "description": "AWS Lambda function responsible for sending Cloudwatch Alerts to Teams.",
   "devDependencies": {
