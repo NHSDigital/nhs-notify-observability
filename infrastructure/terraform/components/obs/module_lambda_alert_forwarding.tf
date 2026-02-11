@@ -41,6 +41,7 @@ module "lambda_alert_forwarding" {
     "TEAMS_WEBHOOK_ALERTS_SECURITY_SSM_PARAM"      = aws_ssm_parameter.teams_webhook_url_alerts_security.name
     "JIRA_URL_PARAM_NAME"                          = local.jira_url_path
     "JIRA_PAT_PARAM_NAME"                          = local.jira_pat_token_path
+    "ALERTS_TO_JIRA"                               = var.alerts_to_jira
   }
 }
 

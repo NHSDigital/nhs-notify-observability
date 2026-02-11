@@ -205,8 +205,8 @@ async function hasExistingJira({
             if (alarmName) {
                 jqlParts.push(`summary ~ "${escapeForJql(alarmName)}"`);
             }
-            if (accountName) {
-                jqlParts.push(`description ~ "${escapeForJql(accountName)}"`);
+            if (accountId) {
+                jqlParts.push(`description ~ "${escapeForJql(accountId)}"`);
             }
             if (descriptionSnippet) {
                 jqlParts.push(`description ~ "${escapeForJql(descriptionSnippet)}"`);
@@ -378,8 +378,8 @@ function buildJiraIssueData(input) {
         };
   } else {
   // Default for other sources
-  if (!alarmName || !accountName) {
-        console.warn('alarmName or accountName is missing or undefined');
+  if (!alarmName) {
+        console.warn('alarmName is missing or undefined');
         throw new Error('Necessary fields missing to raise JIRA issue for Alarms')
   }
   return {
@@ -390,7 +390,7 @@ function buildJiraIssueData(input) {
             `This ticket has been raised for a production alarm reported in the *Alerts* Teams channel.`,
             'h2. Details',
             ` * *Time of the alarm:* _${formatAlarmTime(time)}_`,
-            ` * *Account Name:* _${accountName || 'unknown'}_`,
+            ` * *Account ID:* _${accountId || 'unknown'}_`,
             ` * *Alarm name:* _${alarmName || 'unknown'}_`,
             ` * *Error message:* _${description || 'n/a'}_`,
             ` * *CloudWatch console link:* https://console.aws.amazon.com/cloudwatch/home?region=${encodeURIComponent(
@@ -407,9 +407,16 @@ function buildJiraIssueData(input) {
 async function createJiraTicket(event) {
   const alarmName = event?.detail?.alarmName;
   const environment = event?.detail?.environment;
-  const accountName = event?.detail?.accountName;
-  const source = event.source;
+    const accountName = event?.detail?.accountName;
+    const source = event.source;
   console.log(`Jira:create:start`);
+    const alertsToJira = process.env.ALERTS_TO_JIRA === 'true';
+    if (!alertsToJira) {
+        console.log(
+            `[Jira:create:skip] We don't intend to create Jira tickets for alerts in this environment – skipping Jira creation`,
+        );
+        return;
+    }
 
   // Replace with your own credentials retrieval logic
   const urlPath = process.env.JIRA_URL_PARAM_NAME;
@@ -464,7 +471,7 @@ async function createJiraTicket(event) {
             alarmName,
             environment,
             accountName,
-            accountId: event.detail?.accountId,
+            accountId: event.detail?.accountId || event.account,
             boundedContext: event.detail?.boundedContext,
             component: event.detail?.component,
             description,
@@ -536,16 +543,20 @@ module.exports = {
                 const alarmName = detail.alarmName;
                 const state = detail.state.value;
                 const reason = detail.state.reason;
+                const accountId = event.account;
                 const statusEmoji = state === 'ALARM' ? '🔴' : state === 'OK' ? '🟢' : '';
 
                 title = `${statusEmoji} CloudWatch Alarm: ${alarmName} - ${state}`;
                 formattedMessage = `
 **Alarm Name:** ${alarmName}
 
+**AccountID:** ${accountId}
+
 **State:** ${state}
 
 **Reason:** ${reason}
                 `.trim();
+                await createJiraTicket(event);
             } else if (event.source === "aws.backup") {
                 const jobId = detail.backupJobId || detail.restoreJobId || detail.copyJobId;
                 const state = detail.state;
