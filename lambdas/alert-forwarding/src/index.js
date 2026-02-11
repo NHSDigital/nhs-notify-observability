@@ -407,8 +407,8 @@ function buildJiraIssueData(input) {
 async function createJiraTicket(event) {
   const alarmName = event?.detail?.alarmName;
   const environment = event?.detail?.environment;
-    const accountName = event?.detail?.accountName;
-    const source = event.source;
+  const accountName = event?.detail?.accountName;
+  const source = event.source;
   console.log(`Jira:create:start`);
     const alertsToJira = process.env.ALERTS_TO_JIRA === 'true';
     if (!alertsToJira) {

@@ -118,7 +118,7 @@ variable "parent_acct_environment" {
   default     = "main"
 }
 
-variable "alerts_to_jira" {
+variable "enable_jira_ticket_creation" {
   type        = bool
   description = "Whether to create Jira tickets for Cloudwatch alerts that meet the criteria defined in the lambda. Should be set to false in non-prod environments to save costs and avoid creating unnecessary tickets."
   default     = true
