@@ -411,12 +411,12 @@ async function createJiraTicket(event) {
   const source = event.source;
   console.log(`Jira:create:start`);
   const alertsToJira = process.env.ALERTS_TO_JIRA === 'true';
-  if (source === "aws.cloudwatch" && !alertsToJira) {
-     console.log(
-       `[Jira:create:skip] ALERTS_TO_JIRA is not 'true' for aws.cloudwatch – skipping Jira creation`,
-     );
-     return;
-  }
+    if (source === "aws.cloudwatch" && !alertsToJira) {
+        console.log(
+        `[Jira:create:skip] ALERTS_TO_JIRA is not 'true' for aws.cloudwatch – skipping Jira creation`,
+        );
+        return;
+    }
 
   // Replace with your own credentials retrieval logic
   const urlPath = process.env.JIRA_URL_PARAM_NAME;
