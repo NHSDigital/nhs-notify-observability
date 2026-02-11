@@ -1,6 +1,13 @@
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
 const https = require('https');
-const { getTeamsWebhookUrl, sendTeamsMessage, handler, extractSecurityHubSections, buildJiraIssueData } = require('../index');
+const {
+    getTeamsWebhookUrl,
+    sendTeamsMessage,
+    handler,
+    extractSecurityHubSections,
+    buildJiraIssueData,
+    createJiraTicket,
+} = require('../index');
 const axios = require('axios');
 
 jest.mock('@aws-sdk/client-ssm');
@@ -165,6 +172,7 @@ describe('handler', () => {
 
         const event = {
             source: 'aws.cloudwatch', // add source so handler enters cloudwatch branch
+            account: '123412341234',
             detail: {
                 alarmName: 'TestAlarm',
                 state: { value: 'ALARM', reason: 'Threshold Crossed' }
@@ -203,6 +211,7 @@ describe('handler', () => {
 
         const event = {
             source: 'aws.cloudwatch',
+            account: '123412341234',
             detail: {
                 alarmName: 'TestAlarm',
                 state: {
@@ -276,15 +285,13 @@ describe('buildJiraIssueData', () => {
         const data = buildJiraIssueData({
             source: 'aws.cloudwatch',
             alarmName: 'HighErrorRate',
-            accountName: 'notify-prod',
             description: 'Error rate exceeded',
             region: 'eu-west-2',
             time: baseEventData.time,
         });
         expect(data.fields.summary).toContain('Alarm triggered: HighErrorRate');
-        expect(data.fields.description).toContain('notify-prod');
         expect(data.fields.description).toContain('Error rate exceeded');
-        expect(data.fields.description).toContain('cloudwatch');
+        expect(data.fields.description).toContain('CloudWatch console link');
     });
 
     it('builds Security Hub per-finding issue data with high priority', () => {
@@ -315,5 +322,73 @@ describe('buildJiraIssueData', () => {
             accountName: '',
             time: baseEventData.time,
         })).toThrow('Necessary fields missing to raise JIRA issue for Alarms');
+    });
+});
+
+describe('createJiraTicket', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        delete process.env.ALERTS_TO_JIRA;
+        delete process.env.JIRA_URL_PARAM_NAME;
+        delete process.env.JIRA_PAT_PARAM_NAME;
+    });
+
+    afterEach(() => {
+        delete process.env.ALERTS_TO_JIRA;
+        delete process.env.JIRA_URL_PARAM_NAME;
+        delete process.env.JIRA_PAT_PARAM_NAME;
+    });
+
+    it('skips Jira creation when ALERTS_TO_JIRA is not true', async () => {
+        const event = {
+            source: 'aws.cloudwatch',
+            detail: {
+                alarmName: 'TestAlarm',
+                configuration: { description: 'Alarm description' },
+            },
+            region: 'eu-west-2',
+            time: new Date().toISOString(),
+        };
+
+        SSMClient.prototype.send.mockClear();
+        axios.post.mockClear();
+
+        await createJiraTicket(event);
+
+        expect(SSMClient.prototype.send).not.toHaveBeenCalled();
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+
+    it('creates a Jira issue for prod CloudWatch alarms', async () => {
+        const event = {
+            source: 'aws.cloudwatch',
+            detail: {
+                accountName: 'notify-prod',
+                alarmName: 'HighErrorRate',
+                configuration: { description: 'Error rate exceeded' },
+            },
+            region: 'eu-west-2',
+            time: new Date().toISOString(),
+        };
+
+        process.env.ALERTS_TO_JIRA = 'true';
+        process.env.JIRA_URL_PARAM_NAME = 'JIRA_URL_PARAM_NAME';
+        process.env.JIRA_PAT_PARAM_NAME = 'JIRA_PAT_PARAM_NAME';
+
+        SSMClient.prototype.send
+            .mockResolvedValueOnce({ Parameter: { Value: 'https://jira.example.com' } })
+            .mockResolvedValueOnce({ Parameter: { Value: 'fake-pat-token' } });
+
+        axios.post.mockResolvedValue({
+            status: 201,
+            statusText: 'Created',
+            data: { key: 'CCM-123' },
+        });
+
+        await createJiraTicket(event);
+
+        expect(SSMClient.prototype.send).toHaveBeenCalledTimes(2);
+        expect(axios.post).toHaveBeenCalledTimes(1);
+        expect(axios.post.mock.calls[0][0]).toBe('https://jira.example.com/rest/api/2/issue');
     });
 });

@@ -117,3 +117,9 @@ variable "parent_acct_environment" {
   description = "Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments"
   default     = "main"
 }
+
+variable "enable_jira_ticket_creation" {
+  type        = bool
+  description = "Whether to create Jira tickets for Cloudwatch alerts that meet the criteria defined in the lambda. Should be set to false in non-prod environments to save costs and avoid creating unnecessary tickets."
+  default     = true
+}
