@@ -47,7 +47,7 @@ jobs:
         with:
           fetch-depth: 0 # Full history is needed to scan all commits
       - name: "Scan secrets"
-        uses: ./.github/actions/scan-secrets
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/scan-secrets@CCM-14029 # TODO: Update to final release tag after merging
   check-file-format:
     name: "Check file format"
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
         with:
           fetch-depth: 0 # Full history is needed to compare branches
       - name: "Check file format"
-        uses: ./.github/actions/check-file-format
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/check-file-format@CCM-14029 # TODO: Update to final release tag after merging
   check-markdown-format:
     name: "Check Markdown format"
     runs-on: ubuntu-latest
@@ -69,7 +69,7 @@ jobs:
         with:
           fetch-depth: 0 # Full history is needed to compare branches
       - name: "Check Markdown format"
-        uses: ./.github/actions/check-markdown-format
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/check-markdown-format@CCM-14029 # TODO: Update to final release tag after merging
   terraform-docs:
     name: "Run terraform-docs"
     runs-on: ubuntu-latest
@@ -104,7 +104,7 @@ jobs:
         with:
           fetch-depth: 0 # Full history is needed to compare branches
       - name: "Check English usage"
-        uses: ./.github/actions/check-english-usage
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/check-english-usage@CCM-14029 # TODO: Update to final release tag after merging
   check-todo-usage:
     name: "Check TODO usage"
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
         with:
           fetch-depth: 0 # Full history is needed to compare branches
       - name: "Check TODO usage"
-        uses: ./.github/actions/check-todo-usage
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/check-todo-usage@CCM-14029 # TODO: Update to final release tag after merging
   detect-terraform-changes:
     name: "Detect Terraform Changes"
     runs-on: ubuntu-latest
@@ -151,7 +151,7 @@ jobs:
       - name: "Setup ASDF"
         uses: asdf-vm/actions/setup@1902764435ca0dd2f3388eea723a4f92a4eb8302
       - name: "Lint Terraform"
-        uses: ./.github/actions/lint-terraform
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/lint-terraform@CCM-14029 # TODO: Update to final release tag after merging
   trivy-iac:
     name: "Trivy IaC Scan"
     permissions:
@@ -166,7 +166,7 @@ jobs:
       - name: "Setup ASDF"
         uses: asdf-vm/actions/setup@1902764435ca0dd2f3388eea723a4f92a4eb8302
       - name: "Trivy IaC Scan"
-        uses: ./.github/actions/trivy-iac
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/trivy-iac@CCM-14029 # TODO: Update to final release tag after merging
   trivy-package:
     if: ${{ !inputs.skip_trivy_package }}
     name: "Trivy Package Scan"
@@ -180,7 +180,7 @@ jobs:
       - name: "Setup ASDF"
         uses: asdf-vm/actions/setup@1902764435ca0dd2f3388eea723a4f92a4eb8302
       - name: "Trivy Package Scan"
-        uses: ./.github/actions/trivy-package
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/trivy-package@CCM-14029 # TODO: Update to final release tag after merging
   count-lines-of-code:
     name: "Count lines of code"
     runs-on: ubuntu-latest
@@ -192,7 +192,7 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@v4
       - name: "Count lines of code"
-        uses: ./.github/actions/create-lines-of-code-report
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/create-lines-of-code-report@CCM-14029 # TODO: Update to final release tag after merging
         with:
           build_datetime: "${{ inputs.build_datetime }}"
           build_timestamp: "${{ inputs.build_timestamp }}"
@@ -211,7 +211,7 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@v4
       - name: "Scan dependencies"
-        uses: ./.github/actions/scan-dependencies
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/scan-dependencies@CCM-14029 # TODO: Update to final release tag after merging
         with:
           build_datetime: "${{ inputs.build_datetime }}"
           build_timestamp: "${{ inputs.build_timestamp }}"
