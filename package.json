@@ -26,6 +26,10 @@
     "typescript": "^5.8.2"
   },
   "name": "nhs-notify-observability",
+  "overrides": {
+    "minimatch": "^10.2.1",
+    "fast-xml-parser": "^5.3.6"
+  },
   "private": true,
   "scripts": {
     "build": "npm run --workspace frontend build --if-present",
