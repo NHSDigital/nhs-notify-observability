@@ -41,7 +41,7 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@v4
       - name: "Build docs"
-        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/build-docs@CCM-14029 # TODO: CCM-14029 Update to final release tag after merging
+        uses: NHSDigital/nhs-notify-shared-modules/.github/actions/build-docs@3.0.0
         with:
           version: "${{ inputs.version }}"
   artefact-1:

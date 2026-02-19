@@ -14,9 +14,9 @@ repos:
       - id: pretty-format-json
         args: ['--autofix']
         exclude: '(^|/)package(-lock)?\.json$'
-    # -   id: ...
+
   - repo: https://github.com/NHSDigital/nhs-notify-shared-modules
-    rev: CCM-14029 # TODO: Update to final release tag after merging
+    rev: 3.0.0
     hooks:
       - id: sort-dictionary
       - id: scan-secrets

@@ -19,7 +19,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Sync repository template
-      uses: NHSDigital/nhs-notify-shared-modules/.github/actions/sync-template-repo@CCM-14029 # TODO: Update to final release tag after merging
+      uses: NHSDigital/nhs-notify-shared-modules/.github/actions/sync-template-repo@3.0.0
       with:
         github_token: ${{ github.token }}
 
